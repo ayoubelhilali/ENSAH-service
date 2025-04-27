@@ -7,7 +7,6 @@ Support: https://codedthemes.authordesk.app
 File: style.css
 =========================================================================
 =================================================================================== */
-@import url("../fonts/phosphor/duotone/style.css");
 :root {
   --bs-body-bg: #fff;
   --bs-body-bg-rgb: 255, 255, 255;
@@ -16,9 +15,9 @@ File: style.css
   --pc-sidebar-background: #fff;
   --pc-sidebar-color: #141414;
   --pc-sidebar-color-rgb: #fff;
-  --pc-sidebar-active-color: var(--bs-primary);
+  --pc-sidebar-active-color: #b08862;
   --pc-sidebar-shadow: 1px 0 0 0px rgb(240 240 240);
-  --pc-sidebar-caption-color: #495057;
+  --pc-sidebar-caption-color: #b08862;
   --pc-header-background: #fff;
   --pc-header-color: #141414;
   --pc-header-shadow: 0 1px 0 0px rgb(240 240 240);
@@ -30,7 +29,7 @@ File: style.css
 [data-pc-theme_contrast=true] {
   --bs-body-bg: #ffffff;
   --pc-sidebar-background: transparent;
-  --pc-sidebar-active-color: #0d6efd;
+  --pc-sidebar-active-color: white;
   --pc-sidebar-shadow: 1px 0 3px 0px #dee2e6;
   --pc-sidebar-border: none;
   --pc-card-box-shadow: 0px 8px 24px rgba(27, 46, 94, 0.08);
@@ -44,7 +43,7 @@ h2,
 
 :root,
 [data-bs-theme=light] {
-  --bs-blue: #1890ff;
+  --bs-blue: #b08862;
   --bs-indigo: #6610f2;
   --bs-purple: #6f42c1;
   --bs-pink: #e83e8c;
@@ -2319,6 +2318,7 @@ textarea.form-control-lg {
   border: 1px solid #ced4da;
   border-radius: 4px;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  cursor: pointer;
 }
 @media (prefers-reduced-motion: reduce) {
   .form-select {
@@ -15984,6 +15984,8 @@ pre[class*=language-] > code {
   z-index: 1026;
   overflow: hidden;
   box-shadow: var(--pc-sidebar-shadow);
+  border-right: 1px solid #000000;
+  background-color: #343a40;
 }
 .pc-sidebar .navbar-wrapper {
   width: 260px;
@@ -16019,7 +16021,7 @@ pre[class*=language-] > code {
 }
 .pc-sidebar .pc-caption span:not(.badge) {
   display: block;
-  color: #67758a;
+  color: #b08862;
   font-size: 14px;
   font-weight: 500;
 }
@@ -16050,11 +16052,12 @@ pre[class*=language-] > code {
 .pc-sidebar .pc-link {
   display: block;
   padding: 10px 24px;
-  color: var(--pc-sidebar-color);
+  color: white;
   position: relative;
   font-size: 14px;
   font-weight: 400;
 }
+
 .pc-sidebar .pc-link:focus, .pc-sidebar .pc-link.active, .pc-sidebar .pc-link:hover {
   text-decoration: none;
 }
@@ -16073,7 +16076,7 @@ pre[class*=language-] > code {
 }
 .pc-sidebar .pc-navbar > .pc-item.active > .pc-link:before {
   opacity: 0;
-  background: var(--pc-sidebar-active-color);
+  background: #b08862;
 }
 .pc-sidebar .pc-navbar > .pc-item.active:not(.pc-hasmenu) > .pc-link::after {
   content: "";
@@ -16082,14 +16085,14 @@ pre[class*=language-] > code {
   right: 0px;
   width: 2px;
   height: 100%;
-  background: var(--pc-sidebar-active-color);
+  background: #b08862;
 }
 .pc-sidebar .pc-navbar > .pc-item.active:not(.pc-hasmenu) > .pc-link:before {
   opacity: 0.1;
-  background: var(--pc-sidebar-active-color);
+  background:#b08862;
 }
 .pc-sidebar .pc-navbar > .pc-item:hover:not(.active) > .pc-link:before {
-  background: var(--pc-sidebar-color);
+  background: white;
 }
 .pc-sidebar .pc-navbar > .pc-item .pc-submenu .pc-item > .pc-link::before {
   content: "";
@@ -16117,17 +16120,17 @@ pre[class*=language-] > code {
 }
 .pc-sidebar .pc-navbar > .pc-item .pc-submenu .pc-item:hover > .pc-link:before {
   opacity: 0.05;
-  background: var(--pc-sidebar-color);
+  background: #b08862;
 }
 .pc-sidebar .pc-navbar > .pc-item .pc-submenu .pc-item.pc-trigger > .pc-link, .pc-sidebar .pc-navbar > .pc-item .pc-submenu .pc-item.active > .pc-link, .pc-sidebar .pc-navbar > .pc-item .pc-submenu .pc-item:focus > .pc-link {
-  color: var(--pc-sidebar-active-color);
+  color: #b08862;
 }
 .pc-sidebar .pc-navbar > .pc-item .pc-submenu .pc-item.pc-trigger > .pc-link:before, .pc-sidebar .pc-navbar > .pc-item .pc-submenu .pc-item.active > .pc-link:before, .pc-sidebar .pc-navbar > .pc-item .pc-submenu .pc-item:focus > .pc-link:before {
   opacity: 0.1;
-  background: var(--pc-sidebar-active-color);
+  background: #b08862;
 }
 .pc-sidebar .pc-navbar > .pc-item .pc-submenu .pc-item.pc-trigger > .pc-link:after, .pc-sidebar .pc-navbar > .pc-item .pc-submenu .pc-item.active > .pc-link:after, .pc-sidebar .pc-navbar > .pc-item .pc-submenu .pc-item:focus > .pc-link:after {
-  background: var(--pc-sidebar-active-color);
+  background: white;
 }
 .pc-sidebar .pc-navbar > .pc-item .pc-submenu .pc-link {
   padding: 10px 30px 10px 58px;

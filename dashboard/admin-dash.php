@@ -13,7 +13,8 @@
   <meta name="keywords" content="Mantis, Dashboard UI Kit, Bootstrap 5, Admin Template, Admin Dashboard, CRM, CMS, Bootstrap Admin Template">
   <meta name="author" content="CodedThemes">
   <!-- [Favicon] icon -->
-  <link rel="icon" href="/ENSAH-service/assets/images/logo-small_noBG.png" type="image/x-icon"> <!-- [Google Font] Family -->
+  <link rel="icon" href="/ENSAH-service/assets/images/logo-small_noBG.png" type="image/x-icon"> 
+  <!-- [Google Font] Family -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap" id="main-font-link">
   <!-- [Tabler Icons] https://tablericons.com -->
   <link rel="stylesheet" href="/ENSAH-service/assets/fonts/tabler-icons.min.css" >
@@ -24,7 +25,7 @@
   <!-- [Material Icons] https://fonts.google.com/icons -->
   <link rel="stylesheet" href="/ENSAH-service/assets/fonts/material.css" >
   <!-- [Template CSS Files] -->
-  <link rel="stylesheet" href="/ENSAH-service/assets/css/style.css" id="main-style-link" >
+  <link rel="stylesheet" href="/ENSAH-service/assets/css/style.css">
   <link rel="stylesheet" href="/ENSAH-service/assets/css/style-preset.css" >
   <link rel="stylesheet" href="/ENSAH-service/assets/css/main.css" >
 
@@ -73,17 +74,16 @@
         <div class="col-md-6 col-xl-3">
           <div class="card">
             <div class="card-body">
-              <h6 class="mb-2 f-w-400 text-muted">Total Page Views</h6>
+              <h6 class="mb-2 f-w-400 text-muted">Total des employés</h6>
               <h4 class="mb-3">4,42,236 <span class="badge bg-light-primary border border-primary"><i
                     class="ti ti-trending-up"></i> 59.3%</span></h4>
-              </p>
             </div>
           </div>
         </div>
         <div class="col-md-6 col-xl-3">
           <div class="card">
             <div class="card-body">
-              <h6 class="mb-2 f-w-400 text-muted">Total Users</h6>
+              <h6 class="mb-2 f-w-400 text-muted">Nombre des professeurs</h6>
               <h4 class="mb-3">78,250 <span class="badge bg-light-success border border-success"><i
                     class="ti ti-trending-up"></i> 70.5%</span></h4>
             </div>
@@ -92,7 +92,7 @@
         <div class="col-md-6 col-xl-3">
           <div class="card">
             <div class="card-body">
-              <h6 class="mb-2 f-w-400 text-muted">Total Order</h6>
+              <h6 class="mb-2 f-w-400 text-muted">Nombre des vacataires</h6>
               <h4 class="mb-3">18,800 <span class="badge bg-light-warning border border-warning"><i
                     class="ti ti-trending-down"></i> 27.4%</span></h4>
             </div>
@@ -360,7 +360,7 @@
         </div>
         <div class="col-auto my-1">
           <ul class="list-inline footer-link mb-0">
-            <li class="list-inline-item"><a href="../source/index.html">Home</a></li>
+            <li class="list-inline-item"><a href="/ENSAH-service/dashboard/admin-dash.php">Home</a></li>
           </ul>
         </div>
       </div>
@@ -368,16 +368,16 @@
   </footer>
 
   <!-- [Page Specific JS] start -->
-  <script src="../source/assets/js/plugins/apexcharts.min.js"></script>
-  <script src="../source/assets/js/pages/dashboard-default.js"></script>
+  <script src="/ENSAH-service/assets/js/plugins/apexcharts.min.js"></script>
+  <script src="/ENSAH-service/assets/js/pages/dashboard-default.js"></script>
   <!-- [Page Specific JS] end -->
   <!-- Required Js -->
-  <script src="../source/assets/js/plugins/popper.min.js"></script>
-  <script src="../source/assets/js/plugins/simplebar.min.js"></script>
-  <script src="../source/assets/js/plugins/bootstrap.min.js"></script>
-  <script src="../source/assets/js/fonts/custom-font.js"></script>
-  <script src="../source/assets/js/pcoded.js"></script>
-  <script src="../source/assets/js/plugins/feather.min.js"></script>
+  <script src="/ENSAH-service/assets/js/plugins/popper.min.js"></script>
+  <script src="/ENSAH-service/assets/js/plugins/simplebar.min.js"></script>
+  <script src="/ENSAH-service/assets/js/plugins/bootstrap.min.js"></script>
+  <script src="/ENSAH-service/assets/js/fonts/custom-font.js"></script>
+  <script src="/ENSAH-service/assets/js/pcoded.js"></script>
+  <script src="/ENSAH-service/assets/js/plugins/feather.min.js"></script>
 
   
   

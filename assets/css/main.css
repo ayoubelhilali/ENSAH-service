@@ -1,3 +1,21 @@
-.pc-sidebar{
-    border-right: 1px solid #1890ff;
+
+
+/* Style des selects */
+.form-group select {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Style au survol */
+.form-group select:hover {
+    border-color: #007BFF;
+}
+
+/* Style au focus */
+.form-group select:focus {
+    border-color: #007BFF;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
