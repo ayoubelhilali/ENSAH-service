@@ -22126,18 +22126,30 @@ select.form-control[data-multiselectsplitter-firstselect-selector], select.form-
 }
 .auth-main .auth-wrapper.v3 .auth-form {
   flex-direction: column;
-  background: url("../images/authentication/img-auth-bg.svg");
+  background-image: url("assets/images/logo-smaller_noBG.png");
   min-height: 100vh;
   padding: 24px;
   background-repeat: no-repeat;
-  background-size: auto 75%;
+  background-size: auto 75% ;
   background-position: left center;
-  position: relative;
+  position: relative ;
   justify-content: space-between;
 }
 .auth-main .auth-wrapper.v3 .auth-form > * {
   position: relative;
   z-index: 5;
+}
+
+#imag_header{
+  width: 170px ;
+  height: auto ;
+  position: absolute ;
+  top : 0px ;
+  bottom: 0px ;
+}
+
+.auth-main{
+  background-color:#00c9b0  ;
 }
 .auth-main .auth-wrapper.v3 .auth-form:after {
   content: "";
