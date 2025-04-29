@@ -1,6 +1,4 @@
-<?php 
 
-?>
 <nav class="pc-sidebar">
   <div class="navbar-wrapper">
     <div class="m-header">

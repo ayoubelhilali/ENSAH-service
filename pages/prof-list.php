@@ -1,3 +1,12 @@
+<?php
+ob_start();
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
+$avatar = '/ENSAH-service/assets/images/avatar-M.jpg'; // chemin par défaut
+include('../inc/functions/connections.php');
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <!-- [Head] start -->
@@ -276,8 +285,134 @@
       </div>
     </div>
   </div>
-  <form method="post" action="/ENSAH-service/inc/functions/add-prof.php" class="modal fade" id="user-edit_add-modal"
-    data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+  <?php
+
+  // Initialize variables and error arrays
+  $nom = $prenom = $birthday_day = $birthday_month = $birthday_year = $genre = $email = $password = $md5_pass = $specialite = "";
+  $errors = 0;
+  $nom_error = $prenom_error = $birthday_error = $genre_error = $email_error = $password_error = $specialite_error = $upload_error = "";
+
+  // Check if the form is submitted
+  if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Validate Nom
+    if (empty($_POST["nom"])) {
+      $nom_error = "Nom is required";
+      $errors++;
+    } else {
+      $nom = mysqli_real_escape_string($conne, $_POST["nom"]);
+    }
+
+    // Validate Prenom
+    if (empty($_POST["prenom"])) {
+      $prenom_error = "Prénom is required";
+      $errors++;
+    } else {
+      $prenom = mysqli_real_escape_string($conne, $_POST["prenom"]);
+    }
+
+    // Validate Birthday
+    if (empty($_POST["birthday_day"]) || empty($_POST["birthday_month"]) || empty($_POST["birthday_year"])) {
+      $birthday_error = "Birthday is required";
+      $errors++;
+    } else {
+      $birthday_day = mysqli_real_escape_string($conne, $_POST["birthday_day"]);
+      $birthday_month = mysqli_real_escape_string($conne, $_POST["birthday_month"]);
+      $birthday_year = mysqli_real_escape_string($conne, $_POST["birthday_year"]);
+      $birthday = $birthday_year . "-" . $birthday_month . "-" . $birthday_day;  //YYYY-MM-DD
+  
+      //Validate valid date
+      if (!DateTime::createFromFormat('Y-m-d', $birthday)) {
+        $birthday_error = "Invalid date format.";
+        $errors++;
+      }
+    }
+
+    // Validate Genre
+    if (empty($_POST["genre"])) {
+      $genre_error = "Genre is required";
+      $errors++;
+    } else {
+      $genre = mysqli_real_escape_string($conne, $_POST["genre"]);
+    }
+
+    // Validate Email
+    if (empty($_POST["email"])) {
+      $email_error = "Email is required";
+      $errors++;
+    } else {
+      $email = mysqli_real_escape_string($conne, $_POST["email"]);
+      if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $email_error = "Invalid email format";
+        $errors++;
+      }
+      //Check if email exists
+      $check_email_query = "SELECT * FROM professeur WHERE email = '$email'";
+      $check_email_result = mysqli_query($conne, $check_email_query);
+      if (mysqli_num_rows($check_email_result) > 0) {
+        $email_error = "Email already exists.";
+        $errors++;
+      }
+    }
+
+    // Validate password
+    if (empty($_POST["password"])) {
+      $password_error = "Password is required";
+      $errors++;
+    } else if (strlen($_POST["password"]) < 8) {
+      $password_err = "Password should contain minimum 8 digits";
+    } else {
+      $password = mysqli_real_escape_string($conne, $_POST["password"]);
+      $md5_pass = md5($password); // Hash the password
+    }
+
+    // Validate Specialite
+    if (empty($_POST["specialite"])) {
+      $specialite_error = "Specialité is required";
+      $errors++;
+    } else {
+      $specialite = mysqli_real_escape_string($conne, $_POST["specialite"]);
+    }
+
+    // If there are no errors, proceed with database insertion
+    if ($errors == 0) {
+      // Ajouter le professeur dans la table des utilisateurs
+      $add_user = "INSERT INTO user(nom, prenom, date_naissance, genre) 
+        VALUES('$nom', '$prenom', '$birthday', '$genre')";
+      if (mysqli_query($conne, $add_user)) {
+        // Récupérer l'ID de l'utilisateur inséré
+        $user_id = mysqli_insert_id($conne);
+
+        if ($user_id) {
+          $add_prof = "INSERT INTO professeur(user_ID, email, password, md5_pass, specialite) 
+                VALUES('$user_id', '$email', '$password', '$md5_pass', '$specialite')";
+          if (mysqli_query($conne, $add_prof)) {
+            $_SESSION['success_message'] = "Professor added successfully!";
+            header("Location: /ENSAH-service/dashboard/admin-dash.php");
+            exit;
+          } else {
+            $general_error = "Failed to add professor.";
+          }
+        } else {
+          $general_error = "Failed to retrieve user ID.";
+        }
+      } else {
+        $general_error = "Failed to add user to the database.";
+      }
+    } else {
+      $general_error = "Please correct the errors in the form.";
+    }
+  }
+  ?>
+  <?php if ($_SERVER["REQUEST_METHOD"] == "POST" && $errors > 0): ?>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var myModal = new bootstrap.Modal(document.getElementById('user-edit_add-modal'));
+        myModal.show();
+      });
+    </script>
+  <?php endif; ?>
+  <form method="post" class="modal fade" id="user-edit_add-modal" data-bs-keyboard="false" tabindex="-1"
+    aria-hidden="true" enctype="multipart/form-data">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
@@ -288,34 +423,46 @@
         </div>
         <div class="modal-body">
           <div class="row">
+            <?php
+            // Charger le traitement d'image en premier
+            include "../inc/functions/upload-image.php";
+
+            // Mettre à jour l'avatar si l'image a été uploadée
+            $avatar = "/ENSAH-service/assets/images/avatar-M.jpg"; // Valeur par défaut
+            if (isset($_SESSION['avatar_path'])) {
+              $avatar = $_SESSION['avatar_path'];
+            }
+            ?>
             <div class="col-sm-3 text-center mb-3">
               <div class="user-upload wid-75">
-                <img src="/ENSAH-service/assets/images/avatar-M.jpg" alt="img" class="img-fluid">
+                <img src="<?php echo $avatar; ?>" alt="img" class="img-fluid">
                 <label for="uplfile" class="img-avtar-upload">
                   <i class="ti ti-camera f-24 mb-1"></i>
                   <span>Upload</span>
                 </label>
-                <input type="file" id="uplfile" class="d-none">
+                <input type="file" id="uplfile" class="d-none" name="uplfile">
               </div>
+              <p style="color: red"><?php if (isset($upload_error)) {
+                echo $upload_error;
+              } ?></p>
             </div>
             <div class="col-sm-9">
-              <?php if (isset($nom_error)) {
+              <p style="color: red"><?php if (isset($nom_error)) {
                 echo $nom_error;
-              }?>
+              } ?></p>
               <div class="form-group">
                 <label class="form-label">Nom</label>
-                <input required name="nom" type="text" class="form-control" placeholder="Nom">
+                <input required name="nom" type="text" class="form-control" placeholder="Nom"
+                  value="<?php echo htmlspecialchars($nom); ?>">
               </div>
-              <?php if (isset($prenom_error)) {
+              <p style="color: red"><?php if (isset($prenom_error)) {
                 echo $prenom_error;
-              } ?>
+              } ?></p>
               <div class="form-group">
                 <label class="form-label">Prénom</label>
-                <input required name="prenom" type="text" class="form-control" placeholder="Prénom">
+                <input required name="prenom" type="text" class="form-control" placeholder="Prénom"
+                  value="<?php echo htmlspecialchars($nom); ?>">
               </div>
-              <?php if (isset($birthday_error)) {
-                echo $birthday_error;
-              } ?>
               <div class="form-group">
                 <label for="day" class="form-label">Date de naissance :</label><br>
 
@@ -328,19 +475,27 @@
                 </select>
 
                 <select name="birthday_month" id="month" required>
-                  <option value="">Mois</option>
-                  <option value="1">Janvier</option>
-                  <option value="2">Février</option>
-                  <option value="3">Mars</option>
-                  <option value="4">Avril</option>
-                  <option value="5">Mai</option>
-                  <option value="6">Juin</option>
-                  <option value="7">Juillet</option>
-                  <option value="8">Août</option>
-                  <option value="9">Septembre</option>
-                  <option value="10">Octobre</option>
-                  <option value="11">Novembre</option>
-                  <option value="12">Décembre</option>
+                  <option disabled <?php if (empty($birthday_month))
+                    echo 'selected'; ?>>Mois</option>
+                  <?php
+                  $months = [
+                    1 => "Janvier",
+                    2 => "Février",
+                    3 => "Mars",
+                    4 => "Avril",
+                    5 => "Mai",
+                    6 => "Juin",
+                    7 => "Juillet",
+                    8 => "Août",
+                    9 => "Septembre",
+                    10 => "Octobre",
+                    11 => "Novembre",
+                    12 => "Décembre"
+                  ];
+                  foreach ($months as $key => $month) {
+                    echo "<option value='$key' " . ($birthday_month == $month ? "selected" : "") . ">$month</option>";
+                  }
+                  ?>
                 </select>
 
                 <select name="birthday_year" id="year" required>
@@ -351,27 +506,31 @@
                   } ?>
                 </select>
               </div>
-              <?php if (isset($genre_error)) {
-                echo $genre_error;
-              } ?>
+              <p style="color: red"><?php if (isset($birthday_error)) {
+                echo $birthday_error;
+              } ?></p>
               <div class="form-group">
                 <label class="form-label">Genre</label>
                 <select name="genre" class="form-select" required>
-                  <option disabled selected>Selectionner Genre</option>
-                  <option>Masculin</option>
-                  <option>Féminin</option>
+                  <option disabled <?php if (empty($genre))
+                    echo 'selected'; ?>>Selectionner Genre</option>
+                  <option <?php if ($genre == "Masculin")
+                    echo 'selected'; ?>>Masculin</option>
+                  <option <?php if ($genre == "Féminin")
+                    echo 'selected'; ?>>Féminin</option>
                 </select>
               </div>
-              <?php if (isset($email_error)) {
-                echo $email_error;
-              } ?>
+              <p style="color: red"><?php if (isset($genre_error)) {
+                echo $genre_error;
+              } ?></p>
               <div class="form-group">
                 <label class="form-label">Email</label>
-                <input name="email" type="email" class="form-control" placeholder="Email" required>
+                <input name="email" type="email" class="form-control" placeholder="Email" required
+                  value="<?php echo htmlspecialchars($email); ?>">
               </div>
-              <?php if (isset($password_err)) {
-                echo $password_err;
-              } ?>
+              <p style="color: red"><?php if (isset($email_error)) {
+                echo $email_error;
+              } ?></p>
               <div class="form-group ">
                 <label class="form-label">Password</label>
                 <div style="position: relative;">
@@ -382,9 +541,9 @@
                 </div>
 
               </div>
-              <?php if (isset($specialite_error)) {
-                echo $specialite_error;
-              } ?>
+              <p style="color: red"><?php if (isset($password_err)) {
+                echo $password_err;
+              } ?></p>
               <div class="form-group">
                 <label class="form-label">Specialité</label>
                 <select name="specialite" class="form-select" required>
@@ -395,6 +554,9 @@
                   <option>Mathematics</option>
                 </select>
               </div>
+              <p style="color: red"><?php if (isset($specialite_error)) {
+                echo $specialite_error;
+              } ?></p>
             </div>
           </div>
         </div>
@@ -440,11 +602,7 @@
   <script src="../assets/js/pcoded.js"></script>
   <script src="../assets/js/plugins/feather.min.js"></script>
 
-
-
-
-
-  <script>layout_change('light');</script>
+  <script>layout_change('dark');</script>
 
 
 

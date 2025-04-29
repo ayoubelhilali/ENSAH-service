@@ -1,128 +1,114 @@
 <?php
-// 🔵 Connexion à la base de données
-$host = 'localhost';
-$dbname = 'ensah_service';
-$username = 'root';
-$password = '';
+session_start();
+include('../inc/functions/connections.php');
+
+// Initialize variables and error arrays
+$nom = $prenom = $birthday = $genre = $email = $motdepasse = $specialite = "";
 $errors = 0;
+$nom_error = $prenom_error = $birthday_error = $genre_error = $email_error = $motdepasse_error = $specialite_error = $general_error = "";
 
-include_once 'connections.php';  // Make sure the connection is established correctly
-
-
-// 🟢 Vérifier si les données sont envoyées en POST
-if (isset($_POST['submit'])) {
-    // 🟢 Récupérer les données du formulaire
-    $nom = stripcslashes($_POST['nom']);
-    $prenom = stripcslashes($_POST['prenom']);
-    $email = stripcslashes(strtolower($_POST['email']));
-    $motdepasse = stripcslashes($_POST['password']);
-    if (isset($_POST['birthday_year']) && isset($_POST['birthday_month']) && isset($_POST['birthday_day'])) {
-        $jour = (int) $_POST['birthday_day'];
-        $mois = (int) $_POST['birthday_month'];
-        $annee = (int) $_POST['birthday_year'];
-        // 📅 Formater la date
-        $birthday = htmlentities(mysqli_real_escape_string($conne, $jour . "-" . $mois . "-" . $annee));
-    }
-
-    $nom = htmlentities(mysqli_real_escape_string($conne, $nom));
-    $prenom = htmlentities(mysqli_real_escape_string($conne, $prenom));
-    $email = htmlentities(mysqli_real_escape_string($conne, $email));
-    $motdepasse = htmlentities(mysqli_real_escape_string($conne, $motdepasse));
-    $md5_pass = md5($motdepasse);  // Use md5, but consider using password_hash()
-
-    if (isset($_POST['genre'])) {
-        $genre = htmlentities(mysqli_real_escape_string($conne, $_POST['genre']));
-        if (!in_array($genre, ["Masculin", "Féminin"])) {
-            $genre_error = "Please choose a valid genre!";
-            $errors = 1;
-        }
-    }
-
-    if (isset($_POST['specialite'])) {
-        $specialite = htmlentities(mysqli_real_escape_string($conne, $_POST['specialite']));
-        if (!in_array($specialite, ["Computer science", "Data analyst", "cybersecurity", "Mathematics"])) {
-            $specialite_error = "Please choose a valid specialite!";
-            $errors = 1;
-        }
-    }
-
-    // check nom
-    if (empty($nom)) {
-        $nom_error = "Entrer un nom valide!";
-        $errors = 1;
-    } elseif (strlen($nom) < 3 || strlen($nom) > 15) {
-        $nom_error = "Entrer un nom valide (3 -> 15 caractères)!";
-        $errors = 1;
-    } elseif (filter_var($nom, FILTER_VALIDATE_INT)) {
-        $nom_error = "Entrer un nom valide!";
-        $errors = 1;
-    }
-
-    // check prenom
-    if (empty($prenom)) {
-        $prenom_error = "Entrer un prénom valide!";
-        $errors = 1;
-    } elseif (strlen($prenom) < 3 || strlen($prenom) > 15) {
-        $prenom_error = "Entrer un prénom valide (3 -> 15 caractères)!";
-        $errors = 1;
-    } elseif (filter_var($prenom, FILTER_VALIDATE_INT)) {
-        $prenom_error = "Entrer un prénom valide!";
-        $errors = 1;
-    }
-
-    // check email
-    if (empty($email)) {
-        $email_error = "Entrer un email valide!";
-        $errors = 1;
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $email_error = "Entrer un email valide!";
-        $errors = 1;
-    }
-
-    // check empty genre
-    if (empty($genre)) {
-        $genre_error = "Entrer le genre";
-        $errors = 1;
-    }
-
-    // check empty birthday
-    if (empty($birthday)) {
-        $birthday_error = "Entrer une date de naissance!";
-        $errors = 1;
-    }
-
-    // check empty password
-    if (empty($motdepasse)) {
-        $password_err = "Entrer le mot de passe!";
-        $errors = 1;
-    } elseif (strlen($motdepasse) < 6) {
-        $password_err = "Mot de passe invalide!";
-        $errors = 1;
+// Check if the form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Validate Nom
+    if (empty($_POST["nom"])) {
+        $nom_error = "Nom is required";
+        $errors++;
     } else {
-        if ($errors == 0) {
-            // Ajouter le professeur dans la table des utilisateurs
-            $add_user = "INSERT INTO user(nom, prenom, date_naissance, genre) 
-            VALUES('$nom', '$prenom', '$birthday', '$genre')";
-            mysqli_query($conne, $add_user);
+        $nom = mysqli_real_escape_string($conne, $_POST["nom"]);
+    }
 
+    // Validate Prenom
+    if (empty($_POST["prenom"])) {
+        $prenom_error = "Prenom is required";
+        $errors++;
+    } else {
+        $prenom = mysqli_real_escape_string($conne, $_POST["prenom"]);
+    }
+
+    // Validate Birthday
+    if (empty($_POST["birthday"])) {
+        $birthday_error = "Birthday is required";
+        $errors++;
+    } else {
+        $birthday = mysqli_real_escape_string($conne, $_POST["birthday"]);
+    }
+
+    // Validate Genre
+    if (empty($_POST["genre"])) {
+        $genre_error = "Genre is required";
+        $errors++;
+    } else {
+        $genre = mysqli_real_escape_string($conne, $_POST["genre"]);
+    }
+
+    // Validate Email
+    if (empty($_POST["email"])) {
+        $email_error = "Email is required";
+        $errors++;
+    } else {
+        $email = mysqli_real_escape_string($conne, $_POST["email"]);
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $email_error = "Invalid email format";
+            $errors++;
+        }
+        //Check if email exists
+        $check_email_query = "SELECT * FROM professeur WHERE email = '$email'";
+        $check_email_result = mysqli_query($conne, $check_email_query);
+        if (mysqli_num_rows($check_email_result) > 0) {
+            $email_error = "Email already exists.";
+            $errors++;
+        }
+    }
+
+    // Validate Motdepasse
+    if (empty($_POST["motdepasse"])) {
+        $motdepasse_error = "Password is required";
+        $errors++;
+    } else {
+        $motdepasse = mysqli_real_escape_string($conne, $_POST["motdepasse"]);
+        $md5_pass = md5($motdepasse); // Hash the password
+    }
+
+    // Validate Specialite
+    if (empty($_POST["specialite"])) {
+        $specialite_error = "Specialite is required";
+        $errors++;
+    } else {
+        $specialite = mysqli_real_escape_string($conne, $_POST["specialite"]);
+    }
+
+
+    // If there are no errors, proceed with database insertion
+    if ($errors == 0) {
+        // Ajouter le professeur dans la table des utilisateurs
+        $add_user = "INSERT INTO user(nom, prenom, date_naissance, genre) 
+        VALUES('$nom', '$prenom', '$birthday', '$genre')";
+        if (mysqli_query($conne, $add_user)) {
             // Récupérer l'ID de l'utilisateur inséré
             $user_id = mysqli_insert_id($conne);
 
             if ($user_id) {
-            echo "User $nom added to the database with ID $user_id!";
+                // Ajouter le professeur dans la table des professeurs avec l'ID utilisateur
+                $add_prof = "INSERT INTO professeur(user_ID, email, password, md5_pass, specialite) 
+                VALUES('$user_id', '$email', '$motdepasse', '$md5_pass', '$specialite')";
+                if (mysqli_query($conne, $add_prof)) {
+                    $_SESSION['success_message'] = "Professor added successfully!";  // Optional: set a success message
+                    header("Location: /ENSAH-service/dashboard/admin-dash.php");  // Redirect to the dashboard
+                    exit;
+                } else {
+                    $general_error = "Failed to add professor.";
+                }
 
-            // Ajouter le professeur dans la table des professeurs avec l'ID utilisateur
-            $add_prof = "INSERT INTO professeur(user_ID, email, password, md5_pass, specialite) 
-            VALUES('$user_id', '$email', '$motdepasse', '$md5_pass', '$specialite')";
-            mysqli_query($conne, $add_prof);
-            echo "Professeur $nom added to the database!";
             } else {
-            echo "Failed to retrieve user ID.";
+                $general_error = "Failed to retrieve user ID.";
             }
+
         } else {
-            include "../../pages/prof-list.php";  // Redirect to form if errors exist
-            exit();
+            $general_error = "Failed to add user to the database.";
         }
+
+    } else {
+        $general_error = "Please correct the errors in the form.";
     }
 }
 ?>
