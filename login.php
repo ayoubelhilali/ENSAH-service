@@ -44,20 +44,26 @@
         <div class="auth-header">
           <a href="#" ><img id="imag_header" src="assets/images/logo-withoutBG.png" alt="img"></a>
         </div>
+        <form method="POST"  action="traitement.php">
         <div class="card my-5">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-end mb-4">
-              <h3 class="mb-0"><b>Se connecter</b></h3>
+              <h3 class="mb-0" id="se-connecter"><b>Se connecter</b></h3>
               <a href="#" class="link-primary">Vous n'avez pas de compte ?</a>
             </div>
             <div class="form-group mb-3">
               <label class="form-label">Adresse Email</label>
-              <input type="email" class="form-control" placeholder="Entrer votre adresse Email">
+              <input type="email" name="email" class="form-control" placeholder="Entrer votre adresse Email">
             </div>
             <div class="form-group mb-3">
               <label class="form-label">Mot de passe</label>
-              <input type="password" class="form-control" placeholder="Entrer votre mot de passe">
+              <input type="password" name="password" class="form-control" placeholder="Entrer votre mot de passe">
             </div>
+            <?php 
+               if(isset($_GET['message'])){
+                echo "<p style='color: red;'>" . htmlspecialchars($_GET['message']) . "</p>";
+               }
+             ?>
             <div class="d-flex mt-1 justify-content-between">
               <div class="form-check">
                 <input class="form-check-input input-primary" type="checkbox" id="customCheckc1" checked="">
@@ -70,6 +76,7 @@
             </div>
           </div>
         </div>
+      </form>
       </div>
     </div>
   </div>
