@@ -22155,9 +22155,7 @@ select.form-control[data-multiselectsplitter-firstselect-selector], select.form-
   bottom: 0px ;
 }
 
-.auth-main{
-  background-color:#00c9b0  ;
-}
+
 .auth-main .auth-wrapper.v3 .auth-form:after {
   content: "";
   position: absolute;
