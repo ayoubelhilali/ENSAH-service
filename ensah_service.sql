@@ -54,6 +54,8 @@ CREATE TABLE `user` (
   `nom` varchar(20) NOT NULL,
   `prenom` varchar(20) NOT NULL,
   `date_naissance` varchar(11) NOT NULL,
+  `email` varchar(30) NOT NULL ,
+  `password` varchar(8) NOT NULL ,
   `genre` enum('masculin','feminin') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
