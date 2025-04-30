@@ -3,10 +3,10 @@
 $email= $_POST['email'] ;
 $password = $_POST['password'] ;
 
-$pdo = new PDO('mysql:host=localhost;dbname:ensah_service.sql','root','');
+$pdo = new PDO('mysql:host=localhost;port=3307;dbname=ensah_service', 'root', '');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
  
-$stmt = $pdo->prepare("SELECT * FROM user where email=?") ;
+$stmt = $pdo->prepare("SELECT * FROM professeur where email=?") ;
 $stmt->execute([$email]) ;
 $user = $stmt->fetch() ;
 

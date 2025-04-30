@@ -72,7 +72,7 @@
               <h5 class="text-secondary f-w-400">Mot de passe oublié ?</h5>
             </div>
             <div class="d-grid mt-4">
-              <button type="button" class="btn btn-primary">Se connecter</button>
+              <button type="submit" class="btn btn-primary">Se connecter</button>
             </div>
           </div>
         </div>
