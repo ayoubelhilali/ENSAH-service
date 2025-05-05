@@ -5,6 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 $avatar = '/ENSAH-service/assets/images/avatar-M.jpg'; // chemin par défaut
 include('../inc/functions/connections.php');
+include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongPass.php");
 ?>
 
 <!DOCTYPE html>
@@ -71,9 +72,8 @@ include('../inc/functions/connections.php');
           <div class="row align-items-center">
             <div class="col-md-12">
               <ul class="breadcrumb">
-                <li class="breadcrumb-item"><a href="../dashboard/index.html">Home</a></li>
-                <li class="breadcrumb-item"><a href="javascript: void(0)">Profile</a></li>
-                <li class="breadcrumb-item" aria-current="page">User List</li>
+                <li class="breadcrumb-item"><a href="../dashboard/admin-dash.php">Home</a></li>
+                <li class="breadcrumb-item" aria-current="page">Professeurs</li>
               </ul>
             </div>
             <div class="col-md-12">
@@ -92,25 +92,35 @@ include('../inc/functions/connections.php');
         <div class="col-sm-12">
           <div class="card table-card">
             <div class="card-body">
-              <div class="text-end p-4 pb-0">
-                <a href="#" class="btn btn-primary d-inline-flex align-item-center" data-bs-toggle="modal"
-                  data-bs-target="#user-edit_add-modal">
-                  <i class="ti ti-plus f-18"></i> Ajouter professeur
-                </a>
-              </div>
+            <!-------------------------------------->
+            <div class="text-end p-4 pb-0">
+              <a href="#" class="btn btn-primary d-inline-flex align-items-center" data-bs-toggle="modal"
+              data-bs-target="#user-edit_add-modal">
+              <i class="ti ti-plus f-18"></i> Ajouter professeur
+              </a>
+
+              <?php if (isset($_GET['success'])): ?>
+                <div id="success-message" style="color: green; margin-top: 10px;">✅ <?php echo $_SESSION["success_message"] ?></div>
+                <script>
+                setTimeout(function() {
+                  document.getElementById('success-message').remove();
+                }, 10000); // 10 seconds
+                </script>
+              <?php endif; ?>
+            </div>
+
+                  <!---------------------------------->
               <div class="table-responsive">
                 <table class="table table-hover" id="pc-dt-simple">
                   <thead>
                     <tr>
                       <th></th>
                       <th>#</th>
-                      <th>Nom complet</th>
+                      <th>Photo</th>
+                      <th>Nom</th>
+                      <th>Prénom</th>
                       <th>Email</th>
-                      <th>CIN</th>
-                      <th>Genre</th>
-                      <th>Age</th>
                       <th>specialite</th>
-                      <th>Status</th>
                       <th class="text-center">Actions</th>
                     </tr>
                   </thead>
@@ -118,10 +128,9 @@ include('../inc/functions/connections.php');
                     <?php
                     $profs = "SELECT * FROM `professeur` P 
                   JOIN `user` U ON P.user_ID = U.user_ID";
-                    $all_profs = mysqli_query($conne, $profs);
-
+                    $all_profs = $pdo->query($profs);
                     if ($all_profs) {
-                      while ($prof = mysqli_fetch_assoc($all_profs)) {
+                      while ($prof = $all_profs->fetch(PDO::FETCH_ASSOC)) {
                         ?>
                         <tr>
                           <td>
@@ -131,37 +140,37 @@ include('../inc/functions/connections.php');
                           </td>
                           <td><?php echo $prof['prof_ID'] ?></td>
                           <td>
-                            <div class="row">
-                              <div class="col-auto pe-0">
-                                <img src="<?php echo $prof['image']; ?>" alt="user-image" class="wid-40 rounded-circle">
-                              </div>
+                            <div class="col-auto pe-0">
+                                <img src="<?php if(!empty($prof['image']))echo $prof['image']; else echo "/ENSAH-service/assets/images/avatar-M.jpg"?>" alt="user-image" class="wid-40 rounded-circle">
+                            </div>
+                          </td>
+                          <td>
+                            <div class="row"> 
                               <div class="col">
-                                <h5 class="mb-0"><?php echo $prof['nom'] . " " . $prof['prenom'] ?></h5>
+                                <h5 class="mb-1"><?php echo $prof['nom'] ?></h5>
                               </div>
                             </div>
                           </td>
+                          <td>
+                            <tdv class="row"> 
+                              <div class="col">
+                                <h5 class="mb-0"><?php echo $prof['prenom']  ?></h5>
+                              </div>
+                            </tdv>
+                          </td>
                           <td><?php echo $prof['email'] ?></td>
-                          <td><?php echo $prof['CIN'] ?></td>
-                          <td><?php echo $prof['genre'] ?></td>
-                          <td><?php
-                          $birthday = $prof["date_naissance"];
-                          $birthDate = new DateTime($birthday);
-                          $today = new DateTime(); // current date
-                      
-                          $age = $today->diff($birthDate)->y;
-
-                          echo $age . " ans";
-
-                          ?> </td>
-                          <td><?php echo $prof['specialite'] ?></td>
                           <td><?php echo $prof['specialite'] ?></td>
                           <td class="text-center">
                             <ul class="list-inline me-auto mb-0">
                               <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                                <a href="#" class="avtar avtar-xs btn-link-secondary" data-bs-toggle="modal"
-                                  data-bs-target="#user-modal">
+                                <a href="#" class="avtar avtar-xs btn-link-secondary view-btn" data-bs-toggle="modal"
+                                  data-bs-target="#user-modal" data-nom="<?= $prof['nom']; ?>"
+                                  data-prenom="<?= $prof['prenom']; ?>" data-email="<?= $prof['email']; ?>"
+                                  data-specialite="<?= $prof['specialite']; ?>" data-img="<?= $prof['image']; ?>" data-cin="<?= $prof['CIN']; ?>"
+                                  data-genre="<?= $prof['genre']; ?>" data-birthday="<?= $prof['date_naissance']; ?>">
                                   <i class="ti ti-eye f-18"></i>
                                 </a>
+
                               </li>
                               <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
                                 <a href="#" class="avtar avtar-xs btn-link-primary" data-bs-toggle="modal"
@@ -196,146 +205,142 @@ include('../inc/functions/connections.php');
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header border-0 pb-0">
-          <h5 class="mb-0">Customer Details</h5>
+          <h5 class="mb-0">Détails du professeur</h5>
           <a href="#" class="avtar avtar-s btn-link-danger" data-bs-dismiss="modal">
             <i class="ti ti-x f-20"></i>
           </a>
         </div>
         <div class="modal-body">
           <div class="row">
+            <!-- Colonne gauche : infos principales -->
             <div class="col-lg-4">
               <div class="card">
                 <div class="card-body position-relative">
                   <div class="position-absolute end-0 top-0 p-3">
-                    <span class="badge bg-primary">Relationship</span>
+                    <span class="badge bg-primary">Professeur</span>
                   </div>
                   <div class="text-center mt-3">
                     <div class="chat-avtar d-inline-flex mx-auto">
-                      <img class="rounded-circle img-fluid wid-60" src="../assets/images/user/avatar-5.jpg"
-                        alt="User image">
+                      <img id="modal-img" class="rounded-circle img-fluid wid-60" src="" alt="User image">
                     </div>
-                    <h5 class="mb-0">Aaron Poole</h5>
-                    <p class="text-muted text-sm">Manufacturing Director</p>
-                    <hr class="my-3">
-                    <div class="row g-3">
-                      <div class="col-4">
-                        <h5 class="mb-0">45</h5>
-                        <small class="text-muted">Age</small>
-                      </div>
-                      <div class="col-4 border border-top-0 border-bottom-0">
-                        <h5 class="mb-0">86%</h5>
-                        <small class="text-muted">Progress</small>
-                      </div>
-                      <div class="col-4">
-                        <h5 class="mb-0">7634</h5>
-                        <small class="text-muted">Visits</small>
-                      </div>
-                    </div>
+                    <h5 class="mb-0" id="modal-nom"></h5>
+                    <p class="text-muted text-sm" id="modal-poste"></p>
                     <hr class="my-3">
                     <div class="d-inline-flex align-items-center justify-content-between w-100 mb-3">
                       <i class="ti ti-mail"></i>
-                      <p class="mb-0">bo@gmail.com</p>
+                      <p class="mb-0" id="modal-email"></p>
                     </div>
                     <div class="d-inline-flex align-items-center justify-content-between w-100 mb-3">
                       <i class="ti ti-phone"></i>
-                      <p class="mb-0">email@test.com</p>
+                      <p class="mb-0" id="modal-phone">--</p>
                     </div>
                     <div class="d-inline-flex align-items-center justify-content-between w-100 mb-3">
                       <i class="ti ti-map-pin"></i>
-                      <p class="mb-0">Lesotho</p>
+                      <p class="mb-0" id="modal-pays">--</p>
                     </div>
                     <div class="d-inline-flex align-items-center justify-content-between w-100">
                       <i class="ti ti-link"></i>
                       <a href="#" class="link-primary">
-                        <p class="mb-0">https://anshan.dh.url</p>
+                        <p class="mb-0" id="modal-link">--</p>
                       </a>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+
+            <!-- Colonne droite : détails personnels -->
             <div class="col-lg-8">
               <div class="card">
                 <div class="card-header">
-                  <h5>Personal Details</h5>
+                  <h5>Détails personnels</h5>
                 </div>
                 <div class="card-body">
                   <ul class="list-group list-group-flush">
                     <li class="list-group-item px-0 pt-0">
                       <div class="row">
                         <div class="col-md-6">
-                          <p class="mb-1 text-muted">Full Name</p>
-                          <h6 class="mb-0">Aaron Poole</h6>
+                          <p class="mb-1 text-muted">Nom complet</p>
+                          <h6 class="mb-0" id="modal-fullname"></h6>
                         </div>
                         <div class="col-md-6">
-                          <p class="mb-1 text-muted">Father Name</p>
-                          <h6 class="mb-0">Mr. Ralph Sabatini</h6>
+                          <p class="mb-1 text-muted">CIN</p>
+                          <h6 class="mb-0" id="modal-cin"></h6>
                         </div>
                       </div>
                     </li>
                     <li class="list-group-item px-0">
                       <div class="row">
                         <div class="col-md-6">
-                          <p class="mb-1 text-muted">Country</p>
-                          <h6 class="mb-0">Lesotho</h6>
+                          <p class="mb-1 text-muted">Date de naissance</p>
+                          <h6 class="mb-0" id="modal-birthday"></h6>
                         </div>
                         <div class="col-md-6">
-                          <p class="mb-1 text-muted">Zip Code</p>
-                          <h6 class="mb-0">247 849</h6>
+                          <p class="mb-1 text-muted">Genre</p>
+                          <h6 class="mb-0" id="modal-genre"></h6>
                         </div>
                       </div>
                     </li>
                     <li class="list-group-item px-0 pb-0">
-                      <p class="mb-1 text-muted">Address</p>
-                      <h6 class="mb-0">647 Punam Center, Ulabifgu, Myanmar (Burma) - 41487</h6>
+                      <p class="mb-1 text-muted">Adresse</p>
+                      <h6 class="mb-0" id="modal-adresse">--</h6>
                     </li>
                   </ul>
                 </div>
               </div>
+
               <div class="card">
                 <div class="card-header">
-                  <h5>About me</h5>
+                  <h5>À propos</h5>
                 </div>
                 <div class="card-body">
-                  <p class="mb-0">Hello, I’m Aaron Poole Manufacturing Director based in international company, Void
-                    jiidki me na fep juih ced gihhiwi launke cu mig tujum peodpo.</p>
+                  <p class="mb-0" id="modal-about">
+                    -- À propos du professeur --
+                  </p>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
+          </div> <!-- /row -->
+        </div> <!-- /modal-body -->
+      </div> <!-- /modal-content -->
+    </div> <!-- /modal-dialog -->
   </div>
+
+
   <?php
-
-  // Initialize variables and error arrays
-  $nom = $prenom = $cin = $birthday_day = $birthday_month = $birthday_year = $genre = $email = $password = $md5_pass = $specialite = "";
+  // Initialize variables and error messages
+  $nom = $prenom = $cin = $birthday_day = $birthday_month = $birthday_year = "";
+  $genre = $email = $password = $md5_pass = $specialite = "";
   $errors = 0;
-  $CIN_error = $nom_error = $prenom_error = $birthday_error = $genre_error = $email_error = $password_error = $specialite_error = $upload_error = "";
 
-  // Check if the form is submitted
+  $CIN_error = $nom_error = $prenom_error = $birthday_error = "";
+  $genre_error = $email_error = $password_error = $specialite_error = $upload_error = "";
+
+  // Check if form is submitted
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
     // Validate Nom
     if (empty($_POST["nom"])) {
       $nom_error = "Nom is required";
       $errors++;
     } else {
-      $nom = mysqli_real_escape_string($conne, $_POST["nom"]);
+      $nom = htmlspecialchars($_POST["nom"], ENT_QUOTES, 'UTF-8');
     }
 
-    // Validate Prenom
+    // Validate Prénom
     if (empty($_POST["prenom"])) {
       $prenom_error = "Prénom is required";
       $errors++;
     } else {
-      $prenom = mysqli_real_escape_string($conne, $_POST["prenom"]);
+      $prenom = htmlspecialchars($_POST["prenom"], ENT_QUOTES, 'UTF-8');
     }
+
+    // Validate CIN
     if (empty($_POST["CIN"])) {
-      $CIN_error = "CI? is required";
+      $CIN_error = "CIN is required";
       $errors++;
     } else {
-      $cin = mysqli_real_escape_string($conne, $_POST["CIN"]);
+      $cin = htmlspecialchars($_POST["CIN"], ENT_QUOTES, 'UTF-8');
     }
 
     // Validate Birthday
@@ -343,12 +348,12 @@ include('../inc/functions/connections.php');
       $birthday_error = "Birthday is required";
       $errors++;
     } else {
-      $birthday_day = mysqli_real_escape_string($conne, $_POST["birthday_day"]);
-      $birthday_month = mysqli_real_escape_string($conne, $_POST["birthday_month"]);
-      $birthday_year = mysqli_real_escape_string($conne, $_POST["birthday_year"]);
-      $birthday = $birthday_year . "-" . $birthday_month . "-" . $birthday_day;  //YYYY-MM-DD
+      $birthday_day = htmlspecialchars($_POST["birthday_day"], ENT_QUOTES, 'UTF-8');
+      $birthday_month = htmlspecialchars($_POST["birthday_month"], ENT_QUOTES, 'UTF-8');
+      $birthday_year = htmlspecialchars($_POST["birthday_year"], ENT_QUOTES, 'UTF-8');
+      $birthday = "$birthday_year-$birthday_month-$birthday_day"; // YYYY-MM-DD
   
-      //Validate valid date
+      // Validate date format
       if (!DateTime::createFromFormat('Y-m-d', $birthday)) {
         $birthday_error = "Invalid date format.";
         $errors++;
@@ -360,7 +365,7 @@ include('../inc/functions/connections.php');
       $genre_error = "Genre is required";
       $errors++;
     } else {
-      $genre = mysqli_real_escape_string($conne, $_POST["genre"]);
+      $genre = htmlspecialchars($_POST["genre"], ENT_QUOTES, 'UTF-8');
     }
 
     // Validate Email
@@ -368,60 +373,58 @@ include('../inc/functions/connections.php');
       $email_error = "Email is required";
       $errors++;
     } else {
-      $email = mysqli_real_escape_string($conne, $_POST["email"]);
+      $email = htmlspecialchars($_POST["email"], ENT_QUOTES, 'UTF-8');
       if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $email_error = "Invalid email format";
         $errors++;
-      }
-      //Check if email exists
-      $check_email_query = "SELECT * FROM professeur WHERE email = '$email'";
-      $check_email_result = mysqli_query($conne, $check_email_query);
-      if (mysqli_num_rows($check_email_result) > 0) {
-        $email_error = "Email already exists.";
-        $errors++;
+      } else {
+        // Check if email already exists
+        $check_email_query = "SELECT * FROM professeur WHERE email = '$email'";
+        $check_email_stmt = $pdo->prepare($check_email_query);
+        $check_email_stmt->execute();
+        if ($check_email_stmt->rowCount() > 0) {
+          $email_error = "Email already exists.";
+          $errors++;
+        }
       }
     }
 
-    // Validate password
-    if (empty($_POST["password"])) {
-      $password_error = "Password is required";
-      $errors++;
-    } else if (strlen($_POST["password"]) < 8) {
-      $password_err = "Password should contain minimum 8 digits";
-    } else {
-      $password = mysqli_real_escape_string($conne, $_POST["password"]);
+    // Validate Password
+    if (isStrongPassword($_POST["password"])) {
+      $password = htmlspecialchars($_POST["password"], ENT_QUOTES, 'UTF-8');
       $md5_pass = md5($password); // Hash the password
+    } else {
+      $password_error = "Password should include at least: 1 uppercase, 1 lowercase, 1 digit, 1 special character, and be at least 8 characters long.";
+      $errors++;
     }
 
-    // Validate Specialite
+    // Validate Specialité
     if (empty($_POST["specialite"])) {
-      $specialite_error = "Specialité is required";
+      $specialite_error = "Spécialité is required";
       $errors++;
     } else {
-      $specialite = mysqli_real_escape_string($conne, $_POST["specialite"]);
+      $specialite = htmlspecialchars($_POST["specialite"], ENT_QUOTES, 'UTF-8');
     }
 
-    if (!empty($_POST['avatar_path'])) {
-      $avatar = mysqli_real_escape_string($conne, $_POST['avatar_path']);
-      // Save it in your INSERT query
-    }
-    $avatar_path = isset($_POST['avatar_path']) ? mysqli_real_escape_string($conne, $_POST['avatar_path']) : '';
-    echo $avatar_path;
-    // If there are no errors, proceed with database insertion
+    // Handle avatar path
+    $avatar_path = isset($_POST['avatar_path']) ?  htmlspecialchars($_POST["avatar_path"], ENT_QUOTES, 'UTF-8') : '';
+
+    // Proceed with insertion if no errors
     if ($errors == 0) {
-      // Ajouter le professeur dans la table des utilisateurs
-      $add_user = "INSERT INTO user(nom, prenom,CIN,image, date_naissance, genre) 
-        VALUES('$nom', '$prenom','$cin','$avatar_path', '$birthday', '$genre')";
-      if (mysqli_query($conne, $add_user)) {
-        // Récupérer l'ID de l'utilisateur inséré
-        $user_id = mysqli_insert_id($conne);
+      // Insert into user table
+      $add_user = "INSERT INTO user(nom, prenom, CIN, image, date_naissance, genre) 
+                     VALUES('$nom', '$prenom', '$cin', '$avatar_path', '$birthday', '$genre')";
 
+      $stmt = $pdo->prepare($add_user);
+      if ($stmt->execute()) {
+        $user_id = $pdo->lastInsertId();
         if ($user_id) {
+          // Insert into professeur table
           $add_prof = "INSERT INTO professeur(user_ID, email, password, md5_pass, specialite) 
-                VALUES('$user_id', '$email', '$password', '$md5_pass', '$specialite')";
-          if (mysqli_query($conne, $add_prof)) {
+                             VALUES('$user_id', '$email', '$password', '$md5_pass', '$specialite')";
+          if ($pdo->query($add_prof)) {
             $_SESSION['success_message'] = "Professor added successfully!";
-            header("/ENSAH-service/pages/prof-list.php");
+            header("Location: /ENSAH-service/pages/prof-list.php?success=1");
             exit;
           } else {
             $general_error = "Failed to add professor.";
@@ -437,6 +440,7 @@ include('../inc/functions/connections.php');
     }
   }
   ?>
+
   <?php if ($_SERVER["REQUEST_METHOD"] == "POST" && $errors > 0): ?>
     <script>
       document.addEventListener('DOMContentLoaded', function () {
@@ -482,40 +486,44 @@ include('../inc/functions/connections.php');
               </div>
             </div>
             <div class="col-sm-9">
+              <div class="form-group">
+                <label class="form-label">Nom</label>
+                <input required name="nom" type="text" class="form-control nameInput" placeholder="Nom"
+                  value="<?php echo htmlspecialchars($nom); ?>">
+              </div>
               <p style="color: red"><?php if (isset($nom_error)) {
                 echo $nom_error;
               } ?></p>
               <div class="form-group">
-                <label class="form-label">Nom</label>
-                <input required name="nom" type="text" class="form-control" placeholder="Nom"
+                <label class="form-label">Prénom</label>
+                <input required name="prenom" type="text" class="form-control prenomInput" placeholder="Prénom"
                   value="<?php echo htmlspecialchars($nom); ?>">
               </div>
               <p style="color: red"><?php if (isset($prenom_error)) {
                 echo $prenom_error;
               } ?></p>
               <div class="form-group">
-                <label class="form-label">Prénom</label>
-                <input required name="prenom" type="text" class="form-control" placeholder="Prénom"
-                  value="<?php echo htmlspecialchars($nom); ?>">
-              </div>
-              <div class="form-group">
                 <label class="form-label">CIN</label>
-                <input required name="CIN" type="text" class="form-control" placeholder="CIN"
+                <input required name="CIN" type="text" class="form-control cinInput" placeholder="CIN"
                   value="<?php echo htmlspecialchars($cin); ?>">
               </div>
+              <p style="color: red"><?php if (isset($CIN_error)) {
+                echo $CIN_error;
+              } ?></p>
               <div class="form-group">
                 <label for="day" class="form-label">Date de naissance :</label><br>
 
-                <select name="birthday_day" id="day" required>
-                  <option value="">Jour</option>
+                <select name="birthday_day" class="selectInput" id="day" required>
+                  <option value="" class="defaultOption" disabled <?php if (empty($birthday_day))
+                    echo 'selected'; ?>>Jour</option>
                   <!-- Jours de 1 à 31 -->
                   <?php for ($i = 1; $i <= 31; $i++) {
                     echo "<option value='$i'>$i</option>";
                   } ?>
                 </select>
 
-                <select name="birthday_month" id="month" required>
-                  <option disabled <?php if (empty($birthday_month))
+                <select name="birthday_month" class="selectInput" id="month" required>
+                  <option disabled class="defaultOption" <?php if (empty($birthday_month))
                     echo 'selected'; ?>>Mois</option>
                   <?php
                   $months = [
@@ -538,8 +546,9 @@ include('../inc/functions/connections.php');
                   ?>
                 </select>
 
-                <select name="birthday_year" id="year" required>
-                  <option value="">Année</option>
+                <select name="birthday_year" id="year" class="selectInput" required>
+                  <option disabled class="defaultOption" value="" <?php if (empty($birthday_year))
+                    echo 'selected'; ?>>Année</option>
                   <!-- Années de 2025 à 1900 -->
                   <?php for ($i = 2025; $i >= 1900; $i--) {
                     echo "<option value='$i'>$i</option>";
@@ -551,8 +560,8 @@ include('../inc/functions/connections.php');
               } ?></p>
               <div class="form-group">
                 <label class="form-label">Genre</label>
-                <select name="genre" class="form-select" required>
-                  <option disabled <?php if (empty($genre))
+                <select name="genre" class="form-select selectInput" required>
+                  <option disabled class="defaultOption" <?php if (empty($genre))
                     echo 'selected'; ?>>Selectionner Genre</option>
                   <option <?php if ($genre == "Masculin")
                     echo 'selected'; ?>>Masculin</option>
@@ -565,7 +574,7 @@ include('../inc/functions/connections.php');
               } ?></p>
               <div class="form-group">
                 <label class="form-label">Email</label>
-                <input name="email" type="email" class="form-control" placeholder="Email" required
+                <input name="email" type="email" class="form-control emailInput" placeholder="Email" required
                   value="<?php echo htmlspecialchars($email); ?>">
               </div>
               <p style="color: red"><?php if (isset($email_error)) {
@@ -574,20 +583,20 @@ include('../inc/functions/connections.php');
               <div class="form-group ">
                 <label class="form-label">Password</label>
                 <div style="position: relative;">
-                  <input name="password" type="password" placeholder="Enter password" class="form-control"
+                  <input name="password" type="text" placeholder="Enter password" class="form-control passwordInput"
                     style="padding-right: 40px;" required>
-                  <i class="fas fa-sync-alt"
+                  <i class="fas fa-sync-alt generateBtn"
                     style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
                 </div>
-
               </div>
-              <p style="color: red"><?php if (isset($password_err)) {
-                echo $password_err;
+              <p style="color: red"><?php if (isset($password_error)) {
+                echo $password_error;
               } ?></p>
               <div class="form-group">
                 <label class="form-label">Specialité</label>
-                <select name="specialite" class="form-select" required>
-                  <option disabled selected>Select Specialité</option>
+                <select name="specialite" class="form-select selectInput" required>
+                  <option disabled class="defaultOption" <?php if (empty($specialite))
+                    echo 'selected'; ?>>Specialitée</option>
                   <option>Computer science</option>
                   <option>Data analyst</option>
                   <option>cybersecurity</option>
@@ -604,7 +613,7 @@ include('../inc/functions/connections.php');
           <ul class="list-inline me-auto mb-0">
             <li class="list-inline-item align-bottom">
               <a href="#" class="avtar avtar-s btn-link-danger w-sm-auto" data-bs-toggle="tooltip" title="Delete">
-                <i class="ti ti-trash f-18"></i>
+                <i class="ti ti-trash f-18 clearBtn"></i>
               </a>
             </li>
           </ul>
@@ -659,11 +668,44 @@ include('../inc/functions/connections.php');
 
 
   <script>font_change("Public-Sans");</script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.view-btn').forEach(button => {
+        button.addEventListener('click', () => {
+          // Get the data from the clicked button
+
+          const cin = button.getAttribute('data-cin');
+          const nom = button.getAttribute('data-nom');
+          const prenom = button.getAttribute('data-prenom');
+          const birthday = button.getAttribute('data-birthday');
+          const genre = button.getAttribute('data-genre');
+          const email = button.getAttribute('data-email');
+          const specialite = button.getAttribute('data-specialite');
+          const image = button.getAttribute('data-img') || '/ENSAH-service/assets/images/avatar-M.jpg';
+
+          // Populate the modal with the data
+          document.getElementById('modal-img').src = image;
+          document.getElementById('modal-nom').textContent = `${nom} ${prenom}`;
+          document.getElementById('modal-poste').textContent = specialite;
+          document.getElementById('modal-cin').textContent = cin;
+          document.getElementById('modal-birthday').textContent = birthday;
+          document.getElementById('modal-genre').textContent = genre;
+          document.getElementById('modal-email').textContent = email;
+          document.getElementById('modal-fullname').textContent = `${nom} ${prenom}`;
+          document.getElementById('modal-specialite').textContent = specialite; // Add any missing fields
+        });
+      });
+    });
+
+
+  </script>
 
 
 
   <!-- [Page Specific JS] start -->
   <script src="../assets/js/plugins/simple-datatables.js"></script>
+  <script src="../assets/js/generatePass.js"></script>
+  <script src="../assets/js/clearForm.js"></script>
   <script>
     const dataTable = new simpleDatatables.DataTable('#pc-dt-simple', {
       sortable: false,

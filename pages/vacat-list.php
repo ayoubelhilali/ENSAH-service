@@ -1,3 +1,13 @@
+<?php
+ob_start();
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
+$avatar = '/ENSAH-service/assets/images/avatar-M.jpg'; // chemin par défaut
+include('../inc/functions/connections.php');
+include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongPass.php");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <!-- [Head] start -->
@@ -32,6 +42,7 @@
   <link rel="stylesheet" href="/ENSAH-service/assets/css/style.css" id="main-style-link">
   <link rel="stylesheet" href="/ENSAH-service/assets/css/style-preset.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="/ENSAH-service/assets/css/main.css">
 
 
 </head>
@@ -62,13 +73,12 @@
             <div class="col-md-12">
               <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="../dashboard/index.html">Home</a></li>
-                <li class="breadcrumb-item"><a href="javascript: void(0)">Profile</a></li>
-                <li class="breadcrumb-item" aria-current="page">User List</li>
+                <li class="breadcrumb-item" aria-current="page">vacataires</li>
               </ul>
             </div>
             <div class="col-md-12">
               <div class="page-header-title">
-                <h2 class="mb-0">Vacataires List</h2>
+                <h2 class="mb-0">Liste des vacataires</h2>
               </div>
             </div>
           </div>
@@ -82,837 +92,107 @@
         <div class="col-sm-12">
           <div class="card table-card">
             <div class="card-body">
-              <div class="text-end p-4 pb-0">
-                <a href="#" class="btn btn-primary d-inline-flex align-item-center" data-bs-toggle="modal"
-                  data-bs-target="#user-edit_add-modal">
-                  <i class="ti ti-plus f-18"></i> Add User
-                </a>
-              </div>
+            <!-------------------------------------->
+            <div class="text-end p-4 pb-0">
+              <a href="#" class="btn btn-primary d-inline-flex align-items-center" data-bs-toggle="modal"
+              data-bs-target="#user-edit_add-modal">
+              <i class="ti ti-plus f-18"></i> Ajouter vacataire
+              </a>
+
+              <?php if (isset($_GET['success'])): ?>
+                  <div id="success-message" style="color: green; margin-top: 10px;">✅ <?php echo $_SESSION["success_message"] ?></div>
+                  <script>
+                  setTimeout(function() {
+                    document.getElementById('success-message').remove();
+                  }, 10000); // 10 seconds
+                  </script>
+              <?php endif; ?>
+            </div>
+
+                  <!---------------------------------->
               <div class="table-responsive">
                 <table class="table table-hover" id="pc-dt-simple">
                   <thead>
                     <tr>
                       <th></th>
                       <th>#</th>
-                      <th>User Name</th>
-                      <th>Contact</th>
-                      <th>Age</th>
-                      <th>Country</th>
-                      <th>Status</th>
+                      <th>Photo</th>
+                      <th>Nom</th>
+                      <th>Prénom</th>
+                      <th>Email</th>
+                      <th>specialite</th>
                       <th class="text-center">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox">
-                        </div>
-                      </td>
-                      <td>179</td>
-                      <td>
-                        <div class="row">
-                          <div class="col-auto pe-0">
-                            <img src="../assets/images/user/avatar-1.jpg" alt="user-image"
-                              class="wid-40 rounded-circle">
-                          </div>
-                          <div class="col">
-                            <h5 class="mb-0">Addie Bass</h5>
-                            <p class="text-muted f-12 mb-0">mareva@gmail.com</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td>+1 (247) 849-6968</td>
-                      <td>45</td>
-                      <td>United Kingdom</td>
-                      <td><span class="badge bg-light-success rounded-pill f-12">Verified</span> </td>
-                      <td class="text-center">
-                        <ul class="list-inline me-auto mb-0">
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                            <a href="#" class="avtar avtar-xs btn-link-secondary" data-bs-toggle="modal"
-                              data-bs-target="#user-modal">
-                              <i class="ti ti-eye f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                            <a href="#" class="avtar avtar-xs btn-link-primary" data-bs-toggle="modal"
-                              data-bs-target="#user-edit_add-modal">
-                              <i class="ti ti-edit-circle f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                            <a href="#" class="avtar avtar-xs btn-link-danger">
-                              <i class="ti ti-trash f-18"></i>
-                            </a>
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox">
-                        </div>
-                      </td>
-                      <td>60</td>
-                      <td>
-                        <div class="row">
-                          <div class="col-auto pe-0">
-                            <img src="../assets/images/user/avatar-2.jpg" alt="user-image"
-                              class="wid-40 rounded-circle">
-                          </div>
-                          <div class="col">
-                            <h5 class="mb-0">Agnes McGee</h5>
-                            <p class="text-muted f-12 mb-0">heba@gmail.com</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td>+1 (247) 849-6968</td>
-                      <td>42</td>
-                      <td>Russia</td>
-                      <td><span class="badge bg-light-success rounded-pill f-12">Verified</span> </td>
-                      <td class="text-center">
-                        <ul class="list-inline me-auto mb-0">
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                            <a href="#" class="avtar avtar-xs btn-link-secondary" data-bs-toggle="modal"
-                              data-bs-target="#user-modal">
-                              <i class="ti ti-eye f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                            <a href="#" class="avtar avtar-xs btn-link-primary" data-bs-toggle="modal"
-                              data-bs-target="#user-edit_add-modal">
-                              <i class="ti ti-edit-circle f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                            <a href="#" class="avtar avtar-xs btn-link-danger">
-                              <i class="ti ti-trash f-18"></i>
-                            </a>
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox">
-                        </div>
-                      </td>
-                      <td>133</td>
-                      <td>
-                        <div class="row">
-                          <div class="col-auto pe-0">
-                            <img src="../assets/images/user/avatar-3.jpg" alt="user-image"
-                              class="wid-40 rounded-circle">
-                          </div>
-                          <div class="col">
-                            <h5 class="mb-0">Alberta Robbins</h5>
-                            <p class="text-muted f-12 mb-0">miza@gmail.com</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td>+1 (247) 849-6968</td>
-                      <td>20</td>
-                      <td>Honduras</td>
-                      <td><span class="badge bg-light-primary rounded-pill f-12">Pending</span> </td>
-                      <td class="text-center">
-                        <ul class="list-inline me-auto mb-0">
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                            <a href="#" class="avtar avtar-xs btn-link-secondary" data-bs-toggle="modal"
-                              data-bs-target="#user-modal">
-                              <i class="ti ti-eye f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                            <a href="#" class="avtar avtar-xs btn-link-primary" data-bs-toggle="modal"
-                              data-bs-target="#user-edit_add-modal">
-                              <i class="ti ti-edit-circle f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                            <a href="#" class="avtar avtar-xs btn-link-danger">
-                              <i class="ti ti-trash f-18"></i>
-                            </a>
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox">
-                        </div>
-                      </td>
-                      <td>60</td>
-                      <td>
-                        <div class="row">
-                          <div class="col-auto pe-0">
-                            <img src="../assets/images/user/avatar-4.jpg" alt="user-image"
-                              class="wid-40 rounded-circle">
-                          </div>
-                          <div class="col">
-                            <h5 class="mb-0">Agnes McGee</h5>
-                            <p class="text-muted f-12 mb-0">heba@gmail.com</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td>+1 (247) 849-6968</td>
-                      <td>42</td>
-                      <td>Grenada</td>
-                      <td><span class="badge bg-light-primary rounded-pill f-12">Pending</span> </td>
-                      <td class="text-center">
-                        <ul class="list-inline me-auto mb-0">
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                            <a href="#" class="avtar avtar-xs btn-link-secondary" data-bs-toggle="modal"
-                              data-bs-target="#user-modal">
-                              <i class="ti ti-eye f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                            <a href="#" class="avtar avtar-xs btn-link-primary" data-bs-toggle="modal"
-                              data-bs-target="#user-edit_add-modal">
-                              <i class="ti ti-edit-circle f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                            <a href="#" class="avtar avtar-xs btn-link-danger">
-                              <i class="ti ti-trash f-18"></i>
-                            </a>
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox">
-                        </div>
-                      </td>
-                      <td>60</td>
-                      <td>
-                        <div class="row">
-                          <div class="col-auto pe-0">
-                            <img src="../assets/images/user/avatar-5.jpg" alt="user-image"
-                              class="wid-40 rounded-circle">
-                          </div>
-                          <div class="col">
-                            <h5 class="mb-0">Agnes McGee</h5>
-                            <p class="text-muted f-12 mb-0">heba@gmail.com</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td>+1 (247) 849-6968</td>
-                      <td>42</td>
-                      <td>Azerbaijan</td>
-                      <td><span class="badge bg-light-danger rounded-pill f-12">Rejected</span> </td>
-                      <td class="text-center">
-                        <ul class="list-inline me-auto mb-0">
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                            <a href="#" class="avtar avtar-xs btn-link-secondary" data-bs-toggle="modal"
-                              data-bs-target="#user-modal">
-                              <i class="ti ti-eye f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                            <a href="#" class="avtar avtar-xs btn-link-primary" data-bs-toggle="modal"
-                              data-bs-target="#user-edit_add-modal">
-                              <i class="ti ti-edit-circle f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                            <a href="#" class="avtar avtar-xs btn-link-danger">
-                              <i class="ti ti-trash f-18"></i>
-                            </a>
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox">
-                        </div>
-                      </td>
-                      <td>179</td>
-                      <td>
-                        <div class="row">
-                          <div class="col-auto pe-0">
-                            <img src="../assets/images/user/avatar-6.jpg" alt="user-image"
-                              class="wid-40 rounded-circle">
-                          </div>
-                          <div class="col">
-                            <h5 class="mb-0">Addie Bass</h5>
-                            <p class="text-muted f-12 mb-0">mareva@gmail.com</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td>+1 (247) 849-6968</td>
-                      <td>45</td>
-                      <td>Kiribati</td>
-                      <td><span class="badge bg-light-danger rounded-pill f-12">Rejected</span> </td>
-                      <td class="text-center">
-                        <ul class="list-inline me-auto mb-0">
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                            <a href="#" class="avtar avtar-xs btn-link-secondary" data-bs-toggle="modal"
-                              data-bs-target="#user-modal">
-                              <i class="ti ti-eye f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                            <a href="#" class="avtar avtar-xs btn-link-primary" data-bs-toggle="modal"
-                              data-bs-target="#user-edit_add-modal">
-                              <i class="ti ti-edit-circle f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                            <a href="#" class="avtar avtar-xs btn-link-danger">
-                              <i class="ti ti-trash f-18"></i>
-                            </a>
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox">
-                        </div>
-                      </td>
-                      <td>60</td>
-                      <td>
-                        <div class="row">
-                          <div class="col-auto pe-0">
-                            <img src="../assets/images/user/avatar-7.jpg" alt="user-image"
-                              class="wid-40 rounded-circle">
-                          </div>
-                          <div class="col">
-                            <h5 class="mb-0">Agnes McGee</h5>
-                            <p class="text-muted f-12 mb-0">heba@gmail.com</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td>+1 (247) 849-6968</td>
-                      <td>42</td>
-                      <td>Kiribati</td>
-                      <td><span class="badge bg-light-primary rounded-pill f-12">Pending</span> </td>
-                      <td class="text-center">
-                        <ul class="list-inline me-auto mb-0">
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                            <a href="#" class="avtar avtar-xs btn-link-secondary" data-bs-toggle="modal"
-                              data-bs-target="#user-modal">
-                              <i class="ti ti-eye f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                            <a href="#" class="avtar avtar-xs btn-link-primary" data-bs-toggle="modal"
-                              data-bs-target="#user-edit_add-modal">
-                              <i class="ti ti-edit-circle f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                            <a href="#" class="avtar avtar-xs btn-link-danger">
-                              <i class="ti ti-trash f-18"></i>
-                            </a>
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox">
-                        </div>
-                      </td>
-                      <td>133</td>
-                      <td>
-                        <div class="row">
-                          <div class="col-auto pe-0">
-                            <img src="../assets/images/user/avatar-8.jpg" alt="user-image"
-                              class="wid-40 rounded-circle">
-                          </div>
-                          <div class="col">
-                            <h5 class="mb-0">Alberta Robbins</h5>
-                            <p class="text-muted f-12 mb-0">miza@gmail.com</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td>+1 (247) 849-6968</td>
-                      <td>20</td>
-                      <td>Croatia</td>
-                      <td><span class="badge bg-light-success rounded-pill f-12">Verified</span> </td>
-                      <td class="text-center">
-                        <ul class="list-inline me-auto mb-0">
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                            <a href="#" class="avtar avtar-xs btn-link-secondary" data-bs-toggle="modal"
-                              data-bs-target="#user-modal">
-                              <i class="ti ti-eye f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                            <a href="#" class="avtar avtar-xs btn-link-primary" data-bs-toggle="modal"
-                              data-bs-target="#user-edit_add-modal">
-                              <i class="ti ti-edit-circle f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                            <a href="#" class="avtar avtar-xs btn-link-danger">
-                              <i class="ti ti-trash f-18"></i>
-                            </a>
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox">
-                        </div>
-                      </td>
-                      <td>60</td>
-                      <td>
-                        <div class="row">
-                          <div class="col-auto pe-0">
-                            <img src="../assets/images/user/avatar-9.jpg" alt="user-image"
-                              class="wid-40 rounded-circle">
-                          </div>
-                          <div class="col">
-                            <h5 class="mb-0">Agnes McGee</h5>
-                            <p class="text-muted f-12 mb-0">heba@gmail.com</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td>+1 (247) 849-6968</td>
-                      <td>42</td>
-                      <td>Panama</td>
-                      <td><span class="badge bg-light-danger rounded-pill f-12">Rejected</span> </td>
-                      <td class="text-center">
-                        <ul class="list-inline me-auto mb-0">
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                            <a href="#" class="avtar avtar-xs btn-link-secondary" data-bs-toggle="modal"
-                              data-bs-target="#user-modal">
-                              <i class="ti ti-eye f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                            <a href="#" class="avtar avtar-xs btn-link-primary" data-bs-toggle="modal"
-                              data-bs-target="#user-edit_add-modal">
-                              <i class="ti ti-edit-circle f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                            <a href="#" class="avtar avtar-xs btn-link-danger">
-                              <i class="ti ti-trash f-18"></i>
-                            </a>
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox">
-                        </div>
-                      </td>
-                      <td>179</td>
-                      <td>
-                        <div class="row">
-                          <div class="col-auto pe-0">
-                            <img src="../assets/images/user/avatar-1.jpg" alt="user-image"
-                              class="wid-40 rounded-circle">
-                          </div>
-                          <div class="col">
-                            <h5 class="mb-0">Addie Bass</h5>
-                            <p class="text-muted f-12 mb-0">mareva@gmail.com</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td>+1 (247) 849-6968</td>
-                      <td>45</td>
-                      <td>United Kingdom</td>
-                      <td><span class="badge bg-light-success rounded-pill f-12">Verified</span> </td>
-                      <td class="text-center">
-                        <ul class="list-inline me-auto mb-0">
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                            <a href="#" class="avtar avtar-xs btn-link-secondary" data-bs-toggle="modal"
-                              data-bs-target="#user-modal">
-                              <i class="ti ti-eye f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                            <a href="#" class="avtar avtar-xs btn-link-primary" data-bs-toggle="modal"
-                              data-bs-target="#user-edit_add-modal">
-                              <i class="ti ti-edit-circle f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                            <a href="#" class="avtar avtar-xs btn-link-danger">
-                              <i class="ti ti-trash f-18"></i>
-                            </a>
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox">
-                        </div>
-                      </td>
-                      <td>60</td>
-                      <td>
-                        <div class="row">
-                          <div class="col-auto pe-0">
-                            <img src="../assets/images/user/avatar-2.jpg" alt="user-image"
-                              class="wid-40 rounded-circle">
-                          </div>
-                          <div class="col">
-                            <h5 class="mb-0">Agnes McGee</h5>
-                            <p class="text-muted f-12 mb-0">heba@gmail.com</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td>+1 (247) 849-6968</td>
-                      <td>42</td>
-                      <td>Russia</td>
-                      <td><span class="badge bg-light-success rounded-pill f-12">Verified</span> </td>
-                      <td class="text-center">
-                        <ul class="list-inline me-auto mb-0">
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                            <a href="#" class="avtar avtar-xs btn-link-secondary" data-bs-toggle="modal"
-                              data-bs-target="#user-modal">
-                              <i class="ti ti-eye f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                            <a href="#" class="avtar avtar-xs btn-link-primary" data-bs-toggle="modal"
-                              data-bs-target="#user-edit_add-modal">
-                              <i class="ti ti-edit-circle f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                            <a href="#" class="avtar avtar-xs btn-link-danger">
-                              <i class="ti ti-trash f-18"></i>
-                            </a>
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox">
-                        </div>
-                      </td>
-                      <td>133</td>
-                      <td>
-                        <div class="row">
-                          <div class="col-auto pe-0">
-                            <img src="../assets/images/user/avatar-3.jpg" alt="user-image"
-                              class="wid-40 rounded-circle">
-                          </div>
-                          <div class="col">
-                            <h5 class="mb-0">Alberta Robbins</h5>
-                            <p class="text-muted f-12 mb-0">miza@gmail.com</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td>+1 (247) 849-6968</td>
-                      <td>20</td>
-                      <td>Honduras</td>
-                      <td><span class="badge bg-light-primary rounded-pill f-12">Pending</span> </td>
-                      <td class="text-center">
-                        <ul class="list-inline me-auto mb-0">
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                            <a href="#" class="avtar avtar-xs btn-link-secondary" data-bs-toggle="modal"
-                              data-bs-target="#user-modal">
-                              <i class="ti ti-eye f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                            <a href="#" class="avtar avtar-xs btn-link-primary" data-bs-toggle="modal"
-                              data-bs-target="#user-edit_add-modal">
-                              <i class="ti ti-edit-circle f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                            <a href="#" class="avtar avtar-xs btn-link-danger">
-                              <i class="ti ti-trash f-18"></i>
-                            </a>
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox">
-                        </div>
-                      </td>
-                      <td>60</td>
-                      <td>
-                        <div class="row">
-                          <div class="col-auto pe-0">
-                            <img src="../assets/images/user/avatar-4.jpg" alt="user-image"
-                              class="wid-40 rounded-circle">
-                          </div>
-                          <div class="col">
-                            <h5 class="mb-0">Agnes McGee</h5>
-                            <p class="text-muted f-12 mb-0">heba@gmail.com</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td>+1 (247) 849-6968</td>
-                      <td>42</td>
-                      <td>Grenada</td>
-                      <td><span class="badge bg-light-primary rounded-pill f-12">Pending</span> </td>
-                      <td class="text-center">
-                        <ul class="list-inline me-auto mb-0">
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                            <a href="#" class="avtar avtar-xs btn-link-secondary" data-bs-toggle="modal"
-                              data-bs-target="#user-modal">
-                              <i class="ti ti-eye f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                            <a href="#" class="avtar avtar-xs btn-link-primary" data-bs-toggle="modal"
-                              data-bs-target="#user-edit_add-modal">
-                              <i class="ti ti-edit-circle f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                            <a href="#" class="avtar avtar-xs btn-link-danger">
-                              <i class="ti ti-trash f-18"></i>
-                            </a>
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox">
-                        </div>
-                      </td>
-                      <td>60</td>
-                      <td>
-                        <div class="row">
-                          <div class="col-auto pe-0">
-                            <img src="../assets/images/user/avatar-5.jpg" alt="user-image"
-                              class="wid-40 rounded-circle">
-                          </div>
-                          <div class="col">
-                            <h5 class="mb-0">Agnes McGee</h5>
-                            <p class="text-muted f-12 mb-0">heba@gmail.com</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td>+1 (247) 849-6968</td>
-                      <td>42</td>
-                      <td>Azerbaijan</td>
-                      <td><span class="badge bg-light-danger rounded-pill f-12">Rejected</span> </td>
-                      <td class="text-center">
-                        <ul class="list-inline me-auto mb-0">
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                            <a href="#" class="avtar avtar-xs btn-link-secondary" data-bs-toggle="modal"
-                              data-bs-target="#user-modal">
-                              <i class="ti ti-eye f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                            <a href="#" class="avtar avtar-xs btn-link-primary" data-bs-toggle="modal"
-                              data-bs-target="#user-edit_add-modal">
-                              <i class="ti ti-edit-circle f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                            <a href="#" class="avtar avtar-xs btn-link-danger">
-                              <i class="ti ti-trash f-18"></i>
-                            </a>
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox">
-                        </div>
-                      </td>
-                      <td>179</td>
-                      <td>
-                        <div class="row">
-                          <div class="col-auto pe-0">
-                            <img src="../assets/images/user/avatar-6.jpg" alt="user-image"
-                              class="wid-40 rounded-circle">
-                          </div>
-                          <div class="col">
-                            <h5 class="mb-0">Addie Bass</h5>
-                            <p class="text-muted f-12 mb-0">mareva@gmail.com</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td>+1 (247) 849-6968</td>
-                      <td>45</td>
-                      <td>Kiribati</td>
-                      <td><span class="badge bg-light-danger rounded-pill f-12">Rejected</span> </td>
-                      <td class="text-center">
-                        <ul class="list-inline me-auto mb-0">
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                            <a href="#" class="avtar avtar-xs btn-link-secondary" data-bs-toggle="modal"
-                              data-bs-target="#user-modal">
-                              <i class="ti ti-eye f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                            <a href="#" class="avtar avtar-xs btn-link-primary" data-bs-toggle="modal"
-                              data-bs-target="#user-edit_add-modal">
-                              <i class="ti ti-edit-circle f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                            <a href="#" class="avtar avtar-xs btn-link-danger">
-                              <i class="ti ti-trash f-18"></i>
-                            </a>
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox">
-                        </div>
-                      </td>
-                      <td>60</td>
-                      <td>
-                        <div class="row">
-                          <div class="col-auto pe-0">
-                            <img src="../assets/images/user/avatar-7.jpg" alt="user-image"
-                              class="wid-40 rounded-circle">
-                          </div>
-                          <div class="col">
-                            <h5 class="mb-0">Agnes McGee</h5>
-                            <p class="text-muted f-12 mb-0">heba@gmail.com</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td>+1 (247) 849-6968</td>
-                      <td>42</td>
-                      <td>Kiribati</td>
-                      <td><span class="badge bg-light-primary rounded-pill f-12">Pending</span> </td>
-                      <td class="text-center">
-                        <ul class="list-inline me-auto mb-0">
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                            <a href="#" class="avtar avtar-xs btn-link-secondary" data-bs-toggle="modal"
-                              data-bs-target="#user-modal">
-                              <i class="ti ti-eye f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                            <a href="#" class="avtar avtar-xs btn-link-primary" data-bs-toggle="modal"
-                              data-bs-target="#user-edit_add-modal">
-                              <i class="ti ti-edit-circle f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                            <a href="#" class="avtar avtar-xs btn-link-danger">
-                              <i class="ti ti-trash f-18"></i>
-                            </a>
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox">
-                        </div>
-                      </td>
-                      <td>133</td>
-                      <td>
-                        <div class="row">
-                          <div class="col-auto pe-0">
-                            <img src="../assets/images/user/avatar-8.jpg" alt="user-image"
-                              class="wid-40 rounded-circle">
-                          </div>
-                          <div class="col">
-                            <h5 class="mb-0">Alberta Robbins</h5>
-                            <p class="text-muted f-12 mb-0">miza@gmail.com</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td>+1 (247) 849-6968</td>
-                      <td>20</td>
-                      <td>Croatia</td>
-                      <td><span class="badge bg-light-success rounded-pill f-12">Verified</span> </td>
-                      <td class="text-center">
-                        <ul class="list-inline me-auto mb-0">
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                            <a href="#" class="avtar avtar-xs btn-link-secondary" data-bs-toggle="modal"
-                              data-bs-target="#user-modal">
-                              <i class="ti ti-eye f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                            <a href="#" class="avtar avtar-xs btn-link-primary" data-bs-toggle="modal"
-                              data-bs-target="#user-edit_add-modal">
-                              <i class="ti ti-edit-circle f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                            <a href="#" class="avtar avtar-xs btn-link-danger">
-                              <i class="ti ti-trash f-18"></i>
-                            </a>
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox">
-                        </div>
-                      </td>
-                      <td>60</td>
-                      <td>
-                        <div class="row">
-                          <div class="col-auto pe-0">
-                            <img src="../assets/images/user/avatar-9.jpg" alt="user-image"
-                              class="wid-40 rounded-circle">
-                          </div>
-                          <div class="col">
-                            <h5 class="mb-0">Agnes McGee</h5>
-                            <p class="text-muted f-12 mb-0">heba@gmail.com</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td>+1 (247) 849-6968</td>
-                      <td>42</td>
-                      <td>Panama</td>
-                      <td><span class="badge bg-light-danger rounded-pill f-12">Rejected</span> </td>
-                      <td class="text-center">
-                        <ul class="list-inline me-auto mb-0">
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                            <a href="#" class="avtar avtar-xs btn-link-secondary" data-bs-toggle="modal"
-                              data-bs-target="#user-modal">
-                              <i class="ti ti-eye f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                            <a href="#" class="avtar avtar-xs btn-link-primary" data-bs-toggle="modal"
-                              data-bs-target="#user-edit_add-modal">
-                              <i class="ti ti-edit-circle f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                            <a href="#" class="avtar avtar-xs btn-link-danger">
-                              <i class="ti ti-trash f-18"></i>
-                            </a>
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
+                    <?php
+                    $vacats = "SELECT * FROM `vacataire` P 
+                  JOIN `user` U ON P.user_ID = U.user_ID";
+                    $all_vacats = $pdo->query($vacats);
+                    if ($all_vacats) {
+                      while ($vacat = $all_vacats->fetch(PDO::FETCH_ASSOC)) {
+                        ?>
+                            <tr>
+                              <td>
+                                <div class="form-check">
+                                  <input class="form-check-input" type="checkbox">
+                                </div>
+                              </td>
+                              <td><?php echo $vacat['vacat_ID'] ?></td>
+                              <td>
+                                <div class="col-auto pe-0">
+                                    <img src="<?php if (!empty($vacat['image']))
+                                      echo $vacat['image'];
+                                    else
+                                      echo "/ENSAH-service/assets/images/avatar-M.jpg" ?>" alt="user-image" class="wid-40 rounded-circle">
+                                  </div>
+                                </td>
+                                <td>
+                                  <div class="row"> 
+                                    <div class="col">
+                                      <h5 class="mb-1"><?php echo $vacat['nom'] ?></h5>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <tdv class="row"> 
+                                  <div class="col">
+                                    <h5 class="mb-0"><?php echo $vacat['prenom'] ?></h5>
+                                  </div>
+                                </tdv>
+                              </td>
+                              <td><?php echo $vacat['email'] ?></td>
+                              <td><?php echo $vacat['specialite'] ?></td>
+                              <td class="text-center">
+                                <ul class="list-inline me-auto mb-0">
+                                  <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
+                                    <a href="#" class="avtar avtar-xs btn-link-secondary view-btn" data-bs-toggle="modal"
+                                      data-bs-target="#user-modal" data-nom="<?= $vacat['nom']; ?>"
+                                      data-prenom="<?= $vacat['prenom']; ?>" data-email="<?= $vacat['email']; ?>"
+                                      data-specialite="<?= $vacat['specialite']; ?>" data-img="<?= $vacat['image']; ?>" data-cin="<?= $vacat['CIN']; ?>"
+                                      data-genre="<?= $vacat['genre']; ?>" data-birthday="<?= $vacat['date_naissance']; ?>">
+                                      <i class="ti ti-eye f-18"></i>
+                                    </a>
+
+                                  </li>
+                                  <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
+                                    <a href="#" class="avtar avtar-xs btn-link-primary" data-bs-toggle="modal"
+                                      data-bs-target="#user-edit_add-modal">
+                                      <i class="ti ti-edit-circle f-18"></i>
+                                    </a>
+                                  </li>
+                                  <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
+                                    <a href="#" class="avtar avtar-xs btn-link-danger">
+                                      <i class="ti ti-trash f-18"></i>
+                                    </a>
+                                  </li>
+                                </ul>
+                              </td>
+                            </tr>
+                        <?php }
+                    } ?>
+
+
                   </tbody>
                 </table>
               </div>
@@ -928,177 +208,407 @@
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header border-0 pb-0">
-          <h5 class="mb-0">Customer Details</h5>
+          <h5 class="mb-0">Détails de vacataire</h5>
           <a href="#" class="avtar avtar-s btn-link-danger" data-bs-dismiss="modal">
             <i class="ti ti-x f-20"></i>
           </a>
         </div>
         <div class="modal-body">
           <div class="row">
+            <!-- Colonne gauche : infos principales -->
             <div class="col-lg-4">
               <div class="card">
                 <div class="card-body position-relative">
                   <div class="position-absolute end-0 top-0 p-3">
-                    <span class="badge bg-primary">Relationship</span>
+                    <span class="badge bg-primary">vacataire</span>
                   </div>
                   <div class="text-center mt-3">
                     <div class="chat-avtar d-inline-flex mx-auto">
-                      <img class="rounded-circle img-fluid wid-60" src="../assets/images/user/avatar-5.jpg"
-                        alt="User image">
+                      <img id="modal-img" class="rounded-circle img-fluid wid-60" src="" alt="User image">
                     </div>
-                    <h5 class="mb-0">Aaron Poole</h5>
-                    <p class="text-muted text-sm">Manufacturing Director</p>
-                    <hr class="my-3">
-                    <div class="row g-3">
-                      <div class="col-4">
-                        <h5 class="mb-0">45</h5>
-                        <small class="text-muted">Age</small>
-                      </div>
-                      <div class="col-4 border border-top-0 border-bottom-0">
-                        <h5 class="mb-0">86%</h5>
-                        <small class="text-muted">Progress</small>
-                      </div>
-                      <div class="col-4">
-                        <h5 class="mb-0">7634</h5>
-                        <small class="text-muted">Visits</small>
-                      </div>
-                    </div>
+                    <h5 class="mb-0" id="modal-nom"></h5>
+                    <p class="text-muted text-sm" id="modal-poste"></p>
                     <hr class="my-3">
                     <div class="d-inline-flex align-items-center justify-content-between w-100 mb-3">
                       <i class="ti ti-mail"></i>
-                      <p class="mb-0">bo@gmail.com</p>
+                      <p class="mb-0" id="modal-email"></p>
                     </div>
                     <div class="d-inline-flex align-items-center justify-content-between w-100 mb-3">
                       <i class="ti ti-phone"></i>
-                      <p class="mb-0">+1 (247) 849-6968</p>
+                      <p class="mb-0" id="modal-phone">--</p>
                     </div>
                     <div class="d-inline-flex align-items-center justify-content-between w-100 mb-3">
                       <i class="ti ti-map-pin"></i>
-                      <p class="mb-0">Lesotho</p>
+                      <p class="mb-0" id="modal-pays">--</p>
                     </div>
                     <div class="d-inline-flex align-items-center justify-content-between w-100">
                       <i class="ti ti-link"></i>
                       <a href="#" class="link-primary">
-                        <p class="mb-0">https://anshan.dh.url</p>
+                        <p class="mb-0" id="modal-link">--</p>
                       </a>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+
+            <!-- Colonne droite : détails personnels -->
             <div class="col-lg-8">
               <div class="card">
                 <div class="card-header">
-                  <h5>Personal Details</h5>
+                  <h5>Détails personnels</h5>
                 </div>
                 <div class="card-body">
                   <ul class="list-group list-group-flush">
                     <li class="list-group-item px-0 pt-0">
                       <div class="row">
                         <div class="col-md-6">
-                          <p class="mb-1 text-muted">Full Name</p>
-                          <h6 class="mb-0">Aaron Poole</h6>
+                          <p class="mb-1 text-muted">Nom complet</p>
+                          <h6 class="mb-0" id="modal-fullname"></h6>
                         </div>
                         <div class="col-md-6">
-                          <p class="mb-1 text-muted">Father Name</p>
-                          <h6 class="mb-0">Mr. Ralph Sabatini</h6>
+                          <p class="mb-1 text-muted">CIN</p>
+                          <h6 class="mb-0" id="modal-cin"></h6>
                         </div>
                       </div>
                     </li>
                     <li class="list-group-item px-0">
                       <div class="row">
                         <div class="col-md-6">
-                          <p class="mb-1 text-muted">Country</p>
-                          <h6 class="mb-0">Lesotho</h6>
+                          <p class="mb-1 text-muted">Date de naissance</p>
+                          <h6 class="mb-0" id="modal-birthday"></h6>
                         </div>
                         <div class="col-md-6">
-                          <p class="mb-1 text-muted">Zip Code</p>
-                          <h6 class="mb-0">247 849</h6>
+                          <p class="mb-1 text-muted">Genre</p>
+                          <h6 class="mb-0" id="modal-genre"></h6>
                         </div>
                       </div>
                     </li>
                     <li class="list-group-item px-0 pb-0">
-                      <p class="mb-1 text-muted">Address</p>
-                      <h6 class="mb-0">647 Punam Center, Ulabifgu, Myanmar (Burma) - 41487</h6>
+                      <p class="mb-1 text-muted">Adresse</p>
+                      <h6 class="mb-0" id="modal-adresse">--</h6>
                     </li>
                   </ul>
                 </div>
               </div>
+
               <div class="card">
                 <div class="card-header">
-                  <h5>About me</h5>
+                  <h5>À propos</h5>
                 </div>
                 <div class="card-body">
-                  <p class="mb-0">Hello, I’m Aaron Poole Manufacturing Director based in international company, Void
-                    jiidki me na fep juih ced gihhiwi launke cu mig tujum peodpo.</p>
+                  <p class="mb-0" id="modal-about">
+                    -- À propos du vacataire --
+                  </p>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
+          </div> <!-- /row -->
+        </div> <!-- /modal-body -->
+      </div> <!-- /modal-content -->
+    </div> <!-- /modal-dialog -->
   </div>
-  <div class="modal fade" id="user-edit_add-modal" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+
+
+  <?php
+  // Initialize variables and error messages
+  $nom = $prenom = $cin = $birthday_day = $birthday_month = $birthday_year = "";
+  $genre = $email = $password = $md5_pass = $specialite = "";
+  $errors = 0;
+
+  $CIN_error = $nom_error = $prenom_error = $birthday_error = "";
+  $genre_error = $email_error = $password_error = $specialite_error = $upload_error = "";
+
+  // Check if form is submitted
+  if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    // Validate Nom
+    if (empty($_POST["nom"])) {
+      $nom_error = "Nom is required";
+      $errors++;
+    } else {
+      $nom = htmlspecialchars($_POST["nom"], ENT_QUOTES, 'UTF-8');
+    }
+
+    // Validate Prénom
+    if (empty($_POST["prenom"])) {
+      $prenom_error = "Prénom is required";
+      $errors++;
+    } else {
+      $prenom = htmlspecialchars($_POST["prenom"], ENT_QUOTES, 'UTF-8');
+    }
+
+    // Validate CIN
+    if (empty($_POST["CIN"])) {
+      $CIN_error = "CIN is required";
+      $errors++;
+    } else {
+      $cin = htmlspecialchars($_POST["CIN"], ENT_QUOTES, 'UTF-8');
+    }
+
+    // Validate Birthday
+    if (empty($_POST["birthday_day"]) || empty($_POST["birthday_month"]) || empty($_POST["birthday_year"])) {
+      $birthday_error = "Birthday is required";
+      $errors++;
+    } else {
+      $birthday_day = htmlspecialchars($_POST["birthday_day"], ENT_QUOTES, 'UTF-8');
+      $birthday_month = htmlspecialchars($_POST["birthday_month"], ENT_QUOTES, 'UTF-8');
+      $birthday_year = htmlspecialchars($_POST["birthday_year"], ENT_QUOTES, 'UTF-8');
+      $birthday = "$birthday_year-$birthday_month-$birthday_day"; // YYYY-MM-DD
+  
+      // Validate date format
+      if (!DateTime::createFromFormat('Y-m-d', $birthday)) {
+        $birthday_error = "Invalid date format.";
+        $errors++;
+      }
+    }
+
+    // Validate Genre
+    if (empty($_POST["genre"])) {
+      $genre_error = "Genre is required";
+      $errors++;
+    } else {
+      $genre = htmlspecialchars($_POST["genre"], ENT_QUOTES, 'UTF-8');
+    }
+
+    // Validate Email
+    if (empty($_POST["email"])) {
+      $email_error = "Email is required";
+      $errors++;
+    } else {
+      $email = htmlspecialchars($_POST["email"], ENT_QUOTES, 'UTF-8');
+      if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $email_error = "Invalid email format";
+        $errors++;
+      } else {
+        // Check if email already exists
+        $check_email_query = "SELECT * FROM vacataire WHERE email = '$email'";
+        $check_email_stmt = $pdo->prepare($check_email_query);
+        $check_email_stmt->execute();
+        if ($check_email_stmt->rowCount() > 0) {
+          $email_error = "Email already exists.";
+          $errors++;
+        }
+      }
+    }
+
+    // Validate Password
+    if (isStrongPassword($_POST["password"])) {
+      $password = htmlspecialchars($_POST["password"], ENT_QUOTES, 'UTF-8');
+      $md5_pass = md5($password); // Hash the password
+    } else {
+      $password_error = "Password should include at least: 1 uppercase, 1 lowercase, 1 digit, 1 special character, and be at least 8 characters long.";
+      $errors++;
+    }
+
+    // Validate Specialité
+    if (empty($_POST["specialite"])) {
+      $specialite_error = "Spécialité is required";
+      $errors++;
+    } else {
+      $specialite = htmlspecialchars($_POST["specialite"], ENT_QUOTES, 'UTF-8');
+    }
+
+    // Handle avatar path
+    $avatar_path = isset($_POST['avatar_path']) ? htmlspecialchars($_POST["avatar_path"], ENT_QUOTES, 'UTF-8') : '';
+
+    // Proceed with insertion if no errors
+    if ($errors == 0) {
+      // Insert into user table
+      $add_user = "INSERT INTO user(nom, prenom, CIN, image, date_naissance, genre) 
+                     VALUES('$nom', '$prenom', '$cin', '$avatar_path', '$birthday', '$genre')";
+
+      $stmt = $pdo->prepare($add_user);
+      if ($stmt->execute()) {
+        $user_id = $pdo->lastInsertId();
+        if ($user_id) {
+          // Insert into vacataire table
+          $add_vacat = "INSERT INTO vacataire(user_ID, email, password, md5_pass, specialite) 
+                             VALUES('$user_id', '$email', '$password', '$md5_pass', '$specialite')";
+          if ($pdo->query($add_vacat)) {
+            $_SESSION['success_message'] = "vacataire added successfully!";
+            header("Location: /ENSAH-service/pages/vacat-list.php?success=1");
+            exit;
+          } else {
+            $general_error = "Failed to add vacataire.";
+          }
+        } else {
+          $general_error = "Failed to retrieve user ID.";
+        }
+      } else {
+        $general_error = "Failed to add user to the database.";
+      }
+    } else {
+      $general_error = "Please correct the errors in the form.";
+    }
+  }
+  ?>
+
+  <?php if ($_SERVER["REQUEST_METHOD"] == "POST" && $errors > 0): ?>
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          var myModal = new bootstrap.Modal(document.getElementById('user-edit_add-modal'));
+          myModal.show();
+        });
+      </script>
+  <?php endif; ?>
+  <form method="post" class="modal fade" id="user-edit_add-modal" data-bs-keyboard="false" tabindex="-1"
+    aria-hidden="true" enctype="multipart/form-data">
+    <input type="hidden" name="avatar_path" id="avatar-path">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="mb-0">Edit Customer</h5>
+          <h5 class="mb-0">Ajouter vacataire</h5>
           <a href="#" class="avtar avtar-s btn-link-danger" data-bs-dismiss="modal">
             <i class="ti ti-x f-20"></i>
           </a>
         </div>
         <div class="modal-body">
           <div class="row">
+            <?php
+            // Charger le traitement d'image en premier
+            include "../inc/functions/upload-image.php";
+
+            // Mettre à jour l'avatar si l'image a été uploadée
+            $avatar = "/ENSAH-service/assets/images/avatar-M.jpg"; // Valeur par défaut
+            if (isset($_SESSION['avatar_path'])) {
+              $avatar = $_SESSION['avatar_path'];
+            }
+            ?>
             <div class="col-sm-3 text-center mb-3">
               <div class="user-upload wid-75">
-                <img src="../assets/images/user/avatar-5.jpg" alt="img" class="img-fluid">
+                <img id="avatar-preview" src="<?php echo $avatar; ?>" alt="img" class="img-fluid">
+
+
                 <label for="uplfile" class="img-avtar-upload">
                   <i class="ti ti-camera f-24 mb-1"></i>
                   <span>Upload</span>
                 </label>
-                <input type="file" id="uplfile" class="d-none">
+
+                <input type="file" id="uplfile" name="uplfile" class="d-none">
               </div>
             </div>
             <div class="col-sm-9">
               <div class="form-group">
-                <label class="form-label">Name</label>
-                <input type="text" class="form-control" placeholder="Name">
+                <label class="form-label">Nom</label>
+                <input required name="nom" type="text" class="form-control nameInput" placeholder="Nom"
+                  value="<?php echo htmlspecialchars($nom); ?>">
               </div>
+              <p style="color: red"><?php if (isset($nom_error)) {
+                echo $nom_error;
+              } ?></p>
               <div class="form-group">
-                <label class="form-label">Email</label>
-                <input type="text" class="form-control" placeholder="Email">
+                <label class="form-label">Prénom</label>
+                <input required name="prenom" type="text" class="form-control prenomInput" placeholder="Prénom"
+                  value="<?php echo htmlspecialchars($nom); ?>">
               </div>
+              <p style="color: red"><?php if (isset($prenom_error)) {
+                echo $prenom_error;
+              } ?></p>
               <div class="form-group">
-                <label class="form-label">Status</label>
-                <select class="form-select">
-                  <option>Select Status</option>
-                  <option>Complicated</option>
-                  <option>Single</option>
-                  <option>Relationship</option>
+                <label class="form-label">CIN</label>
+                <input required name="CIN" type="text" class="form-control cinInput" placeholder="CIN"
+                  value="<?php echo htmlspecialchars($cin); ?>">
+              </div>
+              <p style="color: red"><?php if (isset($CIN_error)) {
+                echo $CIN_error;
+              } ?></p>
+              <div class="form-group">
+                <label for="day" class="form-label">Date de naissance :</label><br>
+
+                <select name="birthday_day" class="selectInput" id="day" required>
+                  <option value="" class="defaultOption" disabled <?php if (empty($birthday_day))
+                    echo 'selected'; ?>>Jour</option>
+                  <!-- Jours de 1 à 31 -->
+                  <?php for ($i = 1; $i <= 31; $i++) {
+                    echo "<option value='$i'>$i</option>";
+                  } ?>
+                </select>
+
+                <select name="birthday_month" class="selectInput" id="month" required>
+                  <option disabled class="defaultOption" <?php if (empty($birthday_month))
+                    echo 'selected'; ?>>Mois</option>
+                  <?php
+                  $months = [
+                    1 => "Janvier",
+                    2 => "Février",
+                    3 => "Mars",
+                    4 => "Avril",
+                    5 => "Mai",
+                    6 => "Juin",
+                    7 => "Juillet",
+                    8 => "Août",
+                    9 => "Septembre",
+                    10 => "Octobre",
+                    11 => "Novembre",
+                    12 => "Décembre"
+                  ];
+                  foreach ($months as $key => $month) {
+                    echo "<option value='$key' " . ($birthday_month == $month ? "selected" : "") . ">$month</option>";
+                  }
+                  ?>
+                </select>
+
+                <select name="birthday_year" id="year" class="selectInput" required>
+                  <option disabled class="defaultOption" value="" <?php if (empty($birthday_year))
+                    echo 'selected'; ?>>Année</option>
+                  <!-- Années de 2025 à 1900 -->
+                  <?php for ($i = 2025; $i >= 1900; $i--) {
+                    echo "<option value='$i'>$i</option>";
+                  } ?>
                 </select>
               </div>
+              <p style="color: red"><?php if (isset($birthday_error)) {
+                echo $birthday_error;
+              } ?></p>
               <div class="form-group">
-                <label class="form-label">Location</label>
-                <textarea class="form-control" rows="3" placeholder="Enter Location"></textarea>
+                <label class="form-label">Genre</label>
+                <select name="genre" class="form-select selectInput" required>
+                  <option disabled class="defaultOption" <?php if (empty($genre))
+                    echo 'selected'; ?>>Selectionner Genre</option>
+                  <option <?php if ($genre == "Masculin")
+                    echo 'selected'; ?>>Masculin</option>
+                  <option <?php if ($genre == "Féminin")
+                    echo 'selected'; ?>>Féminin</option>
+                </select>
               </div>
-              <div class="form-check form-switch d-flex align-items-center justify-content-between p-0">
-                <label class="form-check-label h5 pe-3 mb-0" for="customSwitchemlnot1">Make Contact Info Public
-                  <span class="text-muted w-75 d-block text-sm f-w-400 mt-2">Means that anyone viewing your profile will
-                    be able to see your contacts details</span>
-                </label>
-                <input class="form-check-input h4 m-0 position-relative" type="checkbox" id="customSwitchemlnot1"
-                  checked="">
+              <p style="color: red"><?php if (isset($genre_error)) {
+                echo $genre_error;
+              } ?></p>
+              <div class="form-group">
+                <label class="form-label">Email</label>
+                <input name="email" type="email" class="form-control emailInput" placeholder="Email" required
+                  value="<?php echo htmlspecialchars($email); ?>">
               </div>
-              <hr class="my-3">
-              <div class="form-check form-switch d-flex align-items-center justify-content-between p-0">
-                <label class="form-check-label h5 pe-3 mb-0" for="customSwitchemlnot2">Available to hire
-                  <span class="text-muted w-75 d-block text-sm f-w-400 mt-2">Toggling this will let your teammates know
-                    that you are available for acquiring new projects</span>
-                </label>
-                <input class="form-check-input h4 m-0 position-relative" type="checkbox" id="customSwitchemlnot2"
-                  checked="">
+              <p style="color: red"><?php if (isset($email_error)) {
+                echo $email_error;
+              } ?></p>
+              <div class="form-group ">
+                <label class="form-label">Password</label>
+                <div style="position: relative;">
+                  <input name="password" type="text" placeholder="Enter password" class="form-control passwordInput"
+                    style="padding-right: 40px;" required>
+                  <i class="fas fa-sync-alt generateBtn"
+                    style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
+                </div>
               </div>
+              <p style="color: red"><?php if (isset($password_error)) {
+                echo $password_error;
+              } ?></p>
+              <div class="form-group">
+                <label class="form-label">Specialité</label>
+                <select name="specialite" class="form-select selectInput" required>
+                  <option disabled class="defaultOption" <?php if (empty($specialite))
+                    echo 'selected'; ?>>Specialitée</option>
+                  <option>Computer science</option>
+                  <option>Data analyst</option>
+                  <option>cybersecurity</option>
+                  <option>Mathematics</option>
+                </select>
+              </div>
+              <p style="color: red"><?php if (isset($specialite_error)) {
+                echo $specialite_error;
+              } ?></p>
             </div>
           </div>
         </div>
@@ -1106,18 +616,18 @@
           <ul class="list-inline me-auto mb-0">
             <li class="list-inline-item align-bottom">
               <a href="#" class="avtar avtar-s btn-link-danger w-sm-auto" data-bs-toggle="tooltip" title="Delete">
-                <i class="ti ti-trash f-18"></i>
+                <i class="ti ti-trash f-18 clearBtn"></i>
               </a>
             </li>
           </ul>
           <div class="flex-grow-1 text-end">
-            <button type="button" class="btn btn-link-danger" data-bs-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+            <button type="button" class="btn btn-link-danger" data-bs-dismiss="modal">Annuler</button>
+            <input type="submit" name="submit" class="btn btn-primary" value="enregistrer">
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </form>
   <!-- [ Main Content ] end -->
   <footer class="pc-footer">
     <div class="footer-wrapper container-fluid">
@@ -1143,12 +653,9 @@
   <script src="../assets/js/fonts/custom-font.js"></script>
   <script src="../assets/js/pcoded.js"></script>
   <script src="../assets/js/plugins/feather.min.js"></script>
+  <script src="../assets/js/upload-image.js"></script>
 
-
-
-
-
-  <script>layout_change('light');</script>
+  <script>layout_change('dark');</script>
 
 
 
@@ -1164,11 +671,44 @@
 
 
   <script>font_change("Public-Sans");</script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.view-btn').forEach(button => {
+        button.addEventListener('click', () => {
+          // Get the data from the clicked button
+
+          const cin = button.getAttribute('data-cin');
+          const nom = button.getAttribute('data-nom');
+          const prenom = button.getAttribute('data-prenom');
+          const birthday = button.getAttribute('data-birthday');
+          const genre = button.getAttribute('data-genre');
+          const email = button.getAttribute('data-email');
+          const specialite = button.getAttribute('data-specialite');
+          const image = button.getAttribute('data-img') || '/ENSAH-service/assets/images/avatar-M.jpg';
+
+          // Populate the modal with the data
+          document.getElementById('modal-img').src = image;
+          document.getElementById('modal-nom').textContent = `${nom} ${prenom}`;
+          document.getElementById('modal-poste').textContent = specialite;
+          document.getElementById('modal-cin').textContent = cin;
+          document.getElementById('modal-birthday').textContent = birthday;
+          document.getElementById('modal-genre').textContent = genre;
+          document.getElementById('modal-email').textContent = email;
+          document.getElementById('modal-fullname').textContent = `${nom} ${prenom}`;
+          document.getElementById('modal-specialite').textContent = specialite; // Add any missing fields
+        });
+      });
+    });
+
+
+  </script>
 
 
 
   <!-- [Page Specific JS] start -->
   <script src="../assets/js/plugins/simple-datatables.js"></script>
+  <script src="../assets/js/generatePass.js"></script>
+  <script src="../assets/js/clearForm.js"></script>
   <script>
     const dataTable = new simpleDatatables.DataTable('#pc-dt-simple', {
       sortable: false,
