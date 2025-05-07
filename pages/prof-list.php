@@ -92,24 +92,25 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
         <div class="col-sm-12">
           <div class="card table-card">
             <div class="card-body">
-            <!-------------------------------------->
-            <div class="text-end p-4 pb-0">
-              <a href="#" class="btn btn-primary d-inline-flex align-items-center" data-bs-toggle="modal"
-              data-bs-target="#user-edit_add-modal">
-              <i class="ti ti-plus f-18"></i> Ajouter professeur
-              </a>
+              <!-------------------------------------->
+              <div class="text-end p-4 pb-0">
+                <a href="#" class="btn btn-primary d-inline-flex align-items-center" data-bs-toggle="modal"
+                  data-bs-target="#user-edit_add-modal">
+                  <i class="ti ti-plus f-18"></i> Ajouter professeur
+                </a>
 
-              <?php if (isset($_GET['success'])): ?>
-                <div id="success-message" style="color: green; margin-top: 10px;">✅ <?php echo $_SESSION["success_message"] ?></div>
+                <div id="success-message" class="success-msg" style="color: green; margin-top: 10px;">
+                  <?php if (isset($_GET['success'])):
+                    echo "✅" . $_SESSION["success_message"]; endif; ?>
+                </div>
                 <script>
-                setTimeout(function() {
-                  document.getElementById('success-message').remove();
-                }, 10000); // 10 seconds
+                  setTimeout(function () {
+                    document.getElementById('success-message').style.display = 'none';
+                  }, 10000); // 10 seconds
                 </script>
-              <?php endif; ?>
-            </div>
+              </div>
 
-                  <!---------------------------------->
+              <!---------------------------------->
               <div class="table-responsive">
                 <table class="table table-hover" id="pc-dt-simple">
                   <thead>
@@ -141,20 +142,24 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
                           <td><?php echo $prof['prof_ID'] ?></td>
                           <td>
                             <div class="col-auto pe-0">
-                                <img src="<?php if(!empty($prof['image']))echo $prof['image']; else echo "/ENSAH-service/assets/images/avatar-M.jpg"?>" alt="user-image" class="wid-40 rounded-circle">
-                            </div>
-                          </td>
-                          <td>
-                            <div class="row"> 
-                              <div class="col">
-                                <h5 class="mb-1"><?php echo $prof['nom'] ?></h5>
+                              <img src="<?php if (!empty($prof['image']))
+                                echo $prof['image'];
+                              else
+                                echo "/ENSAH-service/assets/images/avatar-M.jpg" ?>" alt="user-image"
+                                  class="wid-40 rounded-circle">
+                              </div>
+                            </td>
+                            <td>
+                              <div class="row">
+                                <div class="col">
+                                  <h5 class="mb-1"><?php echo $prof['nom'] ?></h5>
                               </div>
                             </div>
                           </td>
                           <td>
-                            <tdv class="row"> 
+                            <tdv class="row">
                               <div class="col">
-                                <h5 class="mb-0"><?php echo $prof['prenom']  ?></h5>
+                                <h5 class="mb-0"><?php echo $prof['prenom']; ?></h5>
                               </div>
                             </tdv>
                           </td>
@@ -164,22 +169,26 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
                             <ul class="list-inline me-auto mb-0">
                               <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
                                 <a href="#" class="avtar avtar-xs btn-link-secondary view-btn" data-bs-toggle="modal"
-                                  data-bs-target="#user-modal" data-nom="<?= $prof['nom']; ?>"
-                                  data-prenom="<?= $prof['prenom']; ?>" data-email="<?= $prof['email']; ?>"
-                                  data-specialite="<?= $prof['specialite']; ?>" data-img="<?= $prof['image']; ?>" data-cin="<?= $prof['CIN']; ?>"
-                                  data-genre="<?= $prof['genre']; ?>" data-birthday="<?= $prof['date_naissance']; ?>">
+                                  data-bs-target="#user-modal" data-nom="<?= $prof['nom'] ?? ''; ?>"
+                                  data-prenom="<?= $prof['prenom'] ?? ''; ?>" data-email="<?= $prof['email'] ?? ''; ?>"
+                                  data-specialite="<?= $prof['specialite'] ?? ''; ?>"
+                                  data-img="<?= $prof['image'] ?? '/ENSAH-service/assets/images/avatar-M.jpg'; ?>"
+                                  data-cin="<?= $prof['CIN'] ?? ''; ?>" data-genre="<?= $prof['genre'] ?? ''; ?>"
+                                  data-birthday="<?= $prof['date_naissance'] ?? ''; ?>"
+                                  data-bio="<?= $prof['bio'] ?? ''; ?>" data-address="<?= $prof['address'] ?? ''; ?>">
                                   <i class="ti ti-eye f-18"></i>
                                 </a>
 
                               </li>
                               <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
                                 <a href="#" class="avtar avtar-xs btn-link-primary" data-bs-toggle="modal"
-                                  data-bs-target="#user-edit_add-modal">
+                                  data-bs-target="#user-edit_add-modal" data-user="<?php echo $prof["user_ID"] ?>">
                                   <i class="ti ti-edit-circle f-18"></i>
                                 </a>
                               </li>
                               <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                                <a href="#" class="avtar avtar-xs btn-link-danger">
+                                <a href="#" class="avtar avtar-xs btn-link-danger remove-user"
+                                  data-user="<?php echo $prof["user_ID"] ?>" data-prof="<?php echo $prof["prof_ID"] ?>">
                                   <i class="ti ti-trash f-18"></i>
                                 </a>
                               </li>
@@ -283,7 +292,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
                     </li>
                     <li class="list-group-item px-0 pb-0">
                       <p class="mb-1 text-muted">Adresse</p>
-                      <h6 class="mb-0" id="modal-adresse">--</h6>
+                      <h6 class="mb-0" id="modal-address"></h6>
                     </li>
                   </ul>
                 </div>
@@ -294,7 +303,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
                   <h5>À propos</h5>
                 </div>
                 <div class="card-body">
-                  <p class="mb-0" id="modal-about">
+                  <p class="mb-0" id="modal-bio">
                     -- À propos du professeur --
                   </p>
                 </div>
@@ -379,9 +388,9 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
         $errors++;
       } else {
         // Check if email already exists
-        $check_email_query = "SELECT * FROM professeur WHERE email = '$email'";
+        $check_email_query = "SELECT * FROM professeur WHERE email = ?";
         $check_email_stmt = $pdo->prepare($check_email_query);
-        $check_email_stmt->execute();
+        $check_email_stmt->execute([$email]);
         if ($check_email_stmt->rowCount() > 0) {
           $email_error = "Email already exists.";
           $errors++;
@@ -407,7 +416,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
     }
 
     // Handle avatar path
-    $avatar_path = isset($_POST['avatar_path']) ?  htmlspecialchars($_POST["avatar_path"], ENT_QUOTES, 'UTF-8') : '';
+    $avatar_path = isset($_POST['avatar_path']) ? htmlspecialchars($_POST["avatar_path"], ENT_QUOTES, 'UTF-8') : '';
 
     // Proceed with insertion if no errors
     if ($errors == 0) {
@@ -524,7 +533,8 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
 
                 <select name="birthday_month" class="selectInput" id="month" required>
                   <option disabled class="defaultOption" <?php if (empty($birthday_month))
-                    echo 'selected'; ?>>Mois</option>
+                    echo 'selected'; ?>>Mois
+                  </option>
                   <?php
                   $months = [
                     1 => "Janvier",
@@ -562,7 +572,8 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
                 <label class="form-label">Genre</label>
                 <select name="genre" class="form-select selectInput" required>
                   <option disabled class="defaultOption" <?php if (empty($genre))
-                    echo 'selected'; ?>>Selectionner Genre</option>
+                    echo 'selected'; ?>>Selectionner Genre
+                  </option>
                   <option <?php if ($genre == "Masculin")
                     echo 'selected'; ?>>Masculin</option>
                   <option <?php if ($genre == "Féminin")
@@ -589,14 +600,15 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
                     style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
                 </div>
               </div>
-              <p style="color: red"><?php if (isset($password_error)) {
+              <p style="color: red" class="error_msj"><?php if (isset($password_error)) {
                 echo $password_error;
               } ?></p>
               <div class="form-group">
                 <label class="form-label">Specialité</label>
                 <select name="specialite" class="form-select selectInput" required>
                   <option disabled class="defaultOption" <?php if (empty($specialite))
-                    echo 'selected'; ?>>Specialitée</option>
+                    echo 'selected'; ?>>Specialitée
+                  </option>
                   <option>Computer science</option>
                   <option>Data analyst</option>
                   <option>cybersecurity</option>
@@ -630,8 +642,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
     <div class="footer-wrapper container-fluid">
       <div class="row">
         <div class="col-sm my-1">
-          <p class="m-0">Mantis &#9829; crafted by Team <a href="https://themeforest.net/user/codedthemes"
-              target="_blank">Codedthemes</a> Distributed by <a href="https://themewagon.com/">ThemeWagon</a>.</p>
+          <p class="m-0">ENSAH-service &copy; 2025 - All rights reserved; .</p>
         </div>
         <div class="col-auto my-1">
           <ul class="list-inline footer-link mb-0">
@@ -668,6 +679,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
 
 
   <script>font_change("Public-Sans");</script>
+
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       document.querySelectorAll('.view-btn').forEach(button => {
@@ -681,6 +693,8 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
           const genre = button.getAttribute('data-genre');
           const email = button.getAttribute('data-email');
           const specialite = button.getAttribute('data-specialite');
+          const bio = button.getAttribute('data-bio');
+          const address = button.getAttribute('data-address');
           const image = button.getAttribute('data-img') || '/ENSAH-service/assets/images/avatar-M.jpg';
 
           // Populate the modal with the data
@@ -692,12 +706,85 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
           document.getElementById('modal-genre').textContent = genre;
           document.getElementById('modal-email').textContent = email;
           document.getElementById('modal-fullname').textContent = `${nom} ${prenom}`;
-          document.getElementById('modal-specialite').textContent = specialite; // Add any missing fields
+          document.getElementById('modal-specialite').textContent = specialite;
+          document.getElementById('modal-address').textContent = address || '--';
+          document.getElementById('modal-bio').textContent = bio || '-- À propos du professeur --';
         });
       });
     });
+  </script>
+  <script>
+    // Check password strength
+    let pass = document.querySelector(".passwordInput");
+    let error_msg = document.querySelector(".error_msj");
+    pass.addEventListener("input", (e) => {
+      if (e.target.value.length >= 8) {
+        if (/[A-Z]/.test(e.target.value)) {
+          if (/[0-9]/.test(e.target.value)) {
+            if (/[!@#$%^&*(),.?":{}|<>]/.test(e.target.value)) {
+              e.target.style.borderColor = "#00db00";
+              error_msg.innerHTML = "";
+            } else {
+              e.target.style.borderColor = "red";
+              error_msg.innerHTML = "Password should have at least one special character";
+            }
+          } else {
+            e.target.style.borderColor = "red";
+            error_msg.innerHTML = "Password should have at least one digit";
+          }
+        } else {
+          e.target.style.borderColor = "red";
+          error_msg.innerHTML = "Password should have at least one capital letter";
+        }
+      } else {
+        e.target.style.borderColor = "red";
+        error_msg.innerHTML = "Password should have at least 8 digits";
+      }
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.remove-user').forEach(button => {
+        button.addEventListener('click', () => {
+          const user_ID = button.getAttribute('data-user');
+          const prof_ID = button.getAttribute('data-prof');
 
-
+          // Show confirmation dialog
+          if (confirm("Are you sure you want to delete this professor?")) {
+            // Send fetch request to PHP script
+            fetch('/ENSAH-service/inc/functions/delete-user.php', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ user_ID: user_ID })
+            })
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+              })
+              .then(data => {
+                if (data.success) {
+                  let success_msg = document.querySelector(".success-msg");
+                  if (success_msg) {
+                    success_msg.innerHTML = "✅"+"Professeur with ID " + prof_ID + " has been deleted!";
+                    success_msg.display="block";
+                  }
+                  // Optionally, remove the row from the table
+                  button.closest('tr').remove();
+                } else {
+                  console.error("❌ Failed to delete: " + (data.message || "Unknown error"));
+                }
+              })
+              .catch(error => {
+                console.error("❌ Error:", error.message || error);
+              });
+          }
+        });
+      });
+    });
   </script>
 
 

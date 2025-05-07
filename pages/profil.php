@@ -1,6 +1,6 @@
 <?php
 include '../inc/functions/connections.php';
-
+session_start();
 $admin_data = "SELECT * FROM `admin` A 
                   JOIN `user` U ON A.user_ID = U.user_ID";
 $admins = $pdo->query($admin_data);
@@ -18,6 +18,10 @@ if ($admins) {
     $email = $admin["email"];
     $role = "admin";
     $genre = $admin["genre"];
+    $phone = $admin["Phone"];
+    $linkedin = $admin["linkedin"];
+    $address = $admin["address"];
+    $bio = $admin["bio"];
     // Calculate the age:
     $birthday = $admin["date_naissance"]; // 🎂 format: YYYY-MM-DD
     $birthDate = new DateTime($birthday);
@@ -178,12 +182,12 @@ if (!$profs) {
                             </div>
                             <div class="d-inline-flex align-items-center justify-content-between w-100 mb-3">
                               <i class="ti ti-phone"></i>
-                              <p class="mb-0"><!--Phone number--></p>
+                              <p class="mb-0">(+212) <?php echo $phone ?></p>
                             </div>
                             <div class="d-inline-flex align-items-center justify-content-between w-100">
                               <i class="ti ti-brand-linkedin"></i>
                               <a href="#" class="link-primary">
-                                <p class="mb-0"><?php echo "Linkedin" ?></p>
+                                <p class="mb-0"><a href="<?php echo $linkedin; ?>">linkedin</a></p>
                               </a>
                             </div>
                           </div>
@@ -191,12 +195,22 @@ if (!$profs) {
                       </div>
                     </div>
                     <div class="col-lg-8 col-xxl-9">
+                      <?php if (isset($_GET['success'])): ?>
+                        <div id="success-message" style="color: green; margin-top: 10px;">✅
+                          <?php echo $_SESSION["success_message"] ?>
+                        </div>
+                        <script>
+                          setTimeout(function () {
+                            document.getElementById('success-message').remove();
+                          }, 10000); // 10 seconds
+                        </script>
+                      <?php endif; ?>
                       <div class="card">
                         <div class="card-header">
                           <h5>About me</h5>
                         </div>
                         <div class="card-body">
-                          <p class="mb-0"></p>
+                          <p class="mb-0"><?php echo $bio ?></p>
                         </div>
                       </div>
                       <div class="card">
@@ -221,11 +235,11 @@ if (!$profs) {
                               <div class="row">
                                 <div class="col-md-6">
                                   <p class="mb-1 text-muted">Phone</p>
-                                  <p class="mb-0"><!--Phone number--></p>
+                                  <p class="mb-0">(+212) <?php echo $phone ?></p>
                                 </div>
                                 <div class="col-md-6">
                                   <p class="mb-1 text-muted">Address</p>
-                                  <p class="mb-0"><?php echo "Address" ?></p>
+                                  <p class="mb-0"><?php echo $address ?></p>
                                 </div>
                               </div>
                             </li>
@@ -243,7 +257,7 @@ if (!$profs) {
                             </li>
                             <li class="list-group-item px-0 pb-0">
                               <p class="mb-1 text-muted">Address</p>
-                              <p class="mb-0"><!--Address--></p>
+                              <p class="mb-0"><?php echo $address ?></p>
                             </li>
                           </ul>
                         </div>
@@ -343,7 +357,7 @@ if (!$profs) {
                             <div class="col-sm-12">
                               <div class="form-group">
                                 <label class="form-label">Bio</label>
-                                <textarea class="form-control" name="bio"><?php echo "bio" ?></textarea>
+                                <textarea class="form-control" name="bio"><?php echo $bio ?></textarea>
                               </div>
                             </div>
                           </div>
@@ -351,7 +365,6 @@ if (!$profs) {
                       </div>
                     </div>
                     <div class="col-lg-6">
-
                       <div class="card">
                         <div class="card-header">
                           <h5>Contact Information</h5>
@@ -361,7 +374,7 @@ if (!$profs) {
                             <div class="col-sm-6">
                               <div class="form-group">
                                 <label class="form-label">Contact Phone</label>
-                                <input type="text" class="form-control" name="phone" value="(+212) ">
+                                <input type="text" class="form-control" name="phone" value="<?php echo $phone ?>">
                               </div>
                             </div>
                             <div class="col-sm-6">
@@ -373,13 +386,13 @@ if (!$profs) {
                             <div class="col-sm-12">
                               <div class="form-group">
                                 <label class="form-label">Linkedin</label>
-                                <input type="text" name="linkedin" class="form-control" value="">
+                                <input type="text" name="linkedin" class="form-control" value="<?php echo $linkedin ?>">
                               </div>
                             </div>
                             <div class="col-sm-12">
                               <div class="form-group">
                                 <label class="form-label">Address</label>
-                                <textarea class="form-control" name="address"></textarea>
+                                <textarea class="form-control" name="address"><?php echo $address ?></textarea>
                               </div>
                             </div>
                           </div>
@@ -393,7 +406,8 @@ if (!$profs) {
                     </div>
                   </div>
                 </form>
-                <div class="tab-pane" id="profile-4" role="tabpanel" aria-labelledby="profile-tab-4">
+                <form method="POST" action="/ENSAH-service/inc/functions/changepass.php" class="tab-pane" id="profile-4"
+                  role="tabpanel" aria-labelledby="profile-tab-4">
                   <div class="card">
                     <div class="card-header">
                       <h5>Change Password</h5>
@@ -403,27 +417,49 @@ if (!$profs) {
                         <div class="col-sm-6">
                           <div class="form-group">
                             <label class="form-label">Old Password</label>
-                            <input type="password" class="form-control">
+                            <input type="text" class="form-control passwordInput" name="oldpassword">
                           </div>
+                          <p style="color:red"><?php if (isset($oldpass_error)) {
+                            echo $oldpass_error;
+                          } ?></p>
                           <div class="form-group">
                             <label class="form-label">New Password</label>
-                            <input type="password" class="form-control">
+                            <input type="password" class="form-control newpassInput" name="newpassword">
                           </div>
+                          <p style="color:red"><?php if (isset($newpass_error)) {
+                            echo $newpass_error;
+                          } ?></p>
                           <div class="form-group">
                             <label class="form-label">Confirm Password</label>
-                            <input type="password" class="form-control">
+                            <input type="password" class="form-control confirmpassInput" name="confirmpass">
                           </div>
+                          <p style="color:red"><?php if (isset($confirmpass_error)) {
+                            echo $confirmpass_error;
+                          } ?></p>
+                          <p style="color:red"><?php if (isset($changepass_error)) {
+                            echo $changepass_error;
+                          } ?></p>
                         </div>
                         <div class="col-sm-6">
                           <h5>New password must contain:</h5>
                           <ul class="list-group list-group-flush">
-                            <li class="list-group-item"><i class="ti ti-minus me-2"></i> At least 8 characters</li>
-                            <li class="list-group-item"><i class="ti ti-minus me-2"></i> At least 1 lower letter (a-z)
+                            <li class="list-group-item" id="lengthMsg"><i class="ti ti-minus me-2" id="checklength"></i>
+                              At least 8
+                              characters</li>
+                            <li class="list-group-item" id="lowerMsg"><i class="ti ti-minus me-2" id="checklower"></i>
+                              At least 1
+                              lower letter (a-z)
                             </li>
-                            <li class="list-group-item"><i class="ti ti-minus me-2"></i> At least 1 uppercase letter
+                            <li class="list-group-item" id="upperMsg"><i class="ti ti-minus me-2" id="checkupper"></i>
+                              At least 1
+                              uppercase letter
                               (A-Z)</li>
-                            <li class="list-group-item"><i class="ti ti-minus me-2"></i> At least 1 number (0-9)</li>
-                            <li class="list-group-item"><i class="ti ti-minus me-2"></i> At least 1 special characters
+                            <li class="list-group-item" id="numberMsg"><i class="ti ti-minus me-2" id="checknumber"></i>
+                              At least 1
+                              number (0-9)</li>
+                            <li class="list-group-item" id="specialMsg"><i class="ti ti-minus me-2"
+                                id="checkspecial"></i> At least 1
+                              special characters
                             </li>
                           </ul>
                         </div>
@@ -431,10 +467,10 @@ if (!$profs) {
                     </div>
                     <div class="card-footer text-end btn-page">
                       <div class="btn btn-outline-secondary">Cancel</div>
-                      <div class="btn btn-primary">Update Profile</div>
+                      <input type="submit" class="btn btn-primary" name="submit" value="Update Profile"></input>
                     </div>
                   </div>
-                </div>
+                </form>
                 <div class="tab-pane" id="profile-6" role="tabpanel" aria-labelledby="profile-tab-6">
                   <div class="row">
                     <div class="col-md-6">
@@ -639,6 +675,65 @@ if (!$profs) {
 
 
   <script>font_change("Public-Sans");</script>
+  
+  <script>
+    // Declare passwordinput
+    let password = document.querySelector(".passwordInput");
+    let newpass = document.querySelector(".newpassInput"); // Updated to match the correct class
+    let pass = [password, newpass];
+    let confirmPass = document.querySelector(".confirmpassInput");
+    // Declare checkpassword icons
+    let checklength = document.querySelector("#checklength");
+    let checklower = document.querySelector("#checklower");
+    let checkupper = document.querySelector("#checkupper");
+    let checknumber = document.querySelector("#checknumber");
+    let checkspecial = document.querySelector("#checkspecial");
+    // Declare checkpassword messages
+    let lengthMsg = document.querySelector("#lengthMsg");
+    let lowerMsg = document.querySelector("#lowerMsg");
+    let upperMsg = document.querySelector("#upperMsg");
+    let numberMsg = document.querySelector("#numberMsg");
+    let specialMsg = document.querySelector("#specialMsg");
+
+
+    function setCheckState(el, msg, isValid) {
+      el.classList.remove("ti-minus", "me-2", isValid ? "ti-x" : "ti-check");
+      el.classList.add(isValid ? "ti-check" : "ti-x");
+      msg.style.color = isValid ? "green" : "red";
+    }
+    pass.forEach(element => {
+      element.addEventListener("input", (e) => {
+        let val = e.target.value;
+
+        let isLengthValid = val.length >= 8;
+        let hasLower = /[a-z]/.test(val);
+        let hasUpper = /[A-Z]/.test(val);
+        let hasNumber = /[0-9]/.test(val);
+        let hasSpecial = /[!@#$%^&*(),.?:{}|<>]/.test(val);
+
+        setCheckState(checklength, lengthMsg, isLengthValid);
+        setCheckState(checklower, lowerMsg, hasLower);
+        setCheckState(checkupper, upperMsg, hasUpper);
+        setCheckState(checknumber, numberMsg, hasNumber);
+        setCheckState(checkspecial, specialMsg, hasSpecial);
+
+        let allValid = isLengthValid && hasLower && hasUpper && hasNumber && hasSpecial;
+        e.target.style.borderColor = allValid ? "#00db00" : "red";
+      });
+    });
+    confirmPass.addEventListener("input", (e) => {
+      let val = e.target.value;
+      let newPassValue = newpass.value || ""; // Access the first element of newpass NodeList
+      if (val === newPassValue) {
+        e.target.style.borderColor = "#00db00";
+      } else {
+        e.target.style.borderColor = "red";
+      }
+    });
+
+
+  </script>
+
 
 
 
