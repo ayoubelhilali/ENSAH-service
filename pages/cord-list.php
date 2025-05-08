@@ -112,7 +112,7 @@
                       <td>
                         <div class="row">
                           <div class="col-auto pe-0">
-                            <img src="../assets/images/user/avatar-1.jpg" alt="user-image"
+                            <img src="../assets/images/avatar-M.jpg" alt="user-image"
                               class="wid-40 rounded-circle">
                           </div>
                           <div class="col">
@@ -157,7 +157,7 @@
                       <td>
                         <div class="row">
                           <div class="col-auto pe-0">
-                            <img src="../assets/images/user/avatar-2.jpg" alt="user-image"
+                            <img src="../assets/images/avatar-M.jpg" alt="user-image"
                               class="wid-40 rounded-circle">
                           </div>
                           <div class="col">
@@ -202,7 +202,7 @@
                       <td>
                         <div class="row">
                           <div class="col-auto pe-0">
-                            <img src="../assets/images/user/avatar-3.jpg" alt="user-image"
+                            <img src="../assets/images/avatar-M.jpg" alt="user-image"
                               class="wid-40 rounded-circle">
                           </div>
                           <div class="col">
@@ -517,7 +517,7 @@
                       <td>
                         <div class="row">
                           <div class="col-auto pe-0">
-                            <img src="../assets/images/user/avatar-1.jpg" alt="user-image"
+                            <img src="../assets/images/avatar-M.jpg" alt="user-image"
                               class="wid-40 rounded-circle">
                           </div>
                           <div class="col">
@@ -562,7 +562,7 @@
                       <td>
                         <div class="row">
                           <div class="col-auto pe-0">
-                            <img src="../assets/images/user/avatar-2.jpg" alt="user-image"
+                            <img src="../assets/images/avatar-M.jpg" alt="user-image"
                               class="wid-40 rounded-circle">
                           </div>
                           <div class="col">
@@ -607,7 +607,7 @@
                       <td>
                         <div class="row">
                           <div class="col-auto pe-0">
-                            <img src="../assets/images/user/avatar-3.jpg" alt="user-image"
+                            <img src="../assets/images/avatar-M.jpg" alt="user-image"
                               class="wid-40 rounded-circle">
                           </div>
                           <div class="col">

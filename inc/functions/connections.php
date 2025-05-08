@@ -1,6 +1,9 @@
 <?php
-
-$conne = mysqli_connect("127.0.0.1", "root", "", "ensah_service", 3307);
-if(!$conne){
-    die("Error:".mysqli_connect_error());
+try {
+    $pdo = new PDO('mysql:host=localhost;port=3307;dbname=ensah_service', 'root', '');
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Connection failed: " . $e->getMessage());
 }
+?>
+

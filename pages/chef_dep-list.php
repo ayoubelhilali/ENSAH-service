@@ -111,8 +111,7 @@
                       <td>
                         <div class="row">
                           <div class="col-auto pe-0">
-                            <img src="../assets/images/user/avatar-1.jpg" alt="user-image"
-                              class="wid-40 rounded-circle">
+                            <img src="../assets/images/avatar-M.jpg" alt="user-image" class="wid-40 rounded-circle">
                           </div>
                           <div class="col">
                             <h5 class="mb-0">Addie Bass</h5>
@@ -156,8 +155,7 @@
                       <td>
                         <div class="row">
                           <div class="col-auto pe-0">
-                            <img src="../assets/images/user/avatar-2.jpg" alt="user-image"
-                              class="wid-40 rounded-circle">
+                            <img src="../assets/images/avatar-M.jpg" alt="user-image" class="wid-40 rounded-circle">
                           </div>
                           <div class="col">
                             <h5 class="mb-0">Agnes McGee</h5>
@@ -201,8 +199,7 @@
                       <td>
                         <div class="row">
                           <div class="col-auto pe-0">
-                            <img src="../assets/images/user/avatar-3.jpg" alt="user-image"
-                              class="wid-40 rounded-circle">
+                            <img src="../assets/images/avatar-M.jpg" alt="user-image" class="wid-40 rounded-circle">
                           </div>
                           <div class="col">
                             <h5 class="mb-0">Alberta Robbins</h5>
@@ -516,8 +513,7 @@
                       <td>
                         <div class="row">
                           <div class="col-auto pe-0">
-                            <img src="../assets/images/user/avatar-1.jpg" alt="user-image"
-                              class="wid-40 rounded-circle">
+                            <img src="../assets/images/avatar-M.jpg" alt="user-image" class="wid-40 rounded-circle">
                           </div>
                           <div class="col">
                             <h5 class="mb-0">Addie Bass</h5>
@@ -561,8 +557,7 @@
                       <td>
                         <div class="row">
                           <div class="col-auto pe-0">
-                            <img src="../assets/images/user/avatar-2.jpg" alt="user-image"
-                              class="wid-40 rounded-circle">
+                            <img src="../assets/images/avatar-M.jpg" alt="user-image" class="wid-40 rounded-circle">
                           </div>
                           <div class="col">
                             <h5 class="mb-0">Agnes McGee</h5>
@@ -606,8 +601,7 @@
                       <td>
                         <div class="row">
                           <div class="col-auto pe-0">
-                            <img src="../assets/images/user/avatar-3.jpg" alt="user-image"
-                              class="wid-40 rounded-circle">
+                            <img src="../assets/images/avatar-M.jpg" alt="user-image" class="wid-40 rounded-circle">
                           </div>
                           <div class="col">
                             <h5 class="mb-0">Alberta Robbins</h5>
@@ -926,117 +920,107 @@
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header border-0 pb-0">
-          <h5 class="mb-0">Customer Details</h5>
+          <h5 class="mb-0">Détails du professeur</h5>
           <a href="#" class="avtar avtar-s btn-link-danger" data-bs-dismiss="modal">
             <i class="ti ti-x f-20"></i>
           </a>
         </div>
         <div class="modal-body">
           <div class="row">
+            <!-- Colonne gauche : infos principales -->
             <div class="col-lg-4">
               <div class="card">
                 <div class="card-body position-relative">
                   <div class="position-absolute end-0 top-0 p-3">
-                    <span class="badge bg-primary">Relationship</span>
+                    <span class="badge bg-primary">Professeur</span>
                   </div>
                   <div class="text-center mt-3">
                     <div class="chat-avtar d-inline-flex mx-auto">
-                      <img class="rounded-circle img-fluid wid-60" src="../assets/images/user/avatar-5.jpg"
-                        alt="User image">
+                      <img id="modal-img" class="rounded-circle img-fluid wid-60" src="" alt="User image">
                     </div>
-                    <h5 class="mb-0">Aaron Poole</h5>
-                    <p class="text-muted text-sm">Manufacturing Director</p>
-                    <hr class="my-3">
-                    <div class="row g-3">
-                      <div class="col-4">
-                        <h5 class="mb-0">45</h5>
-                        <small class="text-muted">Age</small>
-                      </div>
-                      <div class="col-4 border border-top-0 border-bottom-0">
-                        <h5 class="mb-0">86%</h5>
-                        <small class="text-muted">Progress</small>
-                      </div>
-                      <div class="col-4">
-                        <h5 class="mb-0">7634</h5>
-                        <small class="text-muted">Visits</small>
-                      </div>
-                    </div>
+                    <h5 class="mb-0" id="modal-nom"></h5>
+                    <p class="text-muted text-sm" id="modal-poste"></p>
                     <hr class="my-3">
                     <div class="d-inline-flex align-items-center justify-content-between w-100 mb-3">
                       <i class="ti ti-mail"></i>
-                      <p class="mb-0">bo@gmail.com</p>
+                      <p class="mb-0" id="modal-email"></p>
                     </div>
                     <div class="d-inline-flex align-items-center justify-content-between w-100 mb-3">
                       <i class="ti ti-phone"></i>
-                      <p class="mb-0">+1 (247) 849-6968</p>
+                      <p class="mb-0" id="modal-phone">--</p>
                     </div>
                     <div class="d-inline-flex align-items-center justify-content-between w-100 mb-3">
                       <i class="ti ti-map-pin"></i>
-                      <p class="mb-0">Lesotho</p>
+                      <p class="mb-0" id="modal-pays">--</p>
                     </div>
                     <div class="d-inline-flex align-items-center justify-content-between w-100">
                       <i class="ti ti-link"></i>
                       <a href="#" class="link-primary">
-                        <p class="mb-0">https://anshan.dh.url</p>
+                        <p class="mb-0" id="modal-link">--</p>
                       </a>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+
+            <!-- Colonne droite : détails personnels -->
             <div class="col-lg-8">
               <div class="card">
                 <div class="card-header">
-                  <h5>Personal Details</h5>
+                  <h5>Détails personnels</h5>
                 </div>
                 <div class="card-body">
                   <ul class="list-group list-group-flush">
                     <li class="list-group-item px-0 pt-0">
                       <div class="row">
                         <div class="col-md-6">
-                          <p class="mb-1 text-muted">Full Name</p>
-                          <h6 class="mb-0">Aaron Poole</h6>
+                          <p class="mb-1 text-muted">Nom complet</p>
+                          <h6 class="mb-0" id="modal-fullname"></h6>
                         </div>
                         <div class="col-md-6">
-                          <p class="mb-1 text-muted">Father Name</p>
-                          <h6 class="mb-0">Mr. Ralph Sabatini</h6>
+                          <p class="mb-1 text-muted">CIN</p>
+                          <h6 class="mb-0" id="modal-cin"></h6>
                         </div>
                       </div>
                     </li>
                     <li class="list-group-item px-0">
                       <div class="row">
                         <div class="col-md-6">
-                          <p class="mb-1 text-muted">Country</p>
-                          <h6 class="mb-0">Lesotho</h6>
+                          <p class="mb-1 text-muted">Date de naissance</p>
+                          <h6 class="mb-0" id="modal-dob"></h6>
                         </div>
                         <div class="col-md-6">
-                          <p class="mb-1 text-muted">Zip Code</p>
-                          <h6 class="mb-0">247 849</h6>
+                          <p class="mb-1 text-muted">Genre</p>
+                          <h6 class="mb-0" id="modal-genre"></h6>
                         </div>
                       </div>
                     </li>
                     <li class="list-group-item px-0 pb-0">
-                      <p class="mb-1 text-muted">Address</p>
-                      <h6 class="mb-0">647 Punam Center, Ulabifgu, Myanmar (Burma) - 41487</h6>
+                      <p class="mb-1 text-muted">Adresse</p>
+                      <h6 class="mb-0" id="modal-adresse">--</h6>
                     </li>
                   </ul>
                 </div>
               </div>
+
               <div class="card">
                 <div class="card-header">
-                  <h5>About me</h5>
+                  <h5>À propos</h5>
                 </div>
                 <div class="card-body">
-                  <p class="mb-0">Hello, I’m Aaron Poole Manufacturing Director based in international company, Void
-                    jiidki me na fep juih ced gihhiwi launke cu mig tujum peodpo.</p>
+                  <p class="mb-0" id="modal-about">
+                    -- À propos du professeur --
+                  </p>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
+          </div> <!-- /row -->
+        </div> <!-- /modal-body -->
+      </div> <!-- /modal-content -->
+    </div> <!-- /modal-dialog -->
   </div>
+
   <div class="modal fade" id="user-edit_add-modal" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
@@ -1141,6 +1125,24 @@
   <script src="../assets/js/fonts/custom-font.js"></script>
   <script src="../assets/js/pcoded.js"></script>
   <script src="../assets/js/plugins/feather.min.js"></script>
+  <script>
+    document.querySelectorAll('.view-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        document.getElementById('modal-img').src = button.getAttribute('data-img');
+        document.getElementById('modal-nom').textContent = button.getAttribute('data-nom') + ' ' + button.getAttribute('data-prenom');
+        document.getElementById('modal-poste').textContent = button.getAttribute('data-poste');
+        document.getElementById('modal-email').textContent = button.getAttribute('data-email');
+        document.getElementById('modal-fullname').textContent = button.getAttribute('data-nom') + ' ' + button.getAttribute('data-prenom');
+        document.getElementById('modal-cin').textContent = button.getAttribute('data-cin');
+        document.getElementById('modal-dob').textContent = button.getAttribute('data-dob');
+        document.getElementById('modal-genre').textContent = button.getAttribute('data-genre');
+        document.getElementById('modal-pays').textContent = button.getAttribute('data-pays');
+        document.getElementById('modal-about').textContent = button.getAttribute('data-about');
+      });
+    });
+  </script>
+
+
 
 
 
