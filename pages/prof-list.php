@@ -101,7 +101,8 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
 
                 <div id="success-message" class="success-msg" style="color: green; margin-top: 10px;">
                   <?php if (isset($_GET['success'])):
-                    echo "✅" . $_SESSION["success_message"]; endif; ?>
+                    echo "✅" . $_SESSION["success_message"];
+                  endif; ?>
                 </div>
                 <script>
                   setTimeout(function () {
@@ -168,14 +169,21 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
                           <td class="text-center">
                             <ul class="list-inline me-auto mb-0">
                               <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                                <a href="#" class="avtar avtar-xs btn-link-secondary view-btn" data-bs-toggle="modal"
-                                  data-bs-target="#user-modal" data-nom="<?= $prof['nom'] ?? ''; ?>"
-                                  data-prenom="<?= $prof['prenom'] ?? ''; ?>" data-email="<?= $prof['email'] ?? ''; ?>"
-                                  data-specialite="<?= $prof['specialite'] ?? ''; ?>"
-                                  data-img="<?= $prof['image'] ?? '/ENSAH-service/assets/images/avatar-M.jpg'; ?>"
-                                  data-cin="<?= $prof['CIN'] ?? ''; ?>" data-genre="<?= $prof['genre'] ?? ''; ?>"
-                                  data-birthday="<?= $prof['date_naissance'] ?? ''; ?>"
-                                  data-bio="<?= $prof['bio'] ?? ''; ?>" data-address="<?= $prof['address'] ?? ''; ?>">
+                                <a href="#" class="avtar avtar-xs btn-link-secondary view-btn" 
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#user-modal" 
+                                  data-nom="<?= $prof['nom']; ?>"
+                                  data-prenom="<?= $prof['prenom']; ?>"
+                                  data-address="<?= $prof['address']; ?>"
+                                  data-email="<?= $prof['email']; ?>"
+                                  data-specialite="<?= $prof['specialite']; ?>"
+                                  data-img="<?= $prof['image']; ?>"
+                                  data-cin="<?= $prof['CIN']; ?>"
+                                  data-genre="<?= $prof['genre']; ?>"
+                                  data-bio="<?= $prof['bio']; ?>"
+                                  data-birthday="<?= $prof['date_naissance']; ?>"
+                                  data-phone="<?= (isset($prof['Phone']) && $prof['Phone'] != "0") ? $prof['Phone'] : '(+212)  - - - - - - - - -   '; ?>"
+                                  data-linkedin="<?= $prof['linkedin']; ?>">
                                   <i class="ti ti-eye f-18"></i>
                                 </a>
 
@@ -243,14 +251,10 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
                       <i class="ti ti-phone"></i>
                       <p class="mb-0" id="modal-phone">--</p>
                     </div>
-                    <div class="d-inline-flex align-items-center justify-content-between w-100 mb-3">
-                      <i class="ti ti-map-pin"></i>
-                      <p class="mb-0" id="modal-pays">--</p>
-                    </div>
                     <div class="d-inline-flex align-items-center justify-content-between w-100">
-                      <i class="ti ti-link"></i>
+                      <i class="ti ti-brand-linkedin"></i>
                       <a href="#" class="link-primary">
-                        <p class="mb-0" id="modal-link">--</p>
+                        <p class="mb-0" id="modal-linkedin">--</p>
                       </a>
                     </div>
                   </div>
@@ -769,8 +773,8 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
                 if (data.success) {
                   let success_msg = document.querySelector(".success-msg");
                   if (success_msg) {
-                    success_msg.innerHTML = "✅"+"Professeur with ID " + prof_ID + " has been deleted!";
-                    success_msg.display="block";
+                    success_msg.innerHTML = "✅" + "Professeur with ID " + prof_ID + " has been deleted!";
+                    success_msg.display = "block";
                   }
                   // Optionally, remove the row from the table
                   button.closest('tr').remove();

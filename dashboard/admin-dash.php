@@ -1,5 +1,11 @@
 
 <?php
+session_start();
+if (!isset($_SESSION['user'])) {
+  // Redirect to login if not authenticated
+  header('Location: ../login.php');
+  exit();
+}
 include('../inc/functions/connections.php');
 $sql = "SELECT COUNT(*) FROM `user`";
 $stmt = $pdo->query($sql);

@@ -170,18 +170,26 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
                             <ul class="list-inline me-auto mb-0">
                               <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
                                 <a href="#" class="avtar avtar-xs btn-link-secondary view-btn" data-bs-toggle="modal"
-                                  data-bs-target="#user-modal" data-nom="<?= $vacat['nom']; ?>"
-                                  data-prenom="<?= $vacat['prenom']; ?>" data-email="<?= $vacat['email']; ?>"
-                                  data-specialite="<?= $vacat['specialite']; ?>" data-img="<?= $vacat['image']; ?>"
-                                  data-cin="<?= $vacat['CIN']; ?>" data-genre="<?= $vacat['genre']; ?>"
-                                  data-birthday="<?= $vacat['date_naissance']; ?>">
+                                  data-bs-target="#user-modal" 
+                                  data-nom="<?= $vacat['nom']; ?>"
+                                  data-prenom="<?= $vacat['prenom']; ?>"
+                                  data-address="<?= $vacat['address']; ?>"
+                                  data-email="<?= $vacat['email']; ?>"
+                                  data-specialite="<?= $vacat['specialite']; ?>"
+                                  data-img="<?= $vacat['image']; ?>"
+                                  data-cin="<?= $vacat['CIN']; ?>"
+                                  data-genre="<?= $vacat['genre']; ?>"
+                                  data-bio="<?= $vacat['bio']; ?>"
+                                  data-birthday="<?= $vacat['date_naissance']; ?>"
+                                  data-phone="<?= (isset($vacat['Phone'])&& $vacat['Phone']!="0") ? $vacat['Phone'] : '(+212)  - - - - - - - - -   '; ?>"
+                                  data-linkedin="<?= $vacat['linkedin']; ?>">
                                   <i class="ti ti-eye f-18"></i>
                                 </a>
 
                               </li>
                               <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
                                 <a href="#" class="avtar avtar-xs btn-link-primary edit-btn" data-bs-toggle="modal"
-                                  data-bs-target="#user-edit-modal" data-nom="<?= $vacat['nom']; ?>"
+                                  data-bs-target="#user-edit-modal" data-nom="<?= $vacat['nom']; ?>" 
                                   data-prenom="<?= $vacat['prenom']; ?>" data-email="<?= $vacat['email']; ?>"
                                   data-pass="<?php echo $vacat['password']; ?>"
                                   data-specialite="<?= $vacat['specialite']; ?>" data-img="<?= $vacat['image']; ?>"
@@ -247,14 +255,10 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
                       <i class="ti ti-phone"></i>
                       <p class="mb-0" id="modal-phone">--</p>
                     </div>
-                    <div class="d-inline-flex align-items-center justify-content-between w-100 mb-3">
-                      <i class="ti ti-map-pin"></i>
-                      <p class="mb-0" id="modal-pays">--</p>
-                    </div>
                     <div class="d-inline-flex align-items-center justify-content-between w-100">
-                      <i class="ti ti-link"></i>
+                      <i class="ti ti-brand-linkedin"></i>
                       <a href="#" class="link-primary">
-                        <p class="mb-0" id="modal-link">--</p>
+                        <p class="mb-0" id="modal-linkedin">--</p>
                       </a>
                     </div>
                   </div>
@@ -296,7 +300,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
                     </li>
                     <li class="list-group-item px-0 pb-0">
                       <p class="mb-1 text-muted">Adresse</p>
-                      <h6 class="mb-0" id="modal-adresse">--</h6>
+                      <h6 class="mb-0" id="modal-address">--</h6>
                     </li>
                   </ul>
                 </div>
@@ -307,7 +311,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
                   <h5>À propos</h5>
                 </div>
                 <div class="card-body">
-                  <p class="mb-0" id="modal-about">
+                  <p class="mb-0" id="modal-bio">
                     -- À propos du vacataire --
                   </p>
                 </div>
@@ -703,7 +707,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
               <div class="form-group">
                 <label for="day" class="form-label">Date de naissance :</label><br>
 
-                <select name="birthday_day" class="selectInput" id="day" required>
+                <select name="birthday_day" class="selectInput" id="vacat_day" required>
                   <option value="" class="defaultOption" disabled <?php if (empty($birthday_day))
                     echo 'selected'; ?>>Jour</option>
                   <!-- Jours de 1 à 31 -->
@@ -712,7 +716,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
                   } ?>
                 </select>
 
-                <select name="birthday_month" class="selectInput" id="month" required>
+                <select name="birthday_month" class="selectInput" id="vacat_month" required>
                   <option disabled class="defaultOption" <?php if (empty($birthday_month))
                     echo 'selected'; ?>>Mois
                   </option>
@@ -737,7 +741,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
                   ?>
                 </select>
 
-                <select name="birthday_year" id="year" class="selectInput" required>
+                <select name="birthday_year" id="vacat_year" class="selectInput" required>
                   <option disabled class="defaultOption" value="" <?php if (empty($birthday_year))
                     echo 'selected'; ?>>Année</option>
                   <!-- Années de 2025 à 1900 -->
@@ -865,6 +869,10 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
         button.addEventListener('click', () => {
           // Get the data from the clicked button
           const cin = button.getAttribute('data-cin');
+          const address = button.getAttribute('data-address');
+          const phone = button.getAttribute('data-phone');
+          const linkedin = button.getAttribute('data-linkedin');
+          const bio = button.getAttribute('data-bio');
           const nom = button.getAttribute('data-nom');
           const prenom = button.getAttribute('data-prenom');
           const birthday = button.getAttribute('data-birthday');
@@ -878,6 +886,10 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
           document.getElementById('modal-nom').textContent = `${nom} ${prenom}`;
           document.getElementById('modal-poste').textContent = specialite;
           document.getElementById('modal-cin').textContent = cin;
+          document.getElementById('modal-phone').textContent = phone;
+          document.getElementById('modal-linkedin').textContent = linkedin;
+          document.getElementById('modal-bio').textContent = bio;
+          document.getElementById('modal-address').textContent = address;
           document.getElementById('modal-birthday').textContent = birthday;
           document.getElementById('modal-genre').textContent = genre;
           document.getElementById('modal-email').textContent = email;
@@ -896,6 +908,8 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
           const vacat_nom = button.getAttribute('data-nom');
           const vacat_prenom = button.getAttribute('data-prenom');
           const vacat_birthday = button.getAttribute('data-birthday');
+          const [vacat_year, vacat_month, vacat_day] = vacat_birthday.split('-');
+          console.log(vacat_year + "-" + vacat_month + "-" + vacat_day);
           const vacat_genre = button.getAttribute('data-genre');
           const vacat_email = button.getAttribute('data-email');
           const vacat_pass = button.getAttribute('data-pass');
@@ -906,14 +920,16 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
           document.querySelector('.vacat-img').src = vacat_image;
           document.getElementById('vacat-nom').value = `${vacat_nom}`;
           document.getElementById('vacat-prenom').value = `${vacat_prenom}`;
-          // document.getElementById('vacat-poste').value = vacat_specialite;
           document.getElementById('vacat-cin').value = vacat_cin;
-          // document.getElementById('vacat-birthday').value = vacat_birthday;
-          console.log("Genre: " + vacat_genre);
           document.querySelector(`#vacat-genre option[value="${vacat_genre}"]`).selected = true;
           document.getElementById('vacat-email').value = vacat_email;
           document.getElementById('vacat-pass').value = vacat_pass;
           document.querySelector(`#vacat-specialite option[value="${vacat_specialite}"]`).selected = true;
+          // select the birthday
+          document.querySelector(`#vacat_year option[value="${vacat_year}"]`).selected = true;
+          document.querySelector(`#vacat_month option[value="${vacat_month}"]`).selected = true;
+          document.querySelector(`#vacat_day option[value="${vacat_day}"]`).selected = true;
+
         });
       });
     });
