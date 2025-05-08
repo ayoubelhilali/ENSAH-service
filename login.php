@@ -11,7 +11,10 @@
   <meta name="keywords" content="ENSAH, Al Hoceima , E Service , Université Abdelmalek essaadi, Ecole nationale">
 
 
-<link rel="icon" href="assets/images/logo-withoutBG.png" type="image/png">     <!-- icone dans l'onglet de site-->
+
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+<link rel="icon" href="assets/images/logo-small_noBG.png" type="image/png">     <!-- icone dans l'onglet de site-->
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap" id="main-font-link">
 <!-- [Tabler Icons] https://tablericons.com -->
@@ -58,11 +61,12 @@
             <div class="form-group mb-3">
               <label class="form-label">Mot de passe</label>
               <input type="password" name="password" class="form-control" placeholder="Entrer votre mot de passe">
+              <span class="material-symbols-outlined">visibility_off</span>
             </div>
             <?php 
                if(isset($_GET['message'])){
                 echo "<p style='color: red;'>" . htmlspecialchars($_GET['message']) . "</p>";
-               }
+                }
              ?>
             <div class="d-flex mt-1 justify-content-between">
               <div class="form-check">
