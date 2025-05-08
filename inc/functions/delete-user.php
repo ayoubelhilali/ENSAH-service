@@ -8,10 +8,20 @@ $input = json_decode(file_get_contents("php://input"), true);
 $user_ID = $input['user_ID'] ?? null;
 
 if ($user_ID) {
-    $query = "DELETE user, professeur 
-              FROM user 
-              INNER JOIN professeur ON professeur.user_ID = user.user_ID 
-              WHERE user.user_ID = ?";
+    // Check if the user is in the vacataire table
+    $checkVacataire = $pdo->prepare("SELECT COUNT(*) FROM vacataire WHERE user_ID = ?");
+    $checkVacataire->execute([$user_ID]);
+    $isVacataire = $checkVacataire->fetchColumn() > 0;
+
+    if ($isVacataire) {
+        $pdo->prepare("DELETE FROM vacataire WHERE user_ID = ?")->execute([$user_ID]);
+    } else {
+        $pdo->prepare("DELETE FROM professeur WHERE user_ID = ?")->execute([$user_ID]);
+    }
+
+    $query = "DELETE FROM user WHERE user_ID = ?";
+    $stmt = $pdo->prepare($query);
+
     $stmt = $pdo->prepare($query);
 
     if ($stmt->execute([$user_ID])) {

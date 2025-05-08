@@ -92,24 +92,26 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
         <div class="col-sm-12">
           <div class="card table-card">
             <div class="card-body">
-            <!-------------------------------------->
-            <div class="text-end p-4 pb-0">
-              <a href="#" class="btn btn-primary d-inline-flex align-items-center" data-bs-toggle="modal"
-              data-bs-target="#user-edit_add-modal">
-              <i class="ti ti-plus f-18"></i> Ajouter vacataire
-              </a>
+              <!-------------------------------------->
+              <div class="text-end p-4 pb-0">
+                <a href="#" class="btn btn-primary d-inline-flex align-items-center" data-bs-toggle="modal"
+                  data-bs-target="#user-add-modal">
+                  <i class="ti ti-plus f-18"></i> Ajouter vacataire
+                </a>
 
-              <?php if (isset($_GET['success'])): ?>
-                  <div id="success-message" style="color: green; margin-top: 10px;">✅ <?php echo $_SESSION["success_message"] ?></div>
-                  <script>
-                  setTimeout(function() {
-                    document.getElementById('success-message').remove();
+                <div id="success-message" class="success-msg" style="color: green; margin-top: 10px;">
+                  <?php if (isset($_GET['success'])):
+                    echo "✅" . $_SESSION["success_message"];
+                  endif; ?>
+                </div>
+                <script>
+                  setTimeout(function () {
+                    document.getElementById('success-message').style.display = 'none';
                   }, 10000); // 10 seconds
-                  </script>
-              <?php endif; ?>
-            </div>
+                </script>
+              </div>
 
-                  <!---------------------------------->
+              <!---------------------------------->
               <div class="table-responsive">
                 <table class="table table-hover" id="pc-dt-simple">
                   <thead>
@@ -132,64 +134,72 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
                     if ($all_vacats) {
                       while ($vacat = $all_vacats->fetch(PDO::FETCH_ASSOC)) {
                         ?>
-                            <tr>
-                              <td>
-                                <div class="form-check">
-                                  <input class="form-check-input" type="checkbox">
-                                </div>
-                              </td>
-                              <td><?php echo $vacat['vacat_ID'] ?></td>
-                              <td>
-                                <div class="col-auto pe-0">
-                                    <img src="<?php if (!empty($vacat['image']))
-                                      echo $vacat['image'];
-                                    else
-                                      echo "/ENSAH-service/assets/images/avatar-M.jpg" ?>" alt="user-image" class="wid-40 rounded-circle">
-                                  </div>
-                                </td>
-                                <td>
-                                  <div class="row"> 
-                                    <div class="col">
-                                      <h5 class="mb-1"><?php echo $vacat['nom'] ?></h5>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <tdv class="row"> 
-                                  <div class="col">
-                                    <h5 class="mb-0"><?php echo $vacat['prenom'] ?></h5>
-                                  </div>
-                                </tdv>
-                              </td>
-                              <td><?php echo $vacat['email'] ?></td>
-                              <td><?php echo $vacat['specialite'] ?></td>
-                              <td class="text-center">
-                                <ul class="list-inline me-auto mb-0">
-                                  <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                                    <a href="#" class="avtar avtar-xs btn-link-secondary view-btn" data-bs-toggle="modal"
-                                      data-bs-target="#user-modal" data-nom="<?= $vacat['nom']; ?>"
-                                      data-prenom="<?= $vacat['prenom']; ?>" data-email="<?= $vacat['email']; ?>"
-                                      data-specialite="<?= $vacat['specialite']; ?>" data-img="<?= $vacat['image']; ?>" data-cin="<?= $vacat['CIN']; ?>"
-                                      data-genre="<?= $vacat['genre']; ?>" data-birthday="<?= $vacat['date_naissance']; ?>">
-                                      <i class="ti ti-eye f-18"></i>
-                                    </a>
+                        <tr>
+                          <td>
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox">
+                            </div>
+                          </td>
+                          <td><?php echo $vacat['vacat_ID'] ?></td>
+                          <td>
+                            <div class="col-auto pe-0">
+                              <img src="<?php if (!empty($vacat['image']))
+                                echo $vacat['image'];
+                              else
+                                echo "/ENSAH-service/assets/images/avatar-M.jpg" ?>" alt="user-image"
+                                  class="wid-40 rounded-circle">
+                              </div>
+                            </td>
+                            <td>
+                              <div class="row">
+                                <div class="col">
+                                  <h5 class="mb-1"><?php echo $vacat['nom'] ?></h5>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <tdv class="row">
+                              <div class="col">
+                                <h5 class="mb-0"><?php echo $vacat['prenom'] ?></h5>
+                              </div>
+                            </tdv>
+                          </td>
+                          <td><?php echo $vacat['email'] ?></td>
+                          <td><?php echo $vacat['specialite'] ?></td>
+                          <td class="text-center">
+                            <ul class="list-inline me-auto mb-0">
+                              <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
+                                <a href="#" class="avtar avtar-xs btn-link-secondary view-btn" data-bs-toggle="modal"
+                                  data-bs-target="#user-modal" data-nom="<?= $vacat['nom']; ?>"
+                                  data-prenom="<?= $vacat['prenom']; ?>" data-email="<?= $vacat['email']; ?>"
+                                  data-specialite="<?= $vacat['specialite']; ?>" data-img="<?= $vacat['image']; ?>"
+                                  data-cin="<?= $vacat['CIN']; ?>" data-genre="<?= $vacat['genre']; ?>"
+                                  data-birthday="<?= $vacat['date_naissance']; ?>">
+                                  <i class="ti ti-eye f-18"></i>
+                                </a>
 
-                                  </li>
-                                  <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                                    <a href="#" class="avtar avtar-xs btn-link-primary" data-bs-toggle="modal"
-                                      data-bs-target="#user-edit_add-modal">
-                                      <i class="ti ti-edit-circle f-18"></i>
-                                    </a>
-                                  </li>
-                                  <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                                    <a href="#" class="avtar avtar-xs btn-link-danger">
-                                      <i class="ti ti-trash f-18"></i>
-                                    </a>
-                                  </li>
-                                </ul>
-                              </td>
-                            </tr>
-                        <?php }
+                              </li>
+                              <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
+                                <a href="#" class="avtar avtar-xs btn-link-primary edit-btn" data-bs-toggle="modal"
+                                  data-bs-target="#user-edit-modal" data-nom="<?= $vacat['nom']; ?>"
+                                  data-prenom="<?= $vacat['prenom']; ?>" data-email="<?= $vacat['email']; ?>"
+                                  data-pass="<?php echo $vacat['password']; ?>"
+                                  data-specialite="<?= $vacat['specialite']; ?>" data-img="<?= $vacat['image']; ?>"
+                                  data-cin="<?= $vacat['CIN']; ?>" data-genre="<?= $vacat['genre']; ?>"
+                                  data-birthday="<?= $vacat['date_naissance']; ?>">
+                                  <i class="ti ti-edit-circle f-18"></i>
+                                </a>
+                              </li>
+                              <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
+                                <a href="#" class="avtar avtar-xs btn-link-danger remove-user"
+                                  data-user="<?php echo $vacat["user_ID"] ?>" data-vacat="<?php echo $vacat["vacat_ID"] ?>">
+                                  <i class="ti ti-trash f-18"></i>
+                                </a>
+                              </li>
+                            </ul>
+                          </td>
+                        </tr>
+                      <?php }
                     } ?>
 
 
@@ -445,15 +455,15 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
   ?>
 
   <?php if ($_SERVER["REQUEST_METHOD"] == "POST" && $errors > 0): ?>
-      <script>
-        document.addEventListener('DOMContentLoaded', function () {
-          var myModal = new bootstrap.Modal(document.getElementById('user-edit_add-modal'));
-          myModal.show();
-        });
-      </script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var myModal = new bootstrap.Modal(document.getElementById('user-edit_add-modal'));
+        myModal.show();
+      });
+    </script>
   <?php endif; ?>
-  <form method="post" class="modal fade" id="user-edit_add-modal" data-bs-keyboard="false" tabindex="-1"
-    aria-hidden="true" enctype="multipart/form-data">
+  <form method="post" class="modal fade" id="user-add-modal" data-bs-keyboard="false" tabindex="-1" aria-hidden="true"
+    enctype="multipart/form-data">
     <input type="hidden" name="avatar_path" id="avatar-path">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
@@ -527,7 +537,8 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
 
                 <select name="birthday_month" class="selectInput" id="month" required>
                   <option disabled class="defaultOption" <?php if (empty($birthday_month))
-                    echo 'selected'; ?>>Mois</option>
+                    echo 'selected'; ?>>Mois
+                  </option>
                   <?php
                   $months = [
                     1 => "Janvier",
@@ -565,7 +576,8 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
                 <label class="form-label">Genre</label>
                 <select name="genre" class="form-select selectInput" required>
                   <option disabled class="defaultOption" <?php if (empty($genre))
-                    echo 'selected'; ?>>Selectionner Genre</option>
+                    echo 'selected'; ?>>Selectionner Genre
+                  </option>
                   <option <?php if ($genre == "Masculin")
                     echo 'selected'; ?>>Masculin</option>
                   <option <?php if ($genre == "Féminin")
@@ -592,18 +604,194 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
                     style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
                 </div>
               </div>
-              <p style="color: red"><?php if (isset($password_error)) {
+              <p style="color: red" class="error-msg"><?php if (isset($password_error)) {
                 echo $password_error;
               } ?></p>
               <div class="form-group">
                 <label class="form-label">Specialité</label>
                 <select name="specialite" class="form-select selectInput" required>
                   <option disabled class="defaultOption" <?php if (empty($specialite))
-                    echo 'selected'; ?>>Specialitée</option>
+                    echo 'selected'; ?>>Specialitée
+                  </option>
                   <option>Computer science</option>
                   <option>Data analyst</option>
                   <option>cybersecurity</option>
                   <option>Mathematics</option>
+                </select>
+              </div>
+              <p style="color: red"><?php if (isset($specialite_error)) {
+                echo $specialite_error;
+              } ?></p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <ul class="list-inline me-auto mb-0">
+            <li class="list-inline-item align-bottom">
+              <a href="#" class="avtar avtar-s btn-link-danger w-sm-auto" data-bs-toggle="tooltip" title="Delete">
+                <i class="ti ti-trash f-18 clearBtn"></i>
+              </a>
+            </li>
+          </ul>
+          <div class="flex-grow-1 text-end">
+            <button type="button" class="btn btn-link-danger" data-bs-dismiss="modal">Annuler</button>
+            <input type="submit" name="submit" class="btn btn-primary" value="enregistrer">
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <form method="post" class="modal fade" id="user-edit-modal" data-bs-keyboard="false" tabindex="-1" aria-hidden="true"
+    enctype="multipart/form-data">
+    <input type="hidden" name="avatar_path" id="avatar-path">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="mb-0">Modifier vacataire</h5>
+          <a href="#" class="avtar avtar-s btn-link-danger" data-bs-dismiss="modal">
+            <i class="ti ti-x f-20"></i>
+          </a>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <?php
+            // Charger le traitement d'image en premier
+            include "../inc/functions/upload-image.php";
+
+            // Mettre à jour l'avatar si l'image a été uploadée
+            $avatar = "/ENSAH-service/assets/images/avatar-M.jpg"; // Valeur par défaut
+            if (isset($_SESSION['avatar_path'])) {
+              $avatar = $_SESSION['avatar_path'];
+            }
+            ?>
+            <div class="col-sm-3 text-center mb-3">
+              <div class="user-upload wid-75">
+                <img id="avatar-preview" src="<?php echo $avatar; ?>" alt="img" class="img-fluid vacat-img">
+                <label for="uplfile" class="img-avtar-upload">
+                  <i class="ti ti-camera f-24 mb-1"></i>
+                  <span>Upload</span>
+                </label>
+
+                <input type="file" id="uplfile" name="uplfile" class="d-none">
+              </div>
+            </div>
+            <div class="col-sm-9">
+              <div class="form-group">
+                <label class="form-label">Nom</label>
+                <input required name="nom" type="text" class="form-control nameInput" placeholder="Nom" value=""
+                  id="vacat-nom">
+              </div>
+              <p style="color: red"><?php if (isset($nom_error)) {
+                echo $nom_error;
+              } ?></p>
+              <div class="form-group">
+                <label class="form-label">Prénom</label>
+                <input required name="prenom" type="text" class="form-control prenomInput" placeholder="Prénom" value=""
+                  id="vacat-prenom">
+              </div>
+              <p style="color: red"><?php if (isset($prenom_error)) {
+                echo $prenom_error;
+              } ?></p>
+              <div class="form-group">
+                <label class="form-label">CIN</label>
+                <input required name="CIN" type="text" class="form-control cinInput" placeholder="CIN" value=""
+                  id="vacat-cin">
+              </div>
+              <p style="color: red"><?php if (isset($CIN_error)) {
+                echo $CIN_error;
+              } ?></p>
+              <div class="form-group">
+                <label for="day" class="form-label">Date de naissance :</label><br>
+
+                <select name="birthday_day" class="selectInput" id="day" required>
+                  <option value="" class="defaultOption" disabled <?php if (empty($birthday_day))
+                    echo 'selected'; ?>>Jour</option>
+                  <!-- Jours de 1 à 31 -->
+                  <?php for ($i = 1; $i <= 31; $i++) {
+                    echo "<option value='$i'>$i</option>";
+                  } ?>
+                </select>
+
+                <select name="birthday_month" class="selectInput" id="month" required>
+                  <option disabled class="defaultOption" <?php if (empty($birthday_month))
+                    echo 'selected'; ?>>Mois
+                  </option>
+                  <?php
+                  $months = [
+                    1 => "Janvier",
+                    2 => "Février",
+                    3 => "Mars",
+                    4 => "Avril",
+                    5 => "Mai",
+                    6 => "Juin",
+                    7 => "Juillet",
+                    8 => "Août",
+                    9 => "Septembre",
+                    10 => "Octobre",
+                    11 => "Novembre",
+                    12 => "Décembre"
+                  ];
+                  foreach ($months as $key => $month) {
+                    echo "<option value='$key' " . ($birthday_month == $month ? "selected" : "") . ">$month</option>";
+                  }
+                  ?>
+                </select>
+
+                <select name="birthday_year" id="year" class="selectInput" required>
+                  <option disabled class="defaultOption" value="" <?php if (empty($birthday_year))
+                    echo 'selected'; ?>>Année</option>
+                  <!-- Années de 2025 à 1900 -->
+                  <?php for ($i = 2025; $i >= 1900; $i--) {
+                    echo "<option value='$i'>$i</option>";
+                  } ?>
+                </select>
+              </div>
+              <p style="color: red"><?php if (isset($birthday_error)) {
+                echo $birthday_error;
+              } ?></p>
+              <div class="form-group">
+                <label class="form-label">Genre</label>
+                <select name="genre" class="form-select selectInput" required id="vacat-genre">
+                  <option disabled class="defaultOption" value="" <?php if (empty($genre))
+                    echo 'selected'; ?>>
+                    Selectionner Genre
+                  </option>
+                  <option value="masculin" <?php if ($genre == "Masculin")
+                    echo 'selected'; ?>>Masculin</option>
+                  <option value="feminin" <?php if ($genre == "Féminin")
+                    echo 'selected'; ?>>Féminin</option>
+                </select>
+
+              </div>
+              <p style="color: red"><?php if (isset($genre_error)) {
+                echo $genre_error;
+              } ?></p>
+              <div class="form-group">
+                <label class="form-label">Email</label>
+                <input name="email" type="email" class="form-control emailInput" placeholder="Email" required value=""
+                  id="vacat-email">
+              </div>
+              <p style="color: red"><?php if (isset($email_error)) {
+                echo $email_error;
+              } ?></p>
+              <div class="form-group ">
+                <label class="form-label">Password</label>
+                <div style="position: relative;">
+                  <input name="password" type="text" placeholder="Enter password" class="form-control passwordInput"
+                    style="padding-right: 40px;" required id="vacat-pass">
+                </div>
+              </div>
+              <p style="color: red" class="error-msg"><?php if (isset($password_error)) {
+                echo $password_error;
+              } ?></p>
+              <div class="form-group">
+                <label class="form-label">Specialité</label>
+                <select name="specialite" class="form-select selectInput" required id="vacat-specialite">
+                  <option disabled class="defaultOption">Specialitée</option>
+                  <option value="computer science">Computer science</option>
+                  <option value="Data analyst">Data analyst</option>
+                  <option value="cybersecurity">cybersecurity</option>
+                  <option value="Mathematics">Mathematics</option>
                 </select>
               </div>
               <p style="color: red"><?php if (isset($specialite_error)) {
@@ -676,7 +864,6 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
       document.querySelectorAll('.view-btn').forEach(button => {
         button.addEventListener('click', () => {
           // Get the data from the clicked button
-
           const cin = button.getAttribute('data-cin');
           const nom = button.getAttribute('data-nom');
           const prenom = button.getAttribute('data-prenom');
@@ -699,8 +886,112 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
         });
       });
     });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.edit-btn').forEach(button => {
+        button.addEventListener('click', () => {
+          // Get the data from the clicked button
+          const vacat_cin = button.getAttribute('data-cin');
+          const vacat_nom = button.getAttribute('data-nom');
+          const vacat_prenom = button.getAttribute('data-prenom');
+          const vacat_birthday = button.getAttribute('data-birthday');
+          const vacat_genre = button.getAttribute('data-genre');
+          const vacat_email = button.getAttribute('data-email');
+          const vacat_pass = button.getAttribute('data-pass');
+          const vacat_specialite = button.getAttribute('data-specialite');
+          const vacat_image = button.getAttribute('data-img') || '/ENSAH-service/assets/images/avatar-M.jpg';
 
+          // Populate the modal with the data
+          document.querySelector('.vacat-img').src = vacat_image;
+          document.getElementById('vacat-nom').value = `${vacat_nom}`;
+          document.getElementById('vacat-prenom').value = `${vacat_prenom}`;
+          // document.getElementById('vacat-poste').value = vacat_specialite;
+          document.getElementById('vacat-cin').value = vacat_cin;
+          // document.getElementById('vacat-birthday').value = vacat_birthday;
+          console.log("Genre: " + vacat_genre);
+          document.querySelector(`#vacat-genre option[value="${vacat_genre}"]`).selected = true;
+          document.getElementById('vacat-email').value = vacat_email;
+          document.getElementById('vacat-pass').value = vacat_pass;
+          document.querySelector(`#vacat-specialite option[value="${vacat_specialite}"]`).selected = true;
+        });
+      });
+    });
+  </script>
+  <script>
+    // Check password strength
+    let pass = document.querySelector(".passwordInput");
+    let error_msg = document.querySelector(".error-msg");
+    pass.addEventListener("input", (e) => {
+      if (e.target.value.length >= 8) {
+        if (/[A-Z]/.test(e.target.value)) {
+          if (/[0-9]/.test(e.target.value)) {
+            if (/[!@#$%^&*(),.?":{}|<>]/.test(e.target.value)) {
+              e.target.style.borderColor = "#00db00";
+              error_msg.innerHTML = "";
+            } else {
+              e.target.style.borderColor = "red";
+              error_msg.innerHTML = "Password should have at least one special character";
+            }
+          } else {
+            e.target.style.borderColor = "red";
+            error_msg.innerHTML = "Password should have at least one digit";
+          }
+        } else {
+          e.target.style.borderColor = "red";
+          error_msg.innerHTML = "Password should have at least one capital letter";
+        }
+      } else {
+        e.target.style.borderColor = "red";
+        error_msg.innerHTML = "Password should have at least 8 digits";
+      }
+    });
+  </script>
+  <script>
+    // remove vacataire from DB
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.remove-user').forEach(button => {
+        button.addEventListener('click', () => {
+          console.log("btn clicked!");
+          const user_ID = button.getAttribute('data-user');
+          const vacat_ID = button.getAttribute('data-vacat');
 
+          // Show confirmation dialog
+          if (confirm("Are you sure you want to delete this vacataire?")) {
+            // Send fetch request to PHP script
+            fetch('/ENSAH-service/inc/functions/delete-user.php', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ user_ID: user_ID })
+            })
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+              })
+              .then(data => {
+                if (data.success) {
+                  let success_msg = document.querySelector(".success-msg");
+                  if (success_msg) {
+                    success_msg.innerHTML = "✅" + "vacataire with ID " + vacat_ID + " has been deleted!";
+                    success_msg.display = "block";
+                  }
+                  // Optionally, remove the row from the table
+                  button.closest('tr').remove();
+                } else {
+                  console.error("❌ Failed to delete: " + (data.message || "Unknown error"));
+                }
+              })
+              .catch(error => {
+                console.error("❌ Error:", error.message || error);
+              });
+          }
+        });
+      });
+    });
   </script>
 
 
