@@ -106,6 +106,7 @@ include('../inc/functions/connections.php');
                       <th>#</th>
                       <th>Nom complet</th>
                       <th>Email</th>
+                      <th>CIN</th>
                       <th>Genre</th>
                       <th>Age</th>
                       <th>specialite</th>
@@ -114,50 +115,71 @@ include('../inc/functions/connections.php');
                     </tr>
                   </thead>
                   <tbody>
-                    <!-- <tr>
-                      <td>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox">
-                        </div>
-                      </td>
-                      <td>60</td>
-                      <td>
-                        <div class="row">
-                          <div class="col-auto pe-0">
-                            <img src="../assets/images/user/avatar-5.jpg" alt="user-image"
-                              class="wid-40 rounded-circle">
-                          </div>
-                          <div class="col">
-                            <h5 class="mb-0">Agnes McGee</h5>
-                            <p class="text-muted f-12 mb-0">heba@gmail.com</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td>email@test.com</td>
-                      <td>Azerbaijan</td>
-                      <td><span class="badge bg-light-danger rounded-pill f-12">Rejected</span> </td>
-                      <td class="text-center">
-                        <ul class="list-inline me-auto mb-0">
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                            <a href="#" class="avtar avtar-xs btn-link-secondary" data-bs-toggle="modal"
-                              data-bs-target="#user-modal">
-                              <i class="ti ti-eye f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                            <a href="#" class="avtar avtar-xs btn-link-primary" data-bs-toggle="modal"
-                              data-bs-target="#user-edit_add-modal">
-                              <i class="ti ti-edit-circle f-18"></i>
-                            </a>
-                          </li>
-                          <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                            <a href="#" class="avtar avtar-xs btn-link-danger">
-                              <i class="ti ti-trash f-18"></i>
-                            </a>
-                          </li>
-                        </ul>
-                      </td>
-                    </tr> -->
+                    <?php
+                    $profs = "SELECT * FROM `professeur` P 
+                  JOIN `user` U ON P.user_ID = U.user_ID";
+                    $all_profs = mysqli_query($conne, $profs);
+
+                    if ($all_profs) {
+                      while ($prof = mysqli_fetch_assoc($all_profs)) {
+                        ?>
+                        <tr>
+                          <td>
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox">
+                            </div>
+                          </td>
+                          <td><?php echo $prof['prof_ID'] ?></td>
+                          <td>
+                            <div class="row">
+                              <div class="col-auto pe-0">
+                                <img src="<?php echo $prof['image']; ?>" alt="user-image" class="wid-40 rounded-circle">
+                              </div>
+                              <div class="col">
+                                <h5 class="mb-0"><?php echo $prof['nom'] . " " . $prof['prenom'] ?></h5>
+                              </div>
+                            </div>
+                          </td>
+                          <td><?php echo $prof['email'] ?></td>
+                          <td><?php echo $prof['CIN'] ?></td>
+                          <td><?php echo $prof['genre'] ?></td>
+                          <td><?php
+                          $birthday = $prof["date_naissance"];
+                          $birthDate = new DateTime($birthday);
+                          $today = new DateTime(); // current date
+                      
+                          $age = $today->diff($birthDate)->y;
+
+                          echo $age . " ans";
+
+                          ?> </td>
+                          <td><?php echo $prof['specialite'] ?></td>
+                          <td><?php echo $prof['specialite'] ?></td>
+                          <td class="text-center">
+                            <ul class="list-inline me-auto mb-0">
+                              <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
+                                <a href="#" class="avtar avtar-xs btn-link-secondary" data-bs-toggle="modal"
+                                  data-bs-target="#user-modal">
+                                  <i class="ti ti-eye f-18"></i>
+                                </a>
+                              </li>
+                              <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
+                                <a href="#" class="avtar avtar-xs btn-link-primary" data-bs-toggle="modal"
+                                  data-bs-target="#user-edit_add-modal">
+                                  <i class="ti ti-edit-circle f-18"></i>
+                                </a>
+                              </li>
+                              <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
+                                <a href="#" class="avtar avtar-xs btn-link-danger">
+                                  <i class="ti ti-trash f-18"></i>
+                                </a>
+                              </li>
+                            </ul>
+                          </td>
+                        </tr>
+                      <?php }
+                    } ?>
+
 
                   </tbody>
                 </table>
@@ -288,9 +310,9 @@ include('../inc/functions/connections.php');
   <?php
 
   // Initialize variables and error arrays
-  $nom = $prenom = $birthday_day = $birthday_month = $birthday_year = $genre = $email = $password = $md5_pass = $specialite = "";
+  $nom = $prenom = $cin = $birthday_day = $birthday_month = $birthday_year = $genre = $email = $password = $md5_pass = $specialite = "";
   $errors = 0;
-  $nom_error = $prenom_error = $birthday_error = $genre_error = $email_error = $password_error = $specialite_error = $upload_error = "";
+  $CIN_error = $nom_error = $prenom_error = $birthday_error = $genre_error = $email_error = $password_error = $specialite_error = $upload_error = "";
 
   // Check if the form is submitted
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -308,6 +330,12 @@ include('../inc/functions/connections.php');
       $errors++;
     } else {
       $prenom = mysqli_real_escape_string($conne, $_POST["prenom"]);
+    }
+    if (empty($_POST["CIN"])) {
+      $CIN_error = "CI? is required";
+      $errors++;
+    } else {
+      $cin = mysqli_real_escape_string($conne, $_POST["CIN"]);
     }
 
     // Validate Birthday
@@ -373,11 +401,17 @@ include('../inc/functions/connections.php');
       $specialite = mysqli_real_escape_string($conne, $_POST["specialite"]);
     }
 
+    if (!empty($_POST['avatar_path'])) {
+      $avatar = mysqli_real_escape_string($conne, $_POST['avatar_path']);
+      // Save it in your INSERT query
+    }
+    $avatar_path = isset($_POST['avatar_path']) ? mysqli_real_escape_string($conne, $_POST['avatar_path']) : '';
+    echo $avatar_path;
     // If there are no errors, proceed with database insertion
     if ($errors == 0) {
       // Ajouter le professeur dans la table des utilisateurs
-      $add_user = "INSERT INTO user(nom, prenom, date_naissance, genre) 
-        VALUES('$nom', '$prenom', '$birthday', '$genre')";
+      $add_user = "INSERT INTO user(nom, prenom,CIN,image, date_naissance, genre) 
+        VALUES('$nom', '$prenom','$cin','$avatar_path', '$birthday', '$genre')";
       if (mysqli_query($conne, $add_user)) {
         // Récupérer l'ID de l'utilisateur inséré
         $user_id = mysqli_insert_id($conne);
@@ -387,7 +421,7 @@ include('../inc/functions/connections.php');
                 VALUES('$user_id', '$email', '$password', '$md5_pass', '$specialite')";
           if (mysqli_query($conne, $add_prof)) {
             $_SESSION['success_message'] = "Professor added successfully!";
-            header("Location: /ENSAH-service/dashboard/admin-dash.php");
+            header("/ENSAH-service/pages/prof-list.php");
             exit;
           } else {
             $general_error = "Failed to add professor.";
@@ -413,6 +447,7 @@ include('../inc/functions/connections.php');
   <?php endif; ?>
   <form method="post" class="modal fade" id="user-edit_add-modal" data-bs-keyboard="false" tabindex="-1"
     aria-hidden="true" enctype="multipart/form-data">
+    <input type="hidden" name="avatar_path" id="avatar-path">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
@@ -435,16 +470,16 @@ include('../inc/functions/connections.php');
             ?>
             <div class="col-sm-3 text-center mb-3">
               <div class="user-upload wid-75">
-                <img src="<?php echo $avatar; ?>" alt="img" class="img-fluid">
+                <img id="avatar-preview" src="<?php echo $avatar; ?>" alt="img" class="img-fluid">
+
+
                 <label for="uplfile" class="img-avtar-upload">
                   <i class="ti ti-camera f-24 mb-1"></i>
                   <span>Upload</span>
                 </label>
-                <input type="file" id="uplfile" class="d-none" name="uplfile">
+
+                <input type="file" id="uplfile" name="uplfile" class="d-none">
               </div>
-              <p style="color: red"><?php if (isset($upload_error)) {
-                echo $upload_error;
-              } ?></p>
             </div>
             <div class="col-sm-9">
               <p style="color: red"><?php if (isset($nom_error)) {
@@ -462,6 +497,11 @@ include('../inc/functions/connections.php');
                 <label class="form-label">Prénom</label>
                 <input required name="prenom" type="text" class="form-control" placeholder="Prénom"
                   value="<?php echo htmlspecialchars($nom); ?>">
+              </div>
+              <div class="form-group">
+                <label class="form-label">CIN</label>
+                <input required name="CIN" type="text" class="form-control" placeholder="CIN"
+                  value="<?php echo htmlspecialchars($cin); ?>">
               </div>
               <div class="form-group">
                 <label for="day" class="form-label">Date de naissance :</label><br>
@@ -601,6 +641,7 @@ include('../inc/functions/connections.php');
   <script src="../assets/js/fonts/custom-font.js"></script>
   <script src="../assets/js/pcoded.js"></script>
   <script src="../assets/js/plugins/feather.min.js"></script>
+  <script src="../assets/js/upload-image.js"></script>
 
   <script>layout_change('dark');</script>
 
