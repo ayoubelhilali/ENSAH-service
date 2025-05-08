@@ -2,7 +2,7 @@
 session_start();
 $email= trim($_POST['email']) ;
 $password = trim($_POST['password']) ;
-$pdo = new PDO('mysql:host=localhost;port=3307;dbname=ensah_service', 'root', '');
+$pdo = new PDO('mysql:host=localhost;port=3307;dbname=ensah_service.sql', 'root', '');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $user = [];
 if ($pdo) {
