@@ -493,8 +493,6 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
             <div class="col-sm-3 text-center mb-3">
               <div class="user-upload wid-75">
                 <img id="avatar-preview" src="<?php echo $avatar; ?>" alt="img" class="img-fluid">
-
-
                 <label for="uplfile" class="img-avtar-upload">
                   <i class="ti ti-camera f-24 mb-1"></i>
                   <span>Upload</span>
@@ -671,7 +669,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
             ?>
             <div class="col-sm-3 text-center mb-3">
               <div class="user-upload wid-75">
-                <img id="avatar-preview" src="<?php echo $avatar; ?>" alt="img" class="img-fluid prof-img">
+                <img id="avatar-previewh" src="<?php echo $avatar; ?>" alt="img" class="img-fluid prof-img">
                 <label for="uplfile" class="img-avtar-upload">
                   <i class="ti ti-camera f-24 mb-1"></i>
                   <span>Upload</span>

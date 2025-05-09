@@ -3,9 +3,9 @@ if ($_SESSION["role"]="professeur") {
     $targetDir = "../../uploads/professeur/";
 }elseif ($_SESSION["role"] = "vacataire") {
     $targetDir = "../../uploads/vacataire/";
-}else {
-    $targetDir = "../../uploads/"; // File system path for uploads
 }
+$targetDir = "../../uploads/"; // File system path for uploads
+
 
 if (!file_exists($targetDir)) {
     mkdir($targetDir, 0777, true);
