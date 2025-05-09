@@ -67,7 +67,7 @@ CREATE TABLE `professeur` (
 --
 
 /*!40000 ALTER TABLE `professeur` DISABLE KEYS */;
-INSERT INTO `professeur` VALUES (66,'nomprenom@gmail.com','E?d1@W2,Z','Data analyst','517d471a79eb70140f5643f5a',67),(67,'prof@gmail.com','0:pZaMhuJ','cybersecurity','b6214057a3ed8bb66b3200cdf',73);
+INSERT INTO `professeur` VALUES (66,'nomprenom@gmvail.com','E?d1@W2,Z','Data analyst','517d471a79eb70140f5643f5a',67),(67,'prof@gmail.com','0:pZaMhuJ','cybersecurity','b6214057a3ed8bb66b3200cdf',73);
 /*!40000 ALTER TABLE `professeur` ENABLE KEYS */;
 
 --

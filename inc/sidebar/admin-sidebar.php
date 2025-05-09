@@ -6,8 +6,8 @@
         <img src="/ENSAH-service/assets/images/logo-withoutBG.png" class="img-fluid" alt="logo">
       </a>
     </div>
-    <div class="navbar-content">
-      <ul class="pc-navbar">
+    <div class="navbar-content" >
+      <ul class="pc-navbar" style=" margin-bottom:30px;">
         <li class="pc-item">
           <a href="/ENSAH-service/dashboard/admin-dash.php" class="pc-link">
             <span class="pc-micon"><i class="ti ti-dashboard"></i></span>

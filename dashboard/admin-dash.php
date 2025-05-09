@@ -113,7 +113,7 @@ $count = $stmt->fetchColumn();
           <div class="card">
             <div class="card-body">
               <h6 class="mb-2 f-w-400 text-muted">Nombre des vacataires</h6>
-              <h4 class="mb-3"><?php $sql = "SELECT COUNT(*) FROM `admin`";
+              <h4 class="mb-3"><?php $sql = "SELECT COUNT(*) FROM `vacataire`";
                   $stmt = $pdo->query($sql);
                   $count = $stmt->fetchColumn();
 
@@ -149,7 +149,7 @@ $count = $stmt->fetchColumn();
           </div>
         </div>
         <div class="col-md-12 col-xl-4">
-          <h5 class="mb-3">Income Overview</h5>
+          <h5 class="mb-3">Les actualités</h5>
           <div class="card">
           </div>
         </div>
