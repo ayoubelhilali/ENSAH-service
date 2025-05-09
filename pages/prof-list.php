@@ -6,6 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 $avatar = '/ENSAH-service/assets/images/avatar-M.jpg'; // chemin par défaut
 include('../inc/functions/connections.php');
 include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongPass.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php");
 ?>
 
 <!DOCTYPE html>
@@ -441,8 +442,16 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
           $add_prof = "INSERT INTO professeur(user_ID, email, password, md5_pass, specialite) 
                              VALUES('$user_id', '$email', '$password', '$md5_pass', '$specialite')";
           if ($pdo->query($add_prof)) {
-            $_SESSION['success_message'] = "Professor added successfully!";
-            header("Location: /ENSAH-service/pages/prof-list.php?success=1");
+            
+            // Send email
+            $email_handler = new PrepareEmail();
+            if ($email_handler->sendEmailtoUser($email, $password, "$nom $prenom")) {
+              $_SESSION['success_message'] = "Professor added successfully and email sent!";
+              header("Location: /ENSAH-service/pages/prof-list.php?success=1");
+            }else {
+              $_SESSION['success_message'] = "Professor added successfully! but email not sent.";
+              header("Location: /ENSAH-service/pages/prof-list.php?success=1");
+            }
             exit;
           } else {
             $general_error = "Failed to add professor.";

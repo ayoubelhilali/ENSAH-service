@@ -25834,8 +25834,6 @@ select.form-control[data-multiselectsplitter-secondselect-selector] {
   top: 0px;
   bottom: 0px;
 }
-
-<<<<<<< HEAD
 .form-control{
   position: relative ;
 
@@ -25849,12 +25847,10 @@ select.form-control[data-multiselectsplitter-secondselect-selector] {
    cursor: pointer ;
 }
 
-=======
 .auth-main {
   background-color: #00c9b0;
 }
 
->>>>>>> 41377d79aa364f908ac7a4395c5e7511643fdd14
 .auth-main .auth-wrapper.v3 .auth-form:after {
   content: "";
   position: absolute;

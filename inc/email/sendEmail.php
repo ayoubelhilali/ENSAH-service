@@ -1,41 +1,36 @@
 <?php
 require_once __DIR__ . '/MailService.php';
-session_start();
-
-$mailService = new MailService();
-
-// Set target email, subject, and body
-$target_mail = 'ayayoubelhilali@gmail.com';
-$subject = 'Your ENSAH Service Account Has Been Created';
-$body = 'Dear Professor $_SESSION["name"],
-
-We are pleased to inform you that your account has been successfully created on the ENSAH Service platform.
-
-🔐 Here are your login details:
-- **Email**: [professor.email@example.com]
-- **Temporary Password**: [temporary_password]
-
-To access your account, please visit:
-👉 https://ensah-service.com/login
-
-⚠️ For security reasons, we strongly recommend that you log in and change your password immediately after your first connection.
-
-If you have any questions or encounter any issues, feel free to contact the technical support team.
-
-Best regards,  
-Ayoub Hilali  
-ENSAH Service Team';
-
-// Validate email address
-if (!filter_var($target_mail, FILTER_VALIDATE_EMAIL)) {
-    die('❌ Invalid email address.');
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
 
-// Send the email
-$result = $mailService->sendEmail($target_mail, $subject, $body);
+class PrepareEmail
+{
+    private MailService $email_handler;
 
-if ($result === true) {
-    echo '✅ Email sent!';
-} else {
-    echo '❌ Error: ' . $result;
+    public function __construct()
+    {
+        $this->email_handler = new MailService();
+    }
+
+    public function sendEmailtoUser(string $target_mail, string $target_password, string $target_name): bool
+    {
+        // Email content
+        $login_url = "http://127.0.0.1/ENSAH-service/login.php";
+        $subject = "Creation de votre compte sur la plateforme ENSAH Service";
+        $body = "Bonjour Monsieur/Madame " . $target_name . ",\n\n" .
+            "Votre compte a été créé avec succès sur la plateforme ENSAH Service.\n\n" .
+            "🔐 Informations de connexion :\n" .
+            "- Email : " . $target_mail . "\n" .
+            "- Mot de passe temporaire : " . $target_password . "\n\n" .
+            "Vous pouvez vous connecter ici :\n" .
+            $login_url . "\n\n" .
+            "⚠️ Pour des raisons de sécurité, nous vous recommandons de changer votre mot de passe dès votre première connexion.\n\n" .
+            "En cas de problème ou de question, n'hésitez pas à nous contacter.\n\n" .
+            "Cordialement, \n" .
+            "Équipe ENSAH Service";
+
+        // Call the send method of the MailService class
+        return $this->email_handler->sendEmail($target_mail, $subject, $body);
+    }
 }
