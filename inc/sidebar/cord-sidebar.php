@@ -20,12 +20,11 @@
           <i class="ti ti-dashboard"></i>
         </li>
         <li class="pc-item">
-          <a href="/ENSAH-service/pages/prof-list.php" class="pc-link">
+          <a href="/ENSAH-service/pages/vacat-list.php" class="pc-link">
             <span class="pc-micon"><i class="ti ti-user"></i></span>
-            <span class="pc-mtext">Professeurs</span>
+            <span class="pc-mtext">vacataires</span>
           </a>
         </li>
-        
         <li class="pc-item">
           <a href="/ENSAH-service/pages/chef_dep-list.php" class="pc-link">
             <span class="pc-micon"><i class="ti ti-user"></i></span>
@@ -44,7 +43,7 @@
           <i class="ti ti-news"></i>
         </li>
         <li class="pc-item">
-          <a href="/ENSAH-service/pages/depart-list.php" class="pc-link">
+          <a href="/ENSAH-service/login.php" class="pc-link">
             <span class="pc-micon"><i class="ti ti-building-community"></i></span>
             <span class="pc-mtext">Les départements</span>
           </a>

@@ -112,8 +112,8 @@ $count = $stmt->fetchColumn();
         <div class="col-md-6 col-xl-3">
           <div class="card">
             <div class="card-body">
-              <h6 class="mb-2 f-w-400 text-muted">Nombre des fillières</h6>
-              <h4 class="mb-3"><?php $sql = "SELECT COUNT(*) FROM `filliere`";
+              <h6 class="mb-2 f-w-400 text-muted">Nombre des vacataires</h6>
+              <h4 class="mb-3"><?php $sql = "SELECT COUNT(*) FROM `vacataire`";
                   $stmt = $pdo->query($sql);
                   $count = $stmt->fetchColumn();
 
@@ -125,17 +125,12 @@ $count = $stmt->fetchColumn();
         <div class="col-md-6 col-xl-3">
           <div class="card">
             <div class="card-body">
-              <h6 class="mb-2 f-w-400 text-muted">Nombre des départements</h6>
-              <h4 class="mb-3"><?php $sql = "SELECT COUNT(*) FROM `departement`";
-              $stmt = $pdo->query($sql);
-              $count = $stmt->fetchColumn();
-              echo $count;
-              ?></h4>
+              <h6 class="mb-2 f-w-400 text-muted">Total visitors</h6>
+              <h4 class="mb-3"><?php ?></h4>
               </p>
             </div>
           </div>
         </div>
-        
 
         <div class="col-md-12 col-xl-8">
           <div class="d-flex align-items-center justify-content-between mb-3">
