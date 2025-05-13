@@ -68,7 +68,13 @@
         </li>
         
         <li class="pc-item">
-          <a href="../source/other/sample-page.html" class="pc-link">
+          <a href="/ENSAH-service/pages/annonces.php" class="pc-link">
+            <span class="pc-micon"><i class="ti ti-speakerphone"></i></span>
+            <span class="pc-mtext">Annonces</span>
+          </a>
+        </li>
+        <li class="pc-item">
+          <a href="/ENSAH-service/pages/" class="pc-link">
             <span class="pc-micon"><i class="ti ti-history"></i></span>
             <span class="pc-mtext">Historique</span>
           </a>

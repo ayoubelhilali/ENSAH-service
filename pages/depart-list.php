@@ -122,10 +122,37 @@
                       $stmt = $pdo->prepare($chef_query);
                       $stmt->execute(['depart_id' => $depart['depart_ID']]);
                       $chef_row = $stmt->fetch(PDO::FETCH_ASSOC);
+                    
                       // Get all filieres for the current department
                       $filiere_query = "SELECT * FROM filliere F WHERE F.depart_ID = " . $depart['depart_ID'];
                       $all_filiere = $pdo->query($filiere_query);
                       $filieres = [];
+                      // get all filieres without depart
+                      $filiere_query = "SELECT * FROM filliere F WHERE F.depart_ID IS NULL";
+                      $stmt = $pdo->prepare($filiere_query);
+                      $stmt->execute();
+                      $all_filiere_without_depart = $stmt;
+                      $filieres_nodepart = [];
+                      while ($row = $all_filiere_without_depart->fetch(PDO::FETCH_ASSOC)) {
+                        $filieres_nodepart[] = $row['filliere_nom'];
+                      }
+                      // Get all profs from database
+                      $profs_query = "SELECT * FROM professeur P
+                      JOIN user U ON P.user_ID = U.user_ID
+                      WHERE P.prof_ID NOT IN (SELECT prof_ID FROM chef_depart WHERE depart_ID = :depart_id)";
+                      $stmt = $pdo->prepare($profs_query);
+                      $stmt->execute(['depart_id' => $depart['depart_ID']]);
+                      $all_profs = $stmt;
+                      $profs = [];
+                      while ($prof = $all_profs->fetch(PDO::FETCH_ASSOC)) {
+                        $profs[] = [
+                          'prof_ID' => $prof['prof_ID'],
+                          'nom' => $prof['nom'],
+                          'prenom' => $prof['prenom'],
+                          'email' => $prof['email']
+                        ];
+                      }
+                      $profs_json = htmlspecialchars(json_encode($profs), ENT_QUOTES, 'UTF-8');
                       ?>
                       <!-- First Department -->
                       <div class="accordion-item">
@@ -158,7 +185,8 @@
                               <?php } else { ?>
                                 <p>le département n'a aucun chef</p>
                                 <a href="#" class="btn btn-success btn-sm add-chef-dep" data-bs-toggle="modal"
-                                  data-bs-target="#chef-add-modal" data-depart="<?php echo $depart['depart_nom']; ?>">
+                                  data-bs-target="#chef-add-modal" data-profs="<?= $profs_json ?>"
+                                  data-depart="<?php echo $depart['depart_nom']; ?>">
                                   Ajouter
                                 </a>
                               <?php } ?>
@@ -179,10 +207,15 @@
                                   <li>Aucune filière trouvée</li>
                                 <?php }
                                 $filieres_json = htmlspecialchars(json_encode($filieres), ENT_QUOTES, 'UTF-8');
+                                $filieres_nodepart_json = htmlspecialchars(json_encode($filieres_nodepart), ENT_QUOTES, 'UTF-8');
                                 ?>
 
                               </ul>
-                              <button class="btn btn-success btn-sm add-fil-dep">Ajouter</button>
+                              <a href="#" class="btn btn-success btn-sm add-fil-dep" data-bs-toggle="modal"
+                                data-bs-target="#fil-add-modal" data-filiere="<?= $filieres_nodepart_json ?>"
+                                data-depart="<?php echo $depart['depart_nom']; ?>">
+                                Ajouter
+                              </a>
                             </div>
                             <div class="view-departement">
                               <button class="btn btn-outline-primary view-btn" data-bs-toggle="modal"
@@ -277,7 +310,7 @@
                     </li>
                     <li class="list-group-item px-0 pb-0">
                       <p class="mb-1 text-muted">Filières</p>
-                      <ul class="mb-0" id="modal-filieres">
+                      <ul class="mb-0 modal-filieres">
                       </ul>
                     </li>
                   </ul>
@@ -368,23 +401,25 @@
             <div class="col-sm-9">
               <div class="form-group">
                 <label class="form-label">Nom du Département</label>
-                <input type="text" name="depart_nom" class="form-control" placeholder="Nom du Département" required id="dep-nom" disabled>
+                <input type="text" name="depart_nom" class="form-control dep-nom" placeholder="Nom du Département"
+                  required readonly>
               </div>
               <div class="form-group">
                 <label class="form-label">Chef du Département</label>
-                <select name="chef_id" class="form-select" required>
+                <select name="chef_depart" class="form-select" id="modal-profs" required>
                   <option disabled selected>Choisir Chef</option>
                 </select>
               </div>
               <div class="form-group">
                 <label class="form-label">Email du chef</label>
-                <input type="email" name="chef_email" class="form-control" placeholder="Email du chef" required id="chef_email">
+                <input type="email" name="chef_email" class="form-control" placeholder="Email du chef" required
+                  id="chef_email">
               </div>
               <div class="form-group">
                 <label class="form-label">Password du chef</label>
                 <div style="position: relative;">
-                  <input name="password" type="text" placeholder="Enter password" class="form-control passwordInput"
-                    style="padding-right: 40px;" required>
+                  <input name="chef_password" type="text" placeholder="Enter password"
+                    class="form-control passwordInput" style="padding-right: 40px;" required>
                   <i class="fas fa-sync-alt generateBtn"
                     style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
                 </div>
@@ -405,6 +440,51 @@
           <div class="flex-grow-1 text-end">
             <button type="button" class="btn btn-link-danger" data-bs-dismiss="modal">Cancel</button>
             <button type="submit" name="add-depart" class="btn btn-primary">Ajouter</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <form method="post" action="/ENSAH-service/inc/functions/add-fil-dep.php" class="modal fade" id="fil-add-modal"
+    data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="mb-0">Ajouter filiere au departement</h5>
+          <a href="#" class="avtar avtar-s btn-link-danger" data-bs-dismiss="modal">
+            <i class="ti ti-x f-20"></i>
+          </a>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-sm-9">
+              <div class="form-group">
+                <label class="form-label">Nom du Département</label>
+                <input type="text" name="depart_nom" class="form-control dep-nom" placeholder="Nom du Département"
+                  required readonly>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Choisir la filiere</label>
+                <select name="fil_depart" class="form-select modal-fil" id="modal-fil" required>
+                  <option disabled selected>Choisir filiere</option>
+                </select>
+              </div>
+              <p style="color: red;" class="error_msg"></p>
+              <hr class="my-3">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <ul class="list-inline me-auto mb-0">
+            <li class="list-inline-item align-bottom">
+              <a href="#" class="avtar avtar-s btn-link-danger w-sm-auto" data-bs-toggle="tooltip" title="Delete">
+                <i class="ti ti-trash f-18"></i>
+              </a>
+            </li>
+          </ul>
+          <div class="flex-grow-1 text-end">
+            <button type="button" class="btn btn-link-danger" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" name="add-filiere" class="btn btn-primary">Ajouter</button>
           </div>
         </div>
       </div>
@@ -448,14 +528,16 @@
         document.getElementById('modal-linkedin').href = linkedinUrl;
 
         const filiereData = button.getAttribute('data-filiere');
-        const filiereList = document.getElementById('modal-filieres');
+        const filiereList = document.querySelectorAll('.modal-filieres');
         filiereList.innerHTML = ''; // Clear existing list
         try {
           const filieres = JSON.parse(filiereData); // Parse JSON string
           filieres.forEach(filiere => {
             const li = document.createElement('li');
             li.textContent = filiere;
-            filiereList.appendChild(li);
+            filiereList.forEach(element => {
+              element.appendChild(li);
+            });
           });
         } catch (error) {
           console.error('Invalid filiere data:', error);
@@ -465,11 +547,54 @@
     });
     // add chef to a departeement
     document.querySelectorAll(".add-chef-dep").forEach(button => {
-      button.addEventListener('click',()=>{
-        document.getElementById('dep-nom').value = button.getAttribute('data-depart');
-        document.getElementById('chef-choix').value = button.getAttribute('data-depart');
+      button.addEventListener('click', () => {
+        document.querySelectorAll('.dep-nom').forEach(element => {
+          element.value = button.getAttribute('data-depart');
+        });
+        const profsData = button.getAttribute('data-profs');
+        const profsList = document.getElementById('modal-profs');
+        try {
+          const profs = JSON.parse(profsData); // Parse JSON string
+          profs.forEach(prof => {
+            const option = document.createElement('option');
+            option.textContent = prof.nom + " " + prof.prenom; // Set the text of the option to the professor's name
+            option.value = prof.prof_ID; // Set the value of the option to the professor's ID
+            profsList.appendChild(option);
+          });
+        } catch (error) {
+          console.error('Invalid profs data:', error);
+        }
       })
-      
+    });
+    // add filiere to a departeement
+    document.querySelectorAll(".add-fil-dep").forEach(button => {
+      button.addEventListener('click', () => {
+        document.querySelectorAll('.dep-nom').forEach(element => {
+          element.value = button.getAttribute('data-depart');
+        });
+        const filiereData = button.getAttribute('data-filiere');
+        const filiereList = document.querySelectorAll('.modal-fil');
+        filiereList.forEach(element => {
+          const firstOption = element.querySelector('option:first-child');
+          element.innerHTML = ''; // Clear existing list
+          if (firstOption) {
+            element.appendChild(firstOption); // Keep the first option
+            firstOption.selected = true; // Make the first option selected
+          }
+        });
+        try {
+          const filieres = JSON.parse(filiereData); // Parse JSON string
+          filieres.forEach(filiere => {
+            const option = document.createElement('option');
+            option.textContent = filiere;
+            filiereList.forEach(element => {
+              element.appendChild(option);
+            });
+          });
+        } catch (error) {
+          console.error('Invalid filiere data:', error);
+        }
+      })
     });
   </script>
   <script>layout_change('light');</script>
@@ -521,7 +646,7 @@
     }
   }
   ?>
-  <!------------ Suppromer un departement   ------------->
+  <!------------ Supprimer un departement   ------------->
   <script>
     function deleteDep(departID) {
       if (confirm("Êtes-vous sûr de vouloir supprimer ce département ?")) {
