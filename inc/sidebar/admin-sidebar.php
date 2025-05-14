@@ -25,19 +25,6 @@
             <span class="pc-mtext">Professeurs</span>
           </a>
         </li>
-        
-        <li class="pc-item">
-          <a href="/ENSAH-service/pages/chef_dep-list.php" class="pc-link">
-            <span class="pc-micon"><i class="ti ti-user"></i></span>
-            <span class="pc-mtext">Chefs des départements</span>
-          </a>
-        </li>
-        <li class="pc-item">
-          <a href="/ENSAH-service/pages/cord-list.php" class="pc-link">
-            <span class="pc-micon"><i class="ti ti-user"></i></span>
-            <span class="pc-mtext">coordinateurs des filières</span>
-          </a>
-        </li>
 
         <li style="color:#b08862" class="pc-item pc-caption">
           <label>Gestion académique	</label>
@@ -50,7 +37,7 @@
           </a>
         </li>
         <li class="pc-item">
-          <a href="/ENSAH-service/login.php" class="pc-link">
+          <a href="/ENSAH-service/pages/filiere-list.php" class="pc-link">
             <span class="pc-micon"><i class="ti ti-briefcase"></i></span>
             <span class="pc-mtext">Les Filières </span>
           </a>

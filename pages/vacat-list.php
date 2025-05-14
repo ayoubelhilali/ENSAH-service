@@ -322,8 +322,6 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
       </div> <!-- /modal-content -->
     </div> <!-- /modal-dialog -->
   </div>
-
-
   <?php
   // Initialize variables and error messages
   $nom = $prenom = $cin = $birthday_day = $birthday_month = $birthday_year = "";
