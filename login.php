@@ -52,7 +52,6 @@
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-end mb-4">
               <h3 class="mb-0" id="se-connecter"><b>Se connecter</b></h3>
-              <a href="#" class="link-primary">Vous n'avez pas de compte ?</a>
             </div>
             <div class="form-group mb-3">
               <label class="form-label">Adresse Email</label>
@@ -60,20 +59,22 @@
             </div>
             <div class="form-group mb-3">
               <label class="form-label">Mot de passe</label>
-              <input type="password" name="password" class="form-control" placeholder="Entrer votre mot de passe">
-              <span class="material-symbols-outlined">visibility_off</span>
+              <div class="inputPasswoed_iconeEye">
+                 <input type="password" name="password" class="form-control" placeholder="Entrer votre mot de passe" id="input_password">
+                 <span class="material-symbols-outlined" id="icone_Eye">visibility_off</span>
+              </div>
             </div>
             <?php 
                if(isset($_GET['message'])){
                 echo "<p style='color: red;'>" . htmlspecialchars($_GET['message']) . "</p>";
                 }
              ?>
-            <div class="d-flex mt-1 justify-content-between">
-              <div class="form-check">
+            <div class="d-flex justify-content-between align-items-center mt-1">
+              <div class="form-check m-0">
                 <input class="form-check-input input-primary" type="checkbox" id="customCheckc1" checked="">
-                <label class="form-check-label text-muted" for="customCheckc1">Rester connecté</label>
+                <label class="form-check-label text-muted ms-2" for="customCheckc1">Rester connecté</label>
               </div>
-              <h5 class="text-secondary f-w-400">Mot de passe oublié ?</h5>
+              <h5 class="text-secondary fw-normal text-decoration-none">Mot de passe oublié ?</h5>
             </div>
             <div class="d-grid mt-4">
               <button type="submit" class="btn btn-primary">Se connecter</button>
@@ -85,7 +86,8 @@
     </div>
   </div>
   <!-- [ Main Content ] end -->
-
+  
+  <script src="assets/js/JS.js"></script>
   <!-- Required Js -->
   <script src="../assets/js/plugins/popper.min.js"></script>
   <script src="../assets/js/plugins/simplebar.min.js"></script>

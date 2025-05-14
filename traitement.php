@@ -2,8 +2,10 @@
 session_start();
 $email= trim($_POST['email']) ;
 $password = trim($_POST['password']) ;
-$pdo = new PDO('mysql:host=localhost;port=3307;dbname=ensah_service.sql', 'root', '');
+
+$pdo = new PDO('mysql:host=localhost;port=3306;dbname=ensah_service','root','');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
 $user = [];
 if ($pdo) {
     $users_data = "SELECT * FROM admin WHERE email = ?";
