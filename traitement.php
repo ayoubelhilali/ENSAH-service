@@ -22,5 +22,5 @@ if ($pdo) {
     exit();
 }
 $_SESSION['user']= $user["admin_ID"];
-header("Location: dashboard/admin-dash.php");-
+header("Location: dashboard/admin-dash.php");
 exit();

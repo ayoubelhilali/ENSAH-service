@@ -1,12 +1,12 @@
-document.getElementById('uplfile').addEventListener('change', function () {
-    const fileInput = this;
-    const formData = new FormData();
-    formData.append('uplfile', fileInput.files[0]);
+document.querySelectorAll('.uplfile').forEach(fileInput => 
+    fileInput.addEventListener('change', function () {
+        const formData = new FormData();
+        formData.append('uplfile', this.files[0]);
 
-    fetch('../inc/functions/upload-image.php', {
-        method: 'POST',
-        body: formData
-    })
+        fetch('../inc/functions/upload-image.php', {
+            method: 'POST',
+            body: formData
+        })
         .then(response => response.text())
         .then(path => {
             path = path.trim();
@@ -30,7 +30,5 @@ document.getElementById('uplfile').addEventListener('change', function () {
         .catch(error => {
             console.error('Erreur d\'upload :', error);
         });
-});
-// Après avoir reçu la réponse contenant le chemin
-document.getElementById('avatar-path').value = response.path;
-
+    })
+);

@@ -19,3 +19,47 @@
     outline: none;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
+.datatable-info{
+    text-align: center;
+}
+.datatable-pagination {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    margin: 0;
+}
+
+.datatable-pagination-list {
+    list-style: none;
+    display: flex;
+    gap: 10px;
+    padding: 0;
+    margin: 0;
+}
+
+/* .datatable-pagination-list li {
+    cursor: pointer;
+    padding: 3px;
+}  */
+
+.datatable-pagination-list li:hover {
+    background-color: #007BFF;
+    cursor: pointer;
+    padding: 0 5px;
+}
+
+.datatable-active {
+    background-color: #007BFF;
+    color: #fff;
+    border-color: #007BFF;
+    padding:0 5px;
+}
+/*  Styling the departements*/
+.add-fil-dep:hover {
+    background-color: #007BFF;
+    color: #fff;
+    border-color: #007BFF;
+    padding: 0 5px;
+}

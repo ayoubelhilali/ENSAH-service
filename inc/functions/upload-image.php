@@ -1,7 +1,14 @@
 <?php
+if ($_SESSION["role"]="professeur") {
+    $targetDir = "../../uploads/professeur/";
+}elseif ($_SESSION["role"] = "vacataire") {
+    $targetDir = "../../uploads/vacataire/";
+}
 $targetDir = "../../uploads/"; // File system path for uploads
+
+
 if (!file_exists($targetDir)) {
-    mkdir($targetDir, 0777, true); // Create the directory if it doesn't exist
+    mkdir($targetDir, 0777, true);
 }
 
 if (isset($_FILES['uplfile']) && $_FILES['uplfile']['error'] === 0) {
