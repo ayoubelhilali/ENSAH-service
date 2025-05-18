@@ -6,10 +6,10 @@
         <img src="/ENSAH-service/assets/images/logo-withoutBG.png" class="img-fluid" alt="logo">
       </a>
     </div>
-    <div class="navbar-content" >
+    <div class="navbar-content">
       <ul class="pc-navbar" style=" margin-bottom:30px;">
         <li class="pc-item">
-          <a href="/ENSAH-service/dashboard/admin-dash.php" class="pc-link">
+          <a href="/ENSAH-service/dashboard/cord-dash.php" class="pc-link">
             <span class="pc-micon"><i class="ti ti-dashboard"></i></span>
             <span class="pc-mtext">Dashboard</span>
           </a>
@@ -20,52 +20,47 @@
           <i class="ti ti-dashboard"></i>
         </li>
         <li class="pc-item">
-          <a href="/ENSAH-service/pages/vacat-list.php" class="pc-link">
+          <a href="/ENSAH-service/pages/coordonnateur/vacat-list.php" class="pc-link">
             <span class="pc-micon"><i class="ti ti-user"></i></span>
             <span class="pc-mtext">vacataires</span>
           </a>
         </li>
-        <li class="pc-item">
-          <a href="/ENSAH-service/pages/chef_dep-list.php" class="pc-link">
-            <span class="pc-micon"><i class="ti ti-user"></i></span>
-            <span class="pc-mtext">Chefs des départements</span>
-          </a>
-        </li>
-        <li class="pc-item">
-          <a href="/ENSAH-service/pages/cord-list.php" class="pc-link">
-            <span class="pc-micon"><i class="ti ti-user"></i></span>
-            <span class="pc-mtext">coordinateurs des filières</span>
-          </a>
-        </li>
 
         <li style="color:#b08862" class="pc-item pc-caption">
-          <label>Gestion académique	</label>
+          <label>Gestion académique </label>
           <i class="ti ti-news"></i>
         </li>
         <li class="pc-item">
-          <a href="/ENSAH-service/login.php" class="pc-link">
-            <span class="pc-micon"><i class="ti ti-building-community"></i></span>
-            <span class="pc-mtext">Les départements</span>
-          </a>
-        </li>
-        <li class="pc-item">
-          <a href="/ENSAH-service/login.php" class="pc-link">
-            <span class="pc-micon"><i class="ti ti-briefcase"></i></span>
-            <span class="pc-mtext">Les Filières </span>
-          </a>
-        </li>
-        <li class="pc-item">
-          <a href="/ENSAH-service/login.php" class="pc-link">
+          <a href="/ENSAH-service/pages/coordonnateur/ue_list.php" class="pc-link">
             <span class="pc-micon"><i class="ti ti-book"></i></span>
             <span class="pc-mtext">unité d'enseignement (UE) </span>
           </a>
+        </li>
+        <li class="pc-item pc-hasmenu">
+          <a href="#!" class="pc-link"><span class="pc-micon"><i class="ti ti-menu"></i></span><span
+              class="pc-mtext">Affectation des UE</span><span class="pc-arrow"><i
+                data-feather="chevron-right"></i></span></a>
+          <ul class="pc-submenu">
+            <li class="pc-item">
+              <a href="/ENSAH-service/pages/historique.php" class="pc-link">
+                <span class="pc-micon"><i class="ti ti-clipboard-check"></i></span>
+                <span class="pc-mtext">consulter les affectaions </span>
+              </a>
+            </li>
+            <li class="pc-item">
+              <a href="/ENSAH-service/pages/coordonnateur/affect_vacant.php" class="pc-link">
+                <span class="pc-micon"><i class="ti ti-user-plus"></i></span>
+                <span class="pc-mtext">affecter une UE</span>
+              </a>
+            </li>
+          </ul>
         </li>
 
         <li style="color:#b08862" class="pc-item pc-caption">
           <label>Other</label>
           <i class="ti ti-brand-chrome"></i>
         </li>
-        
+
         <li class="pc-item">
           <a href="../source/other/sample-page.html" class="pc-link">
             <span class="pc-micon"><i class="ti ti-history"></i></span>
@@ -74,7 +69,7 @@
         </li>
         <li class="pc-item">
           <a href="/ENSAH-service/login.php" style="color:red;" class="pc-link">
-            <span class="pc-micon"><i class="fa-solid fa-right-from-bracket fa-flip-horizontal"></i></span>
+            <span class="pc-micon"><i class="fa-solid fa-arrow-right-from-bracket fa-flip-horizontal"></i></span>
             <span class="pc-mtext">Logout</span>
           </a>
         </li>

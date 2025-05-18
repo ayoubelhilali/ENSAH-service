@@ -1,4 +1,11 @@
-<?php if (session_status() === PHP_SESSION_NONE) {
+<?php
+session_start();
+if (!isset($_SESSION['user'])) {
+  // Redirect to login if not authenticated
+  header('Location: ../login.php');
+  exit();
+}
+if (session_status() === PHP_SESSION_NONE) {
   session_start();
 }
 ?>
@@ -124,17 +131,17 @@
                       $chef_row = $stmt->fetch(PDO::FETCH_ASSOC);
                     
                       // Get all filieres for the current department
-                      $filiere_query = "SELECT * FROM filliere F WHERE F.depart_ID = " . $depart['depart_ID'];
+                      $filiere_query = "SELECT * FROM filiere F WHERE F.depart_ID = " . $depart['depart_ID'];
                       $all_filiere = $pdo->query($filiere_query);
                       $filieres = [];
                       // get all filieres without depart
-                      $filiere_query = "SELECT * FROM filliere F WHERE F.depart_ID IS NULL";
+                      $filiere_query = "SELECT * FROM filiere F WHERE F.depart_ID IS NULL";
                       $stmt = $pdo->prepare($filiere_query);
                       $stmt->execute();
                       $all_filiere_without_depart = $stmt;
                       $filieres_nodepart = [];
                       while ($row = $all_filiere_without_depart->fetch(PDO::FETCH_ASSOC)) {
-                        $filieres_nodepart[] = $row['filliere_nom'];
+                        $filieres_nodepart[] = $row['filiere_nom'];
                       }
                       // Get all profs from database
                       $profs_query = "SELECT * FROM professeur P
@@ -191,17 +198,17 @@
                                 </a>
                               <?php } ?>
                             </div>
-                            <div class="filliere-dep">
+                            <div class="filiere-dep">
                               <strong>Filières : </strong>
                               <ul style="margin-top: 10px;list-style: none; padding: 0;">
                                 <?php
 
                                 if ($all_filiere) {
                                   while ($row = $all_filiere->fetch(PDO::FETCH_ASSOC)) {
-                                    $filieres[] = $row['filliere_nom'];
+                                    $filieres[] = $row['filiere_nom'];
                                     ?>
                                     <li><a href="" class="btn btn-outline-primary"
-                                        style="width: 100%;margin-bottom:5px"><?php echo $row['filliere_nom']; ?></a></li>
+                                        style="width: 100%;margin-bottom:5px"><?php echo $row['filiere_nom']; ?></a></li>
                                   <?php }
                                 } else { ?>
                                   <li>Aucune filière trouvée</li>
@@ -386,7 +393,7 @@
       </div>
     </div>
   </form>
-  <form method="post" action="/ENSAH-service/inc/functions/add-chef-dep.php" class="modal fade" id="chef-add-modal"
+  <form method="post" action="/ENSAH-service/inc/functions/admin/add-chef-dep.php" class="modal fade" id="chef-add-modal"
     data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
@@ -509,13 +516,14 @@
       </div>
     </div>
   </footer> <!-- Required Js -->
-  <script src="../assets/js/plugins/popper.min.js"></script>
-  <script src="../assets/js/plugins/simplebar.min.js"></script>
-  <script src="../assets/js/plugins/bootstrap.min.js"></script>
-  <script src="../assets/js/fonts/custom-font.js"></script>
-  <script src="../assets/js/pcoded.js"></script>
-  <script src="../assets/js/plugins/feather.min.js"></script>
+  <script src="/ENSAH-service/assets/js/plugins/popper.min.js"></script>
+  <script src="/ENSAH-service/assets/js/plugins/simplebar.min.js"></script>
+  <script src="/ENSAH-service/assets/js/plugins/bootstrap.min.js"></script>
+  <script src="/ENSAH-service/assets/js/fonts/custom-font.js"></script>
+  <script src="/ENSAH-service/assets/js/pcoded.js"></script>
+  <script src="/ENSAH-service/assets/js/plugins/feather.min.js"></script>
   <script>
+    // consulter details du departement
     document.querySelectorAll('.view-btn').forEach(button => {
       button.addEventListener('click', () => {
         document.getElementById('modal-img').src = button.getAttribute('data-img');
@@ -689,8 +697,8 @@
   }
   ?>
   <!-- [Page Specific JS] start -->
-  <script src="../assets/js/plugins/simple-datatables.js"></script>
-  <script src="../assets/js/generatePass.js"></script>
+  <script src="/ENSAH-service/assets/js/plugins/simple-datatables.js"></script>
+  <script src="/ENSAH-service/assets/js/generatePass.js"></script>
   <script>
     // Check password strength
     let pass = document.querySelector(".passwordInput");

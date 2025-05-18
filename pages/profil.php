@@ -1,6 +1,15 @@
 <?php
-include '../inc/functions/connections.php';
 session_start();
+if (!isset($_SESSION['user'])) {
+  // Redirect to login if not authenticated
+  header('Location: ../login.php');
+  exit();
+}
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
+
+include '../inc/functions/connections.php';
 $admin_data = "SELECT * FROM `admin` A 
                   JOIN `user` U ON A.user_ID = U.user_ID";
 $admins = $pdo->query($admin_data);
@@ -634,8 +643,7 @@ if (!$profs) {
     <div class="footer-wrapper container-fluid">
       <div class="row">
         <div class="col-sm my-1">
-          <p class="m-0">Mantis &#9829; crafted by Team <a href="https://themeforest.net/user/codedthemes"
-              target="_blank">Codedthemes</a> Distributed by <a href="https://themewagon.com/">ThemeWagon</a>.</p>
+          <p class="m-0">ENSAH-service &COPY; 2025-Tous droits réservés.</p>
         </div>
         <div class="col-auto my-1">
           <ul class="list-inline footer-link mb-0">

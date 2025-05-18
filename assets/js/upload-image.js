@@ -3,7 +3,7 @@ document.querySelectorAll('.uplfile').forEach(fileInput =>
         const formData = new FormData();
         formData.append('uplfile', this.files[0]);
 
-        fetch('../inc/functions/upload-image.php', {
+        fetch('/ENSAH-service/inc/functions/upload-image.php', {
             method: 'POST',
             body: formData
         })

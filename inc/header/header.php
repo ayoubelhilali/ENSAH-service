@@ -1,6 +1,14 @@
 <!-- [ Header ] Start -->
 <?php
-include('../inc/functions/connections.php');
+if (!isset($_SESSION['user'])) {
+  // Redirect to login if not authenticated
+  header('Location: ../login.php');
+  exit();
+}
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
+include($_SERVER['DOCUMENT_ROOT'] . '/ENSAH-service/inc/functions/connections.php');
 
 $admin_data = "SELECT * FROM `admin` A 
                   JOIN `user` U ON A.user_ID = U.user_ID";
@@ -8,12 +16,11 @@ $admins = $pdo->query($admin_data);
 
 if ($admins) {
   while ($admin = $admins->fetch(PDO::FETCH_ASSOC)) {
-    $name = $admin["nom"];
-    $prenom = $admin["prenom"];
+    $name = $_SESSION['user_name'];
+    $prenom = $_SESSION['user_prenom'];
     $admin_image = $admin["image"];
     $role = "admin";
   }
-  
 }
 ?>
 <header class="pc-header">
@@ -130,7 +137,7 @@ if ($admins) {
           <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#" role="button"
             aria-haspopup="false" data-bs-auto-close="outside" aria-expanded="false">
             <img src="<?php echo $admin_image ?>" alt="user-image" class="user-avtar">
-            <span><?php echo $prenom ?></span>
+            <span><?php echo $name ?></span>
           </a>
           <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
             <div class="dropdown-header">
@@ -142,7 +149,7 @@ if ($admins) {
                   <h6 class="mb-1"><?php echo $name." ".$prenom?></h6>
                   <span><?php echo $role ?></span>
                 </div>
-                <a href="#!" class="pc-head-link bg-transparent"><i class="ti ti-power text-danger"></i></a>
+                <a href="/ENSAH-service/logout.php" class="pc-head-link bg-transparent"><i class="ti ti-power text-danger"></i></a>
               </div>
             </div>
             <ul class="nav drp-tabs nav-fill nav-tabs" id="mydrpTab" role="tablist">

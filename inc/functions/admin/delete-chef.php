@@ -63,6 +63,6 @@ try {
 }
 
 // Redirect back to departments page
-header("Location: /ENSAH-service/pages/depart-list.php");
+header("Location: /ENSAH-service/pages/admin/depart-list.php");
 exit();
 ?>

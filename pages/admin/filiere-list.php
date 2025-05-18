@@ -1,11 +1,18 @@
 <?php
 ob_start();
+session_start();
+if (!isset($_SESSION['user'])) {
+    // Redirect to login if not authenticated
+    header('Location: ../login.php');
+    exit();
+}
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
 $avatar = '/ENSAH-service/assets/images/avatar-M.jpg'; // chemin par défaut
-include('../inc/functions/connections.php');
-include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongPass.php");
+include($_SERVER['DOCUMENT_ROOT'] . '/ENSAH-service/inc/functions/connections.php');
+include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/isStrongPass.php");
 ?>
 
 <!DOCTYPE html>
@@ -132,14 +139,16 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
                                     data-profs='<?= $profs_json ?>' data-departs='<?= $departs_json ?>'>
                                     <i class="ti ti-plus f-18"></i> Ajouter filière
                                 </a>
-                                <div id="success-message" class="success-msg" style="color: green; margin-top: 10px;">
+                                <div id="success-msg" class="success-msg" style="color: green; margin-top: 10px;">
                                     <?php if (isset($_GET['success']) && isset($_SESSION["success_message"])): ?>
                                         <?= "✅" . htmlspecialchars($_SESSION["success_message"], ENT_QUOTES, 'UTF-8'); ?>
-                                    <?php endif; ?>
+                                    <?php endif;
+                                    unset($_SESSION["success_message"]);
+                                    ?>
                                 </div>
                                 <script>
                                     setTimeout(function () {
-                                        document.getElementById('success-message').style.display = 'none';
+                                        document.getElementById('success-msg').style.display = 'none';
                                     }, 10000); // 10 seconds
                                 </script>
                             </div>
@@ -159,10 +168,26 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
                                     </thead>
                                     <tbody>
                                         <?php
-                                        $filieres = "SELECT * FROM `filliere` F join departement D on F.depart_ID=D.depart_ID";
+                                        $filieres = "SELECT * FROM filiere F";
                                         $all_filieres = $pdo->query($filieres);
                                         if ($all_filieres) {
                                             while ($filiere = $all_filieres->fetch(PDO::FETCH_ASSOC)) {
+                                                ?>
+                                                <?php
+                                                if ($filiere['depart_ID'] != null) {
+                                                    $depart_query = "SELECT * FROM departement WHERE depart_ID = :depart_id";
+                                                    $stmt = $pdo->prepare($depart_query);
+                                                    $stmt->execute(['depart_id' => $filiere['depart_ID']]);
+                                                    $depart_row = $stmt->fetch(PDO::FETCH_ASSOC);
+                                                }
+                                                // Get the chef of the current department
+                                                $cord_query = "SELECT * FROM coordonnateur C 
+                                                JOIN professeur P ON C.prof_ID = P.prof_ID
+                                                JOIN user U ON P.user_ID = U.user_ID
+                                                WHERE C.filiere_ID = :filiere_id";
+                                                $stmt = $pdo->prepare($cord_query);
+                                                $stmt->execute(['filiere_id' => $filiere['filiere_ID']]);
+                                                $cord_row = $stmt->fetch(PDO::FETCH_ASSOC);
                                                 ?>
                                                 <tr>
                                                     <td>
@@ -170,44 +195,87 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
                                                             <input class="form-check-input" type="checkbox">
                                                         </div>
                                                     </td>
-                                                    <td><?php echo $filiere['filliere_ID'] ?></td>
+                                                    <td><?php echo $filiere['filiere_ID'] ?></td>
                                                     <td>
                                                         <div class="row">
                                                             <div class="col">
-                                                                <h5 class="mb-1"><?php echo $filiere['filliere_nom'] ?></h5>
+                                                                <h5 class="mb-1"><?php echo $filiere['filiere_nom'] ?></h5>
                                                             </div>
                                                         </div>
                                                     </td>
                                                     <td>
-                                                        <button class="btn btn-success">Ajouter Coordonnateur</button>
+                                                        <?php
+                                                        $has_cord = 0;
+                                                        if ($cord_row) {
+                                                            $has_cord = 1;
+                                                            ?>
+                                                            <div class="d-flex align-items-center" style="margin: 20px;">
+                                                                <img src="<?php echo isset($cord_row["image"]) && !empty($cord_row["image"]) ? $cord_row["image"] : '/ENSAH-service/assets/images/avatar-M.jpg'; ?>"
+                                                                    alt="Chef du département"
+                                                                    class="rounded-circle img-fluid wid-60 me-3"
+                                                                    style="width: 50px;">
+                                                                <div
+                                                                    style="display: flex; flex-direction: column;justify-content: center;">
+                                                                    <h5 class="mb-0">
+                                                                        <?php echo $cord_row["nom"] . " " . $cord_row["prenom"]; ?>
+                                                                    </h5>
+                                                                </div>
+                                                            </div>
+                                                            <button class="btn btn-danger btn-sm"
+                                                                onclick="deleteCordin(<?= $filiere['filiere_ID']; ?>)"
+                                                                data-cord="<?php echo $cord_row["cord_ID"] ?>">supprimer</button>
+                                                        <?php } else { ?>
+                                                            <p>le filiere n'a aucun coordonnateur</p>
+                                                            <a href="#" class="btn btn-success btn-sm add-cord-fil"
+                                                                data-bs-toggle="modal" data-bs-target="#cord-add-modal"
+                                                                data-profs="<?= $profs_json ?>"
+                                                                data-nom="<?= $filiere['filiere_nom']; ?>"
+                                                                data-bio="<?= $filiere['filiere_details']; ?>"
+                                                                data-filiere="<?= $filiere['filiere_ID']; ?>">
+                                                                Ajouter coordonnateur
+                                                            </a>
+                                                        <?php } ?>
+
                                                     </td>
-                                                    <td><?php echo $filiere['depart_nom'] ?></td>
-                                                    <td class="text-center">
-                                                        <ul class="list-inline me-auto mb-0">
-                                                            <li class="list-inline-item align-bottom" data-bs-toggle="tooltip"
-                                                                title="View">
-                                                                <a href="#" class="avtar avtar-xs btn-link-secondary view-btn"
-                                                                    data-bs-toggle="modal" data-bs-target="#filiere-modal"
-                                                                    data-nom="<?= $filiere['filliere_nom']; ?>"
-                                                                    data-bio="<?= $filiere['filliere_details']; ?>">
+                                                    <td><?php if ($filiere['depart_ID'] != null)
+                                                        echo $depart_row['depart_nom'];
+                                                    else
+                                                        echo "aucun département" ?>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <ul class="list-inline me-auto mb-0">
+                                                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip"
+                                                                    title="View">
+                                                                    <a href="#" class="avtar avtar-xs btn-link-secondary view-btn"
+                                                                        data-bs-toggle="modal" data-bs-target="#filiere-modal"
+                                                                        data-cord="<?= $has_cord ? $cord_row['nom'] . " " . $cord_row['prenom'] : "la filiere a aucun coordonnateur"; ?>"
+                                                                    data-cordEmail="<?= $has_cord ? $cord_row['cord_email'] : ''; ?>"
+                                                                    data-phone="<?= $has_cord ? (($cord_row['Phone'] && $cord_row['Phone'] != '0') ? $cord_row['Phone'] : '(+212)') : ' '; ?>"
+                                                                    data-linkedin="<?= $has_cord ? $cord_row['linkedin'] : ''; ?>"
+                                                                    data-cordImg="<?php echo isset($cord_row["image"]) && !empty($cord_row["image"]) ? $cord_row["image"] : '/ENSAH-service/assets/images/avatar-M.jpg'; ?>"
+                                                                    data-nom="<?= $filiere['filiere_nom']; ?>"
+                                                                    data-bio="<?= $filiere['filiere_details']; ?>"
+                                                                    data-departement="<?= $depart_row['depart_nom']; ?>">
                                                                     <i class="ti ti-eye f-18"></i>
                                                                 </a>
-
                                                             </li>
                                                             <li class="list-inline-item align-bottom" data-bs-toggle="tooltip"
                                                                 title="Edit">
                                                                 <a href="#" class="avtar avtar-xs btn-link-primary edit-btn"
                                                                     data-bs-toggle="modal" data-bs-target="#filire-edit-modal"
-                                                                    data-nom="<?= $filiere['filliere_nom']; ?>"
-                                                                    data-bio="<?= $filiere['filliere_details']; ?>"
-                                                                    data-departement="<?= $filiere['depart_nom']; ?>">
+                                                                    data-filiere="<?= $filiere['filiere_ID']; ?>"
+                                                                    data-nom="<?= $filiere['filiere_nom']; ?>"
+                                                                    data-bio="<?= $filiere['filiere_details']; ?>"
+                                                                    data-departement="<?= $depart_row['depart_nom']; ?>">
                                                                     <i class="ti ti-edit-circle f-18"></i>
                                                                 </a>
                                                             </li>
                                                             <li class="list-inline-item align-bottom" data-bs-toggle="tooltip"
                                                                 title="Delete">
-                                                                <a href="#" class="avtar avtar-xs btn-link-danger remove-user"
-                                                                    data-filiere="<?php echo $filiere["filliere_ID"] ?>">
+                                                                <a href="#"
+                                                                    onclick="deleteFil(<?= $filiere['filiere_ID']; ?>)"
+                                                                    class="avtar avtar-xs btn-link-danger remove-filiere"
+                                                                    data-filiere="<?php echo $filiere["filiere_ID"] ?>">
                                                                     <i class="ti ti-trash f-18"></i>
                                                                 </a>
                                                             </li>
@@ -216,8 +284,6 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
                                                 </tr>
                                             <?php }
                                         } ?>
-
-
                                     </tbody>
                                 </table>
                             </div>
@@ -249,10 +315,10 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
                                     </div>
                                     <div class="text-center mt-3">
                                         <div class="chat-avtar d-inline-flex mx-auto">
-                                            <img id="modal-img" class="rounded-circle img-fluid wid-60" src=""
+                                            <img id="modal-coord-img" class="rounded-circle img-fluid wid-60" src=""
                                                 alt="User image">
                                         </div>
-                                        <h5 class="mb-0" id="modal-nom"></h5>
+                                        <h5 class="mb-0" id="modal-coord"></h5>
                                         <p class="text-muted text-sm" id="modal-poste"></p>
                                         <hr class="my-3">
                                         <div
@@ -290,27 +356,16 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
                                                     <p class="mb-1 text-muted">Nom complet</p>
                                                     <h6 class="mb-0" id="modal-fullname"></h6>
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <p class="mb-1 text-muted">CIN</p>
-                                                    <h6 class="mb-0" id="modal-cin"></h6>
-                                                </div>
+
                                             </div>
                                         </li>
                                         <li class="list-group-item px-0">
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <p class="mb-1 text-muted">Date de naissance</p>
-                                                    <h6 class="mb-0" id="modal-birthday"></h6>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <p class="mb-1 text-muted">Genre</p>
-                                                    <h6 class="mb-0" id="modal-genre"></h6>
+                                                    <p class="mb-1 text-muted">Département</p>
+                                                    <h6 class="mb-0" id="modal-departement"></h6>
                                                 </div>
                                             </div>
-                                        </li>
-                                        <li class="list-group-item px-0 pb-0">
-                                            <p class="mb-1 text-muted">Adresse</p>
-                                            <h6 class="mb-0" id="modal-address">--</h6>
                                         </li>
                                     </ul>
                                 </div>
@@ -322,7 +377,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
                                 </div>
                                 <div class="card-body">
                                     <p class="mb-0" id="modal-bio">
-                                        -- À propos du vacataire --
+                                        -- À propos du filière --
                                     </p>
                                 </div>
                             </div>
@@ -337,10 +392,10 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
     $nom = $details = $departement = $coordonnateur = "";
     $nom_error = $general_error = "";
     $errors = 0;
+    $valid_Id = 0;
 
     // Check if form is submitted
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
         // Validate Nom
         if (empty($_POST["nom"])) {
             $nom_error = "Nom du filière est obligatoire";
@@ -349,17 +404,41 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
             $nom = htmlspecialchars($_POST["nom"], ENT_QUOTES, 'UTF-8');
         }
         $details = htmlspecialchars($_POST["fil_details"], ENT_QUOTES, 'UTF-8');
-        $departement = htmlspecialchars($_POST["dep-fil"], ENT_QUOTES, 'UTF-8');
+        if (isset($_POST["dep-fil"]) && is_numeric($_POST["dep-fil"]) && $_POST["dep-fil"] > 0) {
+            $departement_id = (int) $_POST["dep-fil"];
+
+            // Vérifie si le département existe
+            $stmt_check = $pdo->prepare("SELECT 1 FROM departement WHERE depart_ID = ?");
+            $stmt_check->execute([$departement_id]);
+
+            if ($stmt_check->rowCount() > 0) {
+                $departement = $departement_id; // ID valide
+                $valid_Id = 1;
+            } else {
+                $departement = 0; // ID invalide
+            }
+        } else {
+            $departement = 0; // Aucun département sélectionné OU "Aucun département" choisi
+        }
+        echo "filiere: -----------> " . $nom;
+        echo "details: -----------> " . $details;
+        echo "Depart_ID: -----------> " . $departement;
 
         // Proceed with insertion if no errors
         if ($errors == 0) {
             // Insert into user table
-            $add_filiere = "INSERT INTO filliere(filliere_nom, filliere_details, depart_ID) 
+            if ($departement == 0 || $valid_Id == 0) {
+                $add_filiere = "INSERT INTO filiere(filiere_nom, filiere_details) 
+                     VALUES('$nom', '$details')";
+            } else {
+                $add_filiere = "INSERT INTO filiere(filiere_nom, filiere_details, depart_ID) 
                      VALUES('$nom', '$details', '$departement')";
+            }
             $stmt = $pdo->prepare($add_filiere);
             if ($stmt->execute()) {
                 $_SESSION['success_message'] = "filière ajoutée avec succés!";
-                header("Location: /ENSAH-service/pages/filiere-list.php?success=1");
+                header("Location: /ENSAH-service/pages/admin/filiere-list.php?success=1");
+                unset($_SESSION["success_message"]);
                 exit;
             } else {
                 echo "Error: " . $stmt->errorInfo()[2];
@@ -391,18 +470,13 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Détails du filière</label>
-                                <textarea name="fil_details" class="form-control" id=""
+                                <textarea name="fil_details" class="form-control"
                                     placeholder="Détails du Filière"></textarea>
                             </div>
-                            <!-- <div class="form-group">
-                                <label class="form-label">coordonnateur du filière</label>
-                                <select name="cord" class="form-select" id="add-cord-fil" required>
-                                    <option disabled selected>choisir coordonnateur</option>
-                                </select>
-                            </div> -->
+
                             <div class="form-group">
                                 <label class="form-label">département du filière</label>
-                                <select name="dep-fil" class="form-select" id="dep-fil" required>
+                                <select value="" name="dep-fil" class="form-select" id="dep-fil" required>
                                     <option disabled selected>choisir département</option>
                                 </select>
                             </div>
@@ -426,145 +500,46 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
             </div>
         </div>
     </form>
-    <form method="post" class="modal fade" id="filire-edit-modal" data-bs-keyboard="false" tabindex="-1"
-        aria-hidden="true" enctype="multipart/form-data">
-        <input type="hidden" name="avatar_path" id="avatar-path">
+
+    <form method="post" action="/ENSAH-service/inc/functions/admin/add-cord-fil.php" class="modal fade"
+        id="cord-add-modal" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="mb-0">Modifier filière</h5>
+                    <h5 class="mb-0">Ajouter coordonnateur du filière</h5>
                     <a href="#" class="avtar avtar-s btn-link-danger" data-bs-dismiss="modal">
-                        <i class="ti ti-x f-20"></i>
-                    </a>
+                        <i class="ti ti-x f-20"></i> </a>
                 </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-sm-9">
                             <div class="form-group">
                                 <label class="form-label">Nom du filière</label>
-                                <input required name="nom" type="text" class="form-control nameInput" placeholder="Nom"
-                                    value="" id="filiere-nom">
+                                <input type="text" name="filiere_nom" class="form-control fil-nom"
+                                    placeholder="Nom du filière" required readonly>
                             </div>
-                            <p style="color: red"><?php if (isset($nom_error)) {
-                                echo $nom_error;
-                            } ?></p>
                             <div class="form-group">
-                                <label class="form-label">Prénom</label>
-                                <input required name="prenom" type="text" class="form-control prenomInput"
-                                    placeholder="Prénom" value="" id="vacat-prenom">
-                            </div>
-                            <p style="color: red"><?php if (isset($prenom_error)) {
-                                echo $prenom_error;
-                            } ?></p>
-                            <div class="form-group">
-                                <label class="form-label">CIN</label>
-                                <input required name="CIN" type="text" class="form-control cinInput" placeholder="CIN"
-                                    value="" id="vacat-cin">
-                            </div>
-                            <p style="color: red"><?php if (isset($CIN_error)) {
-                                echo $CIN_error;
-                            } ?></p>
-                            <div class="form-group">
-                                <label for="day" class="form-label">Date de naissance :</label><br>
-
-                                <select name="birthday_day" class="selectInput" id="vacat_day" required>
-                                    <option value="" class="defaultOption" disabled <?php if (empty($birthday_day))
-                                        echo 'selected'; ?>>Jour</option>
-                                    <!-- Jours de 1 à 31 -->
-                                    <?php for ($i = 1; $i <= 31; $i++) {
-                                        echo "<option value='$i'>$i</option>";
-                                    } ?>
-                                </select>
-
-                                <select name="birthday_month" class="selectInput" id="vacat_month" required>
-                                    <option disabled class="defaultOption" <?php if (empty($birthday_month))
-                                        echo 'selected'; ?>>Mois
-                                    </option>
-                                    <?php
-                                    $months = [
-                                        1 => "Janvier",
-                                        2 => "Février",
-                                        3 => "Mars",
-                                        4 => "Avril",
-                                        5 => "Mai",
-                                        6 => "Juin",
-                                        7 => "Juillet",
-                                        8 => "Août",
-                                        9 => "Septembre",
-                                        10 => "Octobre",
-                                        11 => "Novembre",
-                                        12 => "Décembre"
-                                    ];
-                                    foreach ($months as $key => $month) {
-                                        echo "<option value='$key' " . ($birthday_month == $month ? "selected" : "") . ">$month</option>";
-                                    }
-                                    ?>
-                                </select>
-
-                                <select name="birthday_year" id="vacat_year" class="selectInput" required>
-                                    <option disabled class="defaultOption" value="" <?php if (empty($birthday_year))
-                                        echo 'selected'; ?>>Année</option>
-                                    <!-- Années de 2025 à 1900 -->
-                                    <?php for ($i = 2025; $i >= 1900; $i--) {
-                                        echo "<option value='$i'>$i</option>";
-                                    } ?>
+                                <label class="form-label">Coordonnateur du filière</label>
+                                <select name="cord_fil" class="form-select" id="modal-profs" required>
+                                    <option disabled selected>Choisir Coordonnateur</option>
                                 </select>
                             </div>
-                            <p style="color: red"><?php if (isset($birthday_error)) {
-                                echo $birthday_error;
-                            } ?></p>
                             <div class="form-group">
-                                <label class="form-label">Genre</label>
-                                <select name="genre" class="form-select selectInput" required id="vacat-genre">
-                                    <option disabled class="defaultOption" value="" <?php if (empty($genre))
-                                        echo 'selected'; ?>>
-                                        Selectionner Genre
-                                    </option>
-                                    <option value="masculin" <?php if ($genre == "Masculin")
-                                        echo 'selected'; ?>>Masculin
-                                    </option>
-                                    <option value="feminin" <?php if ($genre == "Féminin")
-                                        echo 'selected'; ?>>Féminin
-                                    </option>
-                                </select>
-
+                                <label class="form-label">Email du coordonnateur</label>
+                                <input type="email" name="cord_email" class="form-control"
+                                    placeholder="Email du coordonnateur" required id="cord_email">
                             </div>
-                            <p style="color: red"><?php if (isset($genre_error)) {
-                                echo $genre_error;
-                            } ?></p>
                             <div class="form-group">
-                                <label class="form-label">Email</label>
-                                <input name="email" type="email" class="form-control emailInput" placeholder="Email"
-                                    required value="" id="vacat-email">
-                            </div>
-                            <p style="color: red"><?php if (isset($email_error)) {
-                                echo $email_error;
-                            } ?></p>
-                            <div class="form-group ">
-                                <label class="form-label">Password</label>
+                                <label class="form-label">Password du coordonnateur</label>
                                 <div style="position: relative;">
-                                    <input name="password" type="text" placeholder="Enter password"
-                                        class="form-control passwordInput" style="padding-right: 40px;" required
-                                        id="vacat-pass">
+                                    <input name="cord_password" type="text" placeholder="Entrer password"
+                                        class="form-control passwordInput" style="padding-right: 40px;" required>
+                                    <i class="fas fa-sync-alt generateBtn"
+                                        style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
                                 </div>
                             </div>
-                            <p style="color: red" class="error-msg"><?php if (isset($password_error)) {
-                                echo $password_error;
-                            } ?></p>
-                            <div class="form-group">
-                                <label class="form-label">Specialité</label>
-                                <select name="specialite" class="form-select selectInput" required
-                                    id="vacat-specialite">
-                                    <option disabled class="defaultOption">Specialitée</option>
-                                    <option value="computer science">Computer science</option>
-                                    <option value="Data analyst">Data analyst</option>
-                                    <option value="cybersecurity">cybersecurity</option>
-                                    <option value="Mathematics">Mathematics</option>
-                                </select>
-                            </div>
-                            <p style="color: red"><?php if (isset($specialite_error)) {
-                                echo $specialite_error;
-                            } ?></p>
+                            <p style="color: red;" class="error_msg"></p>
+                            <hr class="my-3">
                         </div>
                     </div>
                 </div>
@@ -573,13 +548,13 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
                         <li class="list-inline-item align-bottom">
                             <a href="#" class="avtar avtar-s btn-link-danger w-sm-auto" data-bs-toggle="tooltip"
                                 title="Delete">
-                                <i class="ti ti-trash f-18 clearBtn"></i>
+                                <i class="ti ti-trash f-18"></i>
                             </a>
                         </li>
                     </ul>
                     <div class="flex-grow-1 text-end">
-                        <button type="button" class="btn btn-link-danger" data-bs-dismiss="modal">Annuler</button>
-                        <input type="submit" name="submit" class="btn btn-primary" value="enregistrer">
+                        <button type="button" class="btn btn-link-danger" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" name="add-cord-fil" class="btn btn-primary">Ajouter</button>
                     </div>
                 </div>
             </div>
@@ -604,13 +579,13 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
             </div>
         </div>
     </footer> <!-- Required Js -->
-    <script src="../assets/js/plugins/popper.min.js"></script>
-    <script src="../assets/js/plugins/simplebar.min.js"></script>
-    <script src="../assets/js/plugins/bootstrap.min.js"></script>
-    <script src="../assets/js/fonts/custom-font.js"></script>
-    <script src="../assets/js/pcoded.js"></script>
-    <script src="../assets/js/plugins/feather.min.js"></script>
-    <script src="../assets/js/upload-image.js"></script>
+    <script src="/ENSAH-service/assets/js/plugins/popper.min.js"></script>
+    <script src="/ENSAH-service/assets/js/plugins/simplebar.min.js"></script>
+    <script src="/ENSAH-service/assets/js/plugins/bootstrap.min.js"></script>
+    <script src="/ENSAH-service/assets/js/fonts/custom-font.js"></script>
+    <script src="/ENSAH-service/assets/js/pcoded.js"></script>
+    <script src="/ENSAH-service/assets/js/plugins/feather.min.js"></script>
+    <script src="/ENSAH-service/assets/js/upload-image.js"></script>
 
     <script>layout_change('dark');</script>
 
@@ -628,13 +603,55 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
 
 
     <script>font_change("Public-Sans");</script>
+    <!------------ Supprimer le coordonnateur d'un filiere   ------------->
+    <script>
+        function deleteCordin(filiereID) {
+            if (confirm("Êtes-vous sûr de vouloir supprimer ce coordonnateur ?")) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.style.display = 'none';
+
+                const input = document.createElement('input');
+                input.name = 'delete_cord';
+                input.value = filiereID;
+                form.appendChild(input);
+
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    </script>
+    <?php
+    function deleteCord($filiereID)
+    {
+        global $pdo;
+        $stmt = $pdo->prepare("DELETE FROM coordonnateur WHERE filiere_ID = :filiere_id");
+        $stmt->execute(['filiere_id' => $filiereID]);
+        return $stmt->rowCount() > 0;
+    }
+
+    if (isset($_POST['delete_cord'])) {
+        $filiere_id = $_POST['delete_cord'];
+        if (deleteCord($filiere_id)) {
+            echo '<script>
+                console.log("Coordonnateur deleted successfully");
+                </script>';
+
+        }
+    }
+    ?>
     <script>
         // add coordonnateur to a filiere
-        document.querySelectorAll(".add-filiere").forEach(button => {
+        document.querySelectorAll(".add-cord-fil").forEach(button => {
             button.addEventListener('click', () => {
-
+                console.log("btn clicked!");
+                const filiereNom = button.getAttribute('data-nom');
                 const profsData = button.getAttribute('data-profs');
-                const profsList = document.getElementById('add-cord-fil');
+                const profsList = document.getElementById('modal-profs');
+                document.querySelectorAll('.fil-nom').forEach(element => {
+                    element.value = filiereNom;
+                });
+                console.log(filiereNom);
                 try {
                     // Clear existing options
                     const firstOption = profsList.querySelector('option:first-child');
@@ -687,33 +704,24 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
             document.querySelectorAll('.view-btn').forEach(button => {
                 button.addEventListener('click', () => {
                     // Get the data from the clicked button
-                    const cin = button.getAttribute('data-cin');
-                    const address = button.getAttribute('data-address');
+                    const bio = button.getAttribute('data-bio');
+                    const filiere_nom = button.getAttribute('data-nom');
+                    const depart_nom = button.getAttribute('data-departement');
+                    const cord_nom = button.getAttribute('data-cord');
+                    const cord_img = button.getAttribute('data-cordImg');
+                    const cord_email = button.getAttribute('data-cordEmail');
                     const phone = button.getAttribute('data-phone');
                     const linkedin = button.getAttribute('data-linkedin');
-                    const bio = button.getAttribute('data-bio');
-                    const nom = button.getAttribute('data-nom');
-                    const prenom = button.getAttribute('data-prenom');
-                    const birthday = button.getAttribute('data-birthday');
-                    const genre = button.getAttribute('data-genre');
-                    const email = button.getAttribute('data-email');
-                    const specialite = button.getAttribute('data-specialite');
-                    const image = button.getAttribute('data-img') || '/ENSAH-service/assets/images/avatar-M.jpg';
 
                     // Populate the modal with the data
-                    document.getElementById('modal-img').src = image;
-                    document.getElementById('modal-nom').textContent = `${nom} ${prenom}`;
-                    document.getElementById('modal-poste').textContent = specialite;
-                    document.getElementById('modal-cin').textContent = cin;
-                    document.getElementById('modal-phone').textContent = phone;
-                    document.getElementById('modal-linkedin').textContent = linkedin;
                     document.getElementById('modal-bio').textContent = bio;
-                    document.getElementById('modal-address').textContent = address;
-                    document.getElementById('modal-birthday').textContent = birthday;
-                    document.getElementById('modal-genre').textContent = genre;
-                    document.getElementById('modal-email').textContent = email;
-                    document.getElementById('modal-fullname').textContent = `${nom} ${prenom}`;
-                    document.getElementById('modal-specialite').textContent = specialite; // Add any missing fields
+                    document.getElementById('modal-fullname').textContent = `${filiere_nom}`;
+                    document.getElementById('modal-departement').textContent = `${depart_nom}`;
+                    document.getElementById('modal-coord').textContent = `${cord_nom}`;
+                    document.getElementById('modal-coord-img').src = cord_img;
+                    document.getElementById('modal-email').textContent = `${cord_email}`;
+                    document.getElementById('modal-phone').textContent = `${phone}`;
+                    document.getElementById('modal-linkedin').textContent = `${linkedin}`;
                 });
             });
         });
@@ -723,31 +731,10 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
             document.querySelectorAll('.edit-btn').forEach(button => {
                 button.addEventListener('click', () => {
                     // Get the data from the clicked button
-                    const vacat_cin = button.getAttribute('data-cin');
-                    const vacat_nom = button.getAttribute('data-nom');
-                    const vacat_prenom = button.getAttribute('data-prenom');
-                    const vacat_birthday = button.getAttribute('data-birthday');
-                    const [vacat_year, vacat_month, vacat_day] = vacat_birthday.split('-');
-                    console.log(vacat_year + "-" + vacat_month + "-" + vacat_day);
-                    const vacat_genre = button.getAttribute('data-genre');
-                    const vacat_email = button.getAttribute('data-email');
-                    const vacat_pass = button.getAttribute('data-pass');
-                    const vacat_specialite = button.getAttribute('data-specialite');
-                    const vacat_image = button.getAttribute('data-img') || '/ENSAH-service/assets/images/avatar-M.jpg';
-
-                    // Populate the modal with the data
-                    document.querySelector('.vacat-img').src = vacat_image;
-                    document.getElementById('vacat-nom').value = `${vacat_nom}`;
-                    document.getElementById('vacat-prenom').value = `${vacat_prenom}`;
-                    document.getElementById('vacat-cin').value = vacat_cin;
-                    document.querySelector(`#vacat-genre option[value="${vacat_genre}"]`).selected = true;
-                    document.getElementById('vacat-email').value = vacat_email;
-                    document.getElementById('vacat-pass').value = vacat_pass;
-                    document.querySelector(`#vacat-specialite option[value="${vacat_specialite}"]`).selected = true;
-                    // select the birthday
-                    document.querySelector(`#vacat_year option[value="${vacat_year}"]`).selected = true;
-                    document.querySelector(`#vacat_month option[value="${vacat_month}"]`).selected = true;
-                    document.querySelector(`#vacat_day option[value="${vacat_day}"]`).selected = true;
+                    const fil_ID = button.getAttribute('data-filiere');
+                    const fil_nom = button.getAttribute('data-nom');
+                    const fil_bio = button.getAttribute('data-bio');
+                    const dep_nom = button.getAttribute('data-departement');
 
                 });
             });
@@ -756,7 +743,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
     <script>
         // Check password strength
         let pass = document.querySelector(".passwordInput");
-        let error_msg = document.querySelector(".error-msg");
+        let error_msg = document.querySelector(".error_msg");
         pass.addEventListener("input", (e) => {
             if (e.target.value.length >= 8) {
                 if (/[A-Z]/.test(e.target.value)) {
@@ -782,59 +769,51 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongP
             }
         });
     </script>
-    <script>
-        // remove vacataire from DB
-        document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('.remove-user').forEach(button => {
-                button.addEventListener('click', () => {
-                    console.log("btn clicked!");
-                    const user_ID = button.getAttribute('data-user');
-                    const vacat_ID = button.getAttribute('data-vacat');
+    <!------------ Supprimer un filière   ------------->
+  <script>
+    function deleteFil(filiereID) {
+      if (confirm("Êtes-vous sûr de vouloir supprimer ce filière ?")) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.style.display = 'none';
 
-                    // Show confirmation dialog
-                    if (confirm("Are you sure you want to delete this vacataire?")) {
-                        // Send fetch request to PHP script
-                        fetch('/ENSAH-service/inc/functions/delete-user.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({ user_ID: user_ID })
-                        })
-                            .then(response => {
-                                if (!response.ok) {
-                                    throw new Error(`HTTP error! status: ${response.status}`);
-                                }
-                                return response.json();
-                            })
-                            .then(data => {
-                                if (data.success) {
-                                    let success_msg = document.querySelector(".success-msg");
-                                    if (success_msg) {
-                                        success_msg.innerHTML = "✅" + "vacataire with ID " + vacat_ID + " has been deleted!";
-                                        success_msg.display = "block";
-                                    }
-                                    // Optionally, remove the row from the table
-                                    button.closest('tr').remove();
-                                } else {
-                                    console.error("❌ Failed to delete: " + (data.message || "Unknown error"));
-                                }
-                            })
-                            .catch(error => {
-                                console.error("❌ Error:", error.message || error);
-                            });
-                    }
-                });
-            });
-        });
-    </script>
+        const input = document.createElement('input');
+        input.name = 'delete_fil';
+        input.value = filiereID;
+        form.appendChild(input);
 
+        document.body.appendChild(form);
+        form.submit();
+      }
+    }
+  </script>
+  <?php
+    function deleteFil($filiereID)
+    {
+        global $pdo;
+        $stmt = $pdo->prepare("DELETE FROM filiere WHERE filiere_ID = :filiere_id");
+        $stmt->execute(['filiere_id' => $filiereID]);
+        return $stmt->rowCount() > 0;
+    }
 
-
+    if (isset($_POST['delete_fil'])) {
+        $filiere_id = $_POST['delete_fil'];
+        if (deleteFil($filiere_id)) {
+            echo "<script>
+              document.addEventListener('DOMContentLoaded', function() {
+                const successMsg = document.querySelector('.success-msg');
+                if (successMsg) {
+                  successMsg.innerHTML = '<div class=\"alert alert-success\">departement supprimé avec succès.</div>';
+                }
+              });
+            </script>";
+        }
+    }
+    ?>
     <!-- [Page Specific JS] start -->
-    <script src="../assets/js/plugins/simple-datatables.js"></script>
-    <script src="../assets/js/generatePass.js"></script>
-    <script src="../assets/js/clearForm.js"></script>
+    <script src="/ENSAH-service/assets/js/plugins/simple-datatables.js"></script>
+    <script src="/ENSAH-service/assets/js/generatePass.js"></script>
+    <script src="/ENSAH-service/assets/js/clearForm.js"></script>
     <script>
         const dataTable = new simpleDatatables.DataTable('#pc-dt-simple', {
             sortable: false,

@@ -3,12 +3,12 @@ session_start();
 $email= trim($_POST['email']) ;
 $password = trim($_POST['password']) ;
 
-$pdo = new PDO('mysql:host=localhost;port=3306;dbname=ensah_service','root','');
+$pdo = new PDO('mysql:host=localhost;port=3307;dbname=ensah_service','root','');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 $user = [];
 if ($pdo) {
-    $users_data = "SELECT * FROM admin WHERE email = ?";
+    $users_data = "SELECT * FROM admin join user ON admin.user_ID = user.user_ID WHERE admin.email = ?";
     $stmt = $pdo->prepare($users_data);
     $stmt->execute([$email]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -17,10 +17,12 @@ if ($pdo) {
         exit();
     }
 }else {
-    echo "failed to connect";
     header("Location: login.php");
     exit();
 }
 $_SESSION['user']= $user["admin_ID"];
+$_SESSION['user_name']= $user["nom"];
+$_SESSION['user_prenom']= $user["prenom"];
+$_SESSION['user_email']= $user["email"];
 header("Location: dashboard/admin-dash.php");
 exit();

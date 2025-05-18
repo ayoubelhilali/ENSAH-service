@@ -23,12 +23,12 @@ if (isset($_POST['add-filiere'])) {
     if ($stmt->execute([ $depart_ID,$filiere_ID])) {
         $_SESSION["success_message"] = "filiere ajouté avec succès !";
         // Redirect to the depart-list page with a success message
-        header("Location: /ENSAH-service/pages/depart-list.php?success=1");
+        header("Location: /ENSAH-service/pages/admin/depart-list.php?success=1");
         exit;
     } else {
         $_SESSION["error_message"] = "Error: la filiere n'a pas ajouté !";
         // Redirect to the depart-list page with a success message
-        header("Location: /ENSAH-service/pages/depart-list.php?error=1");
+        header("Location: /ENSAH-service/pages/admin/depart-list.php?error=1");
         exit;
     }
 }

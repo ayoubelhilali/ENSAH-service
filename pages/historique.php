@@ -1,36 +1,47 @@
+<?php
+session_start();
+if (!isset($_SESSION['user'])) {
+  // Redirect to login if not authenticated
+  header('Location: /ENSAH-service/login.php');
+  exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <!-- [Head] start -->
 
 <head>
-  <title>Form Option | Mantis Bootstrap 5 Admin Template</title>
+  <title>ENSAH services - Historique</title>
   <!-- [Meta] -->
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="description"
-    content="Mantis is made using Bootstrap 5 design framework. Download the free admin template & use it for your project.">
-  <meta name="keywords"
-    content="Mantis, Dashboard UI Kit, Bootstrap 5, Admin Template, Admin Dashboard, CRM, CMS, Bootstrap Admin Template">
-  <meta name="author" content="CodedThemes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description"
+        content="Mantis is made using Bootstrap 5 design framework. Download the free admin template & use it for your project.">
+    <meta name="keywords"
+        content="Mantis, Dashboard UI Kit, Bootstrap 5, Admin Template, Admin Dashboard, CRM, CMS, Bootstrap Admin Template">
+    <meta name="author" content="CodedThemes">
 
-  <!-- [Favicon] icon -->
-  <link rel="icon" href="../assets/images/favicon.svg" type="image/x-icon"> <!-- [Google Font] Family -->
-  <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap"
-    id="main-font-link">
-  <!-- [Tabler Icons] https://tablericons.com -->
-  <link rel="stylesheet" href="../assets/fonts/tabler-icons.min.css">
-  <!-- [Feather Icons] https://feathericons.com -->
-  <link rel="stylesheet" href="../assets/fonts/feather.css">
-  <!-- [Font Awesome Icons] https://fontawesome.com/icons -->
-  <link rel="stylesheet" href="../assets/fonts/fontawesome.css">
-  <!-- [Material Icons] https://fonts.google.com/icons -->
-  <link rel="stylesheet" href="../assets/fonts/material.css">
-  <!-- [Template CSS Files] -->
-  <link rel="stylesheet" href="../assets/css/style.css" id="main-style-link">
-  <link rel="stylesheet" href="../assets/css/style-preset.css">
-
+    <!-- [Favicon] icon -->
+    <link rel="icon" href="/ENSAH-service/assets/images/logo-small_noBG.png" type="image/x-icon">
+    <!-- [Google Font] Family -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap"
+        id="main-font-link">
+    <!-- [Tabler Icons] https://tablericons.com -->
+    <link rel="stylesheet" href="/ENSAH-service/assets/fonts/tabler-icons.min.css">
+    <!-- [Feather Icons] https://feathericons.com -->
+    <link rel="stylesheet" href="/ENSAH-service/assets/fonts/feather.css">
+    <!-- [Font Awesome Icons] https://fontawesome.com/icons -->
+    <link rel="stylesheet" href="/ENSAH-service/assets/fonts/fontawesome.css">
+    <!-- [Material Icons] https://fonts.google.com/icons -->
+    <link rel="stylesheet" href="/ENSAH-service/assets/fonts/material.css">
+    <!-- [Template CSS Files] -->
+    <link rel="stylesheet" href="/ENSAH-service/assets/css/style.css" id="main-style-link">
+    <link rel="stylesheet" href="/ENSAH-service/assets/css/style-preset.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="/ENSAH-service/assets/css/main.css">
+    
 </head>
 <!-- [Head] end -->
 <!-- [Body] Start -->
@@ -44,7 +55,7 @@
   </div>
   <!-- [ Pre-loader ] End -->
   <!-- [ Sidebar Menu ] start -->
-  <?php require_once(__DIR__ . "/../inc/sidebar/admin-sidebar.php"); ?>
+  <?php require_once __DIR__ . "/../inc/sidebar/cord-sidebar.php"; ?>
   <!-- [ Sidebar Menu ] end --> <!-- [ Header Topbar ] start -->
   <?php require_once(__DIR__ . "/../inc/header/header.php"); ?>
   <!-- [ Header ] end -->
@@ -57,14 +68,14 @@
           <div class="row align-items-center">
             <div class="col-md-12">
               <ul class="breadcrumb">
-                <li class="breadcrumb-item"><a href="../dashboard/index.html">Home</a></li>
+                <li class="breadcrumb-item"><a href="/ENSAH-service/dashboard/index.html">Home</a></li>
                 <li class="breadcrumb-item"><a href="javascript: void(0)">Forms</a></li>
-                <li class="breadcrumb-item" aria-current="page">Les annonces</li>
+                <li class="breadcrumb-item" aria-current="page">L'historique</li>
               </ul>
             </div>
             <div class="col-md-12">
               <div class="page-header-title">
-                <h2 class="mb-0">Les annonces</h2>
+                <h2 class="mb-0">L'historique</h2>
               </div>
             </div>
           </div>
@@ -73,35 +84,7 @@
       <!-- [ breadcrumb ] end -->
 
       <!-- [ Main Content ] start -->
-      <div class="row">
-        <!-- [ form-element ] start -->
-        <div class="col-sm-6" style="width: 100%;">
-          <!-- Basic Inputs -->
-          <div class="col-sm-12">
-            <div class="card w-100">
-              <div class="card-header">
-                <h5>Ajouter une annonce</h5>
-              </div>
-              <div class="card-body">
-                <div class="form-group">
-                  <label class="form-label">Titre de l'annonce</label>
-                  <input type="text" class="form-control form-control" placeholder="Titre de l'annonce">
-                </div>
-                <div class="form-group mb-0">
-                  <label class="form-label" for="exampleTextarea">Text de l'annonce</label>
-                  <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
-                </div>
-              </div>
-              <div class="card-footer">
-                <button class="btn btn-primary me-2">Annoncer</button>
-                <button type="reset" class="btn btn-light">Reset</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- [ form-element ] end -->
-      </div>
+     
       <!-- [ Main Content ] end -->
     </div>
   </section>
@@ -110,12 +93,11 @@
     <div class="footer-wrapper container-fluid">
       <div class="row">
         <div class="col-sm my-1">
-          <p class="m-0">Mantis &#9829; crafted by Team <a href="https://themeforest.net/user/codedthemes"
-              target="_blank">Codedthemes</a> Distributed by <a href="https://themewagon.com/">ThemeWagon</a>.</p>
+          <p class="m-0">ENSAH-services &copy; 2025-Tous droits réservés.</p>
         </div>
         <div class="col-auto my-1">
           <ul class="list-inline footer-link mb-0">
-            <li class="list-inline-item"><a href="../index.html">Home</a></li>
+            <li class="list-inline-item"><a href="/ENSAH-service/index.html">Home</a></li>
             <li class="list-inline-item"><a href="https://codedthemes.gitbook.io/mantis-bootstrap"
                 target="_blank">Documentation</a></li>
             <li class="list-inline-item"><a href="https://codedthemes.authordesk.app/" target="_blank">Support</a></li>
@@ -124,12 +106,12 @@
       </div>
     </div>
   </footer> <!-- Required Js -->
-  <script src="../assets/js/plugins/popper.min.js"></script>
-  <script src="../assets/js/plugins/simplebar.min.js"></script>
-  <script src="../assets/js/plugins/bootstrap.min.js"></script>
-  <script src="../assets/js/fonts/custom-font.js"></script>
-  <script src="../assets/js/pcoded.js"></script>
-  <script src="../assets/js/plugins/feather.min.js"></script>
+  <script src="/ENSAH-service/assets/js/plugins/popper.min.js"></script>
+  <script src="/ENSAH-service/assets/js/plugins/simplebar.min.js"></script>
+  <script src="/ENSAH-service/assets/js/plugins/bootstrap.min.js"></script>
+  <script src="/ENSAH-service/assets/js/fonts/custom-font.js"></script>
+  <script src="/ENSAH-service/assets/js/pcoded.js"></script>
+  <script src="/ENSAH-service/assets/js/plugins/feather.min.js"></script>
 
 
 
@@ -207,9 +189,9 @@
               <div class="pct-content">
                 <div class="theme-color themepreset-color theme-layout">
                   <a href="#!" class="active" onclick="layout_change('light')" data-value="false"><span><img
-                        src="../assets/images/customization/default.svg" alt="img"></span><span>Light</span></a>
+                        src="/ENSAH-service/assets/images/customization/default.svg" alt="img"></span><span>Light</span></a>
                   <a href="#!" class="" onclick="layout_change('dark')" data-value="true"><span><img
-                        src="../assets/images/customization/dark.svg" alt="img"></span><span>Dark</span></a>
+                        src="/ENSAH-service/assets/images/customization/dark.svg" alt="img"></span><span>Dark</span></a>
                 </div>
               </div>
             </div>
@@ -233,23 +215,23 @@
               <div class="pct-content">
                 <div class="theme-color preset-color">
                   <a href="#!" class="active" data-value="preset-1"><span><img
-                        src="../assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 1</span></a>
+                        src="/ENSAH-service/assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 1</span></a>
                   <a href="#!" class="" data-value="preset-2"><span><img
-                        src="../assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 2</span></a>
+                        src="/ENSAH-service/assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 2</span></a>
                   <a href="#!" class="" data-value="preset-3"><span><img
-                        src="../assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 3</span></a>
+                        src="/ENSAH-service/assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 3</span></a>
                   <a href="#!" class="" data-value="preset-4"><span><img
-                        src="../assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 4</span></a>
+                        src="/ENSAH-service/assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 4</span></a>
                   <a href="#!" class="" data-value="preset-5"><span><img
-                        src="../assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 5</span></a>
+                        src="/ENSAH-service/assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 5</span></a>
                   <a href="#!" class="" data-value="preset-6"><span><img
-                        src="../assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 6</span></a>
+                        src="/ENSAH-service/assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 6</span></a>
                   <a href="#!" class="" data-value="preset-7"><span><img
-                        src="../assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 7</span></a>
+                        src="/ENSAH-service/assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 7</span></a>
                   <a href="#!" class="" data-value="preset-8"><span><img
-                        src="../assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 8</span></a>
+                        src="/ENSAH-service/assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 8</span></a>
                   <a href="#!" class="" data-value="preset-9"><span><img
-                        src="../assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 9</span></a>
+                        src="/ENSAH-service/assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 9</span></a>
                 </div>
               </div>
             </div>
@@ -273,9 +255,9 @@
               <div class="pct-content">
                 <div class="theme-color themepreset-color boxwidthpreset theme-container">
                   <a href="#!" class="active" onclick="change_box_container('false')" data-value="false"><span><img
-                        src="../assets/images/customization/default.svg" alt="img"></span><span>Fluid</span></a>
+                        src="/ENSAH-service/assets/images/customization/default.svg" alt="img"></span><span>Fluid</span></a>
                   <a href="#!" class="" onclick="change_box_container('true')" data-value="true"><span><img
-                        src="../assets/images/customization/container.svg" alt="img"></span><span>Container</span></a>
+                        src="/ENSAH-service/assets/images/customization/container.svg" alt="img"></span><span>Container</span></a>
                 </div>
               </div>
             </div>
