@@ -18,7 +18,7 @@ if (isset($_POST['add-cord-fil'])) {
     $stml->execute([$selectedOption]);
     $prof_ID = $stml->fetchColumn();
     $email = htmlspecialchars($_POST["cord_email"]);
-    $password = hash('sha256', htmlspecialchars($_POST["cord_password"]));
+    $password = password_hash($_POST["cord_password"], PASSWORD_DEFAULT);
     // Prepare and execute the SQL statement
     echo "email: $email";
     echo "password: $password";

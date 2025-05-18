@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['user'])) {
+if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
   // Redirect to login if not authenticated
   header('Location: /ENSAH-service/login.php');
 

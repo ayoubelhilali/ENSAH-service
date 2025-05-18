@@ -102,8 +102,9 @@ $count = $stmt->fetchColumn();
           <div class="card">
             <div class="card-body">
               <h6 class="mb-2 f-w-400 text-muted">Nombre des unités d'enseignement</h6>
-              <h4 class="mb-3"><?php $sql = "SELECT COUNT(*) FROM `unite`";
-              $stmt = $pdo->query($sql);
+              <h4 class="mb-3"><?php $sql = "SELECT COUNT(*) FROM `unite` join `filiere` on unite.filiere_id = filiere.filiere_id where unite.filiere_id=?";
+              $stmt = $pdo->prepare($sql);
+              $stmt->execute([$_SESSION['user']['filiere']]);
               $count = $stmt->fetchColumn();
               echo $count;
               ?></h4>

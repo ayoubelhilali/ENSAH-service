@@ -163,16 +163,19 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/isStrongP
                                     </thead>
                                     <tbody>
                                         <?php
-                                        $units_query = "SELECT * FROM unite ORDER BY semestre,unite_ID";
+                                        $units_query = "SELECT * FROM unite WHERE filiere_ID = :filiere ORDER BY semestre,unite_ID";
                                         $stmt = $pdo->prepare($units_query);
-                                        $stmt->execute();
+                                        $stmt->execute([':filiere' => $_SESSION['filiere']['filiereID']]);
                                         $all_units = $stmt;
                                         while ($unit = $all_units->fetch(PDO::FETCH_ASSOC)) {
                                             $resp_query = $pdo->prepare("SELECT * FROM professeur P
                                             JOIN user U ON P.user_ID = U.user_ID
                                             WHERE P.prof_ID = :resp_ue");
                                             $resp_query->execute([':resp_ue' => $unit['unite_resp']]);
-                                            $resp_ue = $resp_query->fetch(PDO::FETCH_ASSOC);
+                                            $has_resp = false;
+                                            if($resp_ue = $resp_query->fetch(PDO::FETCH_ASSOC)){
+                                                $has_resp = true;
+                                            }
                                             ?>
                                             <tr>
                                                 <td><?= $unit['unite_ID'] ?></td>
@@ -225,7 +228,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/isStrongP
                                                     <div class="row">
                                                         <div class="col">
                                                             <h6 class="mb-1">
-                                                                <?= $resp_ue!=null? "Dr. " . htmlspecialchars($resp_ue['nom'], ENT_QUOTES, 'UTF-8') . " " . htmlspecialchars($resp_ue['prenom'], ENT_QUOTES, 'UTF-8'): "Aucun responsable" ?>
+                                                                <?= $has_resp ? "Dr. " . htmlspecialchars($resp_ue['nom'], ENT_QUOTES, 'UTF-8') . " " . htmlspecialchars($resp_ue['prenom'], ENT_QUOTES, 'UTF-8'): "Aucun responsable" ?>
                                                             </h6>
                                                         </div>
                                                     </div>
@@ -245,15 +248,16 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/isStrongP
                                                         <li class="list-inline-item align-bottom" data-bs-toggle="tooltip"
                                                             title="View">
                                                             <a href="#" class="avtar avtar-xs btn-link-secondary view-btn"
-                                                                data-bs-toggle="modal" data-bs-target="#filiere-modal"
-                                                                data-resp="<?= $has_resp ? $resp_row['nom'] . " " . $resp_row['prenom'] : "l'unité n'est pas affecté a aucun professeur"; ?>"
-                                                                data-respEmail="<?= $has_resp ? $resp_row['resp_email'] : ''; ?>"
-                                                                data-phone="<?= $has_resp ? (($resp_row['Phone'] && $resp_row['Phone'] != '0') ? $resp_row['Phone'] : '(+212)') : ' '; ?>"
-                                                                data-linkedin="<?= $has_resp ? $resp_row['linkedin'] : ''; ?>"
-                                                                data-respImg="<?php echo isset($resp_row["image"]) && !empty($resp_row["image"]) ? $resp_row["image"] : '/ENSAH-service/assets/images/avatar-M.jpg'; ?>"
-                                                                data-filnom="<?= $filiere['filiere_nom']; ?>"
-                                                                data-bio="<?= $filiere['filiere_details']; ?>"
-                                                                data-departement="<?= $depart_row['depart_nom']; ?>">
+                                                                data-bs-toggle="modal" data-bs-target="#unit-modal"
+                                                                data-resp="<?= $has_resp ? $resp_ue['nom'] . " " . $resp_ue['prenom'] : "l'unité n'est pas affecté a aucun professeur"; ?>"
+                                                                data-respEmail="<?= $has_resp ? $resp_ue['email'] : ''; ?>"
+                                                                data-phone="<?= $has_resp ? (($resp_ue['Phone'] && $resp_ue['Phone'] != '0') ? $resp_ue['Phone'] : '(+212)') : ' '; ?>"
+                                                                data-linkedin="<?= $has_resp ? $resp_ue['linkedin'] : ''; ?>"
+                                                                data-respImg="<?php echo isset($resp_ue["image"]) && !empty($resp_ue["image"]) ? $resp_ue["image"] : '/ENSAH-service/assets/images/avatar-M.jpg'; ?>"
+                                                                data-unitName="<?= $unit['unite_name']; ?>"
+                                                                data-spec="<?= $unit['unite_specialite']; ?>"
+                                                                data-filiere="<?= $_SESSION['filiere']['filiereNom']?? "vide" ?>"
+                                                                data-volume="<?=($unit["volume_cours"]+$unit["volume_td"]+$unit["volume_tp"]) ."h (". $unit['volume_cours']."h cours ".$unit["volume_td"]."h TD ".$unit["volume_tp"]."h TP )"; ?>">
                                                                 <i class="ti ti-eye f-18"></i>
                                                             </a>
                                                         </li>
@@ -270,9 +274,9 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/isStrongP
                                                         </li>
                                                         <li class="list-inline-item align-bottom" data-bs-toggle="tooltip"
                                                             title="Delete">
-                                                            <a href="#" onclick="deleteFil(<?= $filiere['filiere_ID']; ?>)"
+                                                            <a href="#" onclick="deleteUnit(<?= $unit['unite_ID']; ?>)"
                                                                 class="avtar avtar-xs btn-link-danger remove-filiere"
-                                                                data-filiere="<?php echo $filiere["filiere_ID"] ?>">
+                                                                data-unite="<?php echo $unit["unite_ID"] ?>">
                                                                 <i class="ti ti-trash f-18"></i>
                                                             </a>
                                                         </li>
@@ -291,11 +295,11 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/isStrongP
             <!-- [ Main Content ] end -->
         </div>
     </div>
-    <div class="modal fade" id="filiere-modal" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="unit-modal" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header border-0 pb-0">
-                    <h5 class="mb-0">Détails du filière</h5>
+                    <h5 class="mb-0">Détails de l'unité</h5>
                     <a href="#" class="avtar avtar-s btn-link-danger" data-bs-dismiss="modal">
                         <i class="ti ti-x f-20"></i>
                     </a>
@@ -314,7 +318,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/isStrongP
                                             <img id="modal-resp-img" class="rounded-circle img-fluid wid-60" src=""
                                                 alt="User image">
                                         </div>
-                                        <h5 class="mb-0" id="modal-coord"></h5>
+                                        <h5 class="mb-0" id="modal-resp"></h5>
                                         <p class="text-muted text-sm" id="modal-poste"></p>
                                         <hr class="my-3">
                                         <div
@@ -366,8 +370,8 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/isStrongP
                                         <li class="list-group-item px-0">
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <p class="mb-1 text-muted">Département</p>
-                                                    <h6 class="mb-0" id="modal-departement"></h6>
+                                                    <p class="mb-1 text-muted">Spécialité</p>
+                                                    <h6 class="mb-0" id="modal-spec"></h6>
                                                 </div>
                                             </div>
                                         </li>
@@ -380,17 +384,6 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/isStrongP
                                             </div>
                                         </li>
                                     </ul>
-                                </div>
-                            </div>
-
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5>À propos</h5>
-                                </div>
-                                <div class="card-body">
-                                    <p class="mb-0" id="modal-bio">
-                                        -- À propos du filière --
-                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -588,26 +581,29 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/isStrongP
         });
     </script>
     <script>
+        // afficher les details d'une unitée
         document.addEventListener('DOMContentLoaded', function () {
             document.querySelectorAll('.view-btn').forEach(button => {
                 button.addEventListener('click', () => {
                     // Get the data from the clicked button
-                    const bio = button.getAttribute('data-bio');
-                    const filiere_nom = button.getAttribute('data-nom');
-                    const depart_nom = button.getAttribute('data-departement');
-                    const cord_nom = button.getAttribute('data-cord');
-                    const cord_img = button.getAttribute('data-cordImg');
-                    const cord_email = button.getAttribute('data-cordEmail');
+                    const unit_nom = button.getAttribute('data-unitName');
+                    const spec = button.getAttribute('data-spec');
+                    const filiere_Nom = button.getAttribute('data-filiere');
+                    const volume = button.getAttribute('data-volume');
+                    const resp_nom = button.getAttribute('data-resp');
+                    const resp_img = button.getAttribute('data-respImg');
+                    const resp_email = button.getAttribute('data-respEmail');
                     const phone = button.getAttribute('data-phone');
                     const linkedin = button.getAttribute('data-linkedin');
 
                     // Populate the modal with the data
-                    document.getElementById('modal-bio').textContent = bio;
-                    document.getElementById('modal-fullname').textContent = `${filiere_nom}`;
-                    document.getElementById('modal-departement').textContent = `${depart_nom}`;
-                    document.getElementById('modal-coord').textContent = `${cord_nom}`;
-                    document.getElementById('modal-coord-img').src = cord_img;
-                    document.getElementById('modal-email').textContent = `${cord_email}`;
+                    document.getElementById('modal-fullname').textContent = `${unit_nom}`;
+                    document.getElementById('modal-spec').textContent = `${spec}`;
+                    document.getElementById('modal-filiere').textContent = `${filiere_Nom}`;
+                    document.getElementById('modal-volume').textContent = `${volume}`;
+                    document.getElementById('modal-resp').textContent = `${resp_nom}`;
+                    document.getElementById('modal-resp-img').src = `${resp_img}`;
+                    document.getElementById('modal-email').textContent = `${resp_email}`;
                     document.getElementById('modal-phone').textContent = `${phone}`;
                     document.getElementById('modal-linkedin').textContent = `${linkedin}`;
                 });
@@ -659,15 +655,16 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/isStrongP
     </script>
     <!------------ Supprimer un filière   ------------->
     <script>
-        function deleteFil(filiereID) {
-            if (confirm("Êtes-vous sûr de vouloir supprimer ce filière ?")) {
+        function deleteUnit(unitID) {
+            if (confirm("Êtes-vous sûr de vouloir supprimer ce module ?")) {
+                console.log(unitID);
                 const form = document.createElement('form');
                 form.method = 'POST';
                 form.style.display = 'none';
 
                 const input = document.createElement('input');
-                input.name = 'delete_fil';
-                input.value = filiereID;
+                input.name = 'delete_unit';
+                input.value = unitID;
                 form.appendChild(input);
 
                 document.body.appendChild(form);
@@ -676,24 +673,31 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/isStrongP
         }
     </script>
     <?php
-    function deleteFil($filiereID)
+    function deleteUnit($unitID)
     {
         global $pdo;
-        $stmt = $pdo->prepare("DELETE FROM filiere WHERE filiere_ID = :filiere_id");
-        $stmt->execute(['filiere_id' => $filiereID]);
+        $stmt = $pdo->prepare("DELETE FROM unite WHERE unite_ID = :unite_id");
+        $stmt->execute(['unite_id' => $unitID]);
         return $stmt->rowCount() > 0;
     }
 
-    if (isset($_POST['delete_fil'])) {
-        $filiere_id = $_POST['delete_fil'];
-        if (deleteFil($filiere_id)) {
+    if (isset($_POST['delete_unit'])) {
+        $unit_id = $_POST['delete_unit'];
+        if (deleteUnit($unit_id)) {
             echo "<script>
               document.addEventListener('DOMContentLoaded', function() {
                 const successMsg = document.querySelector('.success-msg');
                 if (successMsg) {
-                  successMsg.innerHTML = '<div class=\"alert alert-success\">departement supprimé avec succès.</div>';
+                  successMsg.innerHTML = '<div class=\"alert alert-success\">module supprimé avec succès.</div>';
                 }
               });
+              setTimeout(function() {
+                const successMsg = document.querySelector('.success-msg');
+                if (successMsg) {
+                  successMsg.innerHTML = '';
+                  window.location.reload();
+                }
+              }, 1500);
             </script>";
         }
     }

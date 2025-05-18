@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
         $nom_error = "Nom du module est obligatoire";
         $errors++;
     }
-    $filiere_ue = $_SESSION["filiere_ID"];
+    $filiere_ue = $_SESSION["filiere"]["filiereID"];
     $volume_cours = !empty($_POST["volume_cours"]) ? (int) $_POST["volume_cours"] : 0;
     $volume_td = !empty($_POST["volume_td"]) ? (int) $_POST["volume_td"] : 0;
     $volume_tp = !empty($_POST["volume_tp"]) ? (int) $_POST["volume_tp"] : 0;

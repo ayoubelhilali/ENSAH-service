@@ -9,19 +9,6 @@ if (session_status() === PHP_SESSION_NONE) {
   session_start();
 }
 include($_SERVER['DOCUMENT_ROOT'] . '/ENSAH-service/inc/functions/connections.php');
-
-$admin_data = "SELECT * FROM `admin` A 
-                  JOIN `user` U ON A.user_ID = U.user_ID";
-$admins = $pdo->query($admin_data);
-
-if ($admins) {
-  while ($admin = $admins->fetch(PDO::FETCH_ASSOC)) {
-    $name = $_SESSION['user_name'];
-    $prenom = $_SESSION['user_prenom'];
-    $admin_image = $admin["image"];
-    $role = "admin";
-  }
-}
 ?>
 <header class="pc-header">
   <div class="header-wrapper"> <!-- [Mobile Media Block] start -->
@@ -136,18 +123,18 @@ if ($admins) {
         <li class="dropdown pc-h-item header-user-profile">
           <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#" role="button"
             aria-haspopup="false" data-bs-auto-close="outside" aria-expanded="false">
-            <img src="<?php echo $admin_image ?>" alt="user-image" class="user-avtar">
-            <span><?php echo $name ?></span>
+            <img src="<?php echo empty($_SESSION["user"]["image"])? "/ENSAH-service/assets/images/avatar-M.jpg": $_SESSION["user"]["image"]?>" alt="user-image" class="user-avtar">
+            <span><?php echo $_SESSION["user"]["nom"] ?></span>
           </a>
           <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
             <div class="dropdown-header">
               <div class="d-flex mb-1">
                 <div class="flex-shrink-0">
-                  <img src="<?php echo $admin_image ?>" alt="user-image" class="user-avtar wid-35">
+                  <img src="<?php echo empty($_SESSION["user"]["image"])? "/ENSAH-service/assets/images/avatar-M.jpg": $_SESSION["user"]["image"]?>" alt="user-image" class="user-avtar wid-35">
                 </div>
                 <div class="flex-grow-1 ms-3">
-                  <h6 class="mb-1"><?php echo $name." ".$prenom?></h6>
-                  <span><?php echo $role ?></span>
+                  <h6 class="mb-1"><?php echo $_SESSION["user"]["nom"]." ". $_SESSION["user"]["prenom"]?></h6>
+                  <span><?php echo $_SESSION["user"]["role"] ?></span>
                 </div>
                 <a href="/ENSAH-service/logout.php" class="pc-head-link bg-transparent"><i class="ti ti-power text-danger"></i></a>
               </div>
