@@ -10,51 +10,26 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 include '../inc/functions/connections.php';
-$admin_data = "SELECT * FROM `admin` A 
-                  JOIN `user` U ON A.user_ID = U.user_ID";
-$admins = $pdo->query($admin_data);
-$profs_data = "SELECT * FROM `professeur` A 
-                  JOIN `user` U ON A.user_ID = U.user_ID";
-$profs = $pdo->query($profs_data);
+
+$name = $_SESSION["user"]["nom"];
+$prenom = $_SESSION["user"]["prenom"];
+$image = $_SESSION["user"]["image"];
+$email = $_SESSION["user"]["email"];
+$role = $_SESSION["user"]["role"];
+$genre = $_SESSION["user"]["genre"];
+$phone = $_SESSION["user"]["phone"];
+$linkedin = $_SESSION["user"]["linkedin"];
+$address = $_SESSION["user"]["address"];
+$bio = $_SESSION["user"]["bio"];
 
 
+// Calculate the age:
+$birthday = $_SESSION["user"]["birthday"]; // 🎂 format: YYYY-MM-DD
+$birthDate = new DateTime($birthday);
+$today = new DateTime(); // current date
 
-if ($admins) {
-  while ($admin = $admins->fetch(PDO::FETCH_ASSOC)) {
-    $name = $admin["nom"];
-    $prenom = $admin["prenom"];
-    $image = $admin["image"];
-    $email = $admin["email"];
-    $role = "admin";
-    $genre = $admin["genre"];
-    $phone = $admin["Phone"];
-    $linkedin = $admin["linkedin"];
-    $address = $admin["address"];
-    $bio = $admin["bio"];
-    // Calculate the age:
-    $birthday = $admin["date_naissance"]; // 🎂 format: YYYY-MM-DD
-    $birthDate = new DateTime($birthday);
-    $today = new DateTime(); // current date
+$age = $birthDate->diff($today)->y; // 'y' gives the number of full years
 
-    $age = $birthDate->diff($today)->y; // 'y' gives the number of full years
-  }
-}
-if (!$profs) {
-  while ($prof = $profs->fetch(PDO::FETCH_ASSOC)) {
-    $name = $prof["nom"];
-    $prenom = $prof["prenom"];
-    $image = $prof["image"];
-    $email = $prof["email"];
-    $role = "professeur";
-    $genre = $prof["genre"];
-    // Calculate the age:
-    $birthday = $prof["date_naissance"]; // 🎂 format: YYYY-MM-DD
-    $birthDate = new DateTime($birthday);
-    $today = new DateTime(); // current date
-
-    $age = $birthDate->diff($today)->y; // 'y' gives the number of full years
-  }
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -175,14 +150,14 @@ if (!$profs) {
                       <div class="card">
                         <div class="card-body position-relative">
                           <div class="position-absolute end-0 top-0 p-3">
-                            <span class="badge bg-primary">Admin</span>
+                            <span class="badge bg-primary"><?php echo $role ?></span>
                           </div>
                           <div class="text-center mt-3">
                             <div class="chat-avtar d-inline-flex mx-auto">
-                              <img class="rounded-circle img-fluid wid-70" src="<?php echo $image ?>" alt="User image">
+                              <img class="rounded-circle img-fluid wid-70" src="<?php echo empty($image) ? "/ENSAH-service/assets/images/user_empty.png" : $image?>" alt="User image">
                             </div>
                             <h5 class="mb-0"><?php echo $name . " " . $prenom ?></h5>
-                            <p class="text-muted text-sm">Administrateur</p>
+                            <p class="text-muted text-sm"><?php echo $role ?></p>
                             <hr class="my-3">
                             <hr class="my-3">
                             <div class="d-inline-flex align-items-center justify-content-between w-100 mb-3">
@@ -205,12 +180,22 @@ if (!$profs) {
                     </div>
                     <div class="col-lg-8 col-xxl-9">
                       <?php if (isset($_GET['success'])): ?>
-                        <div id="success-message" style="color: green; margin-top: 10px;">✅
+                        <div id="success-message" class="alert alert-success" style="margin-top: 10px;">
                           <?php echo $_SESSION["success_message"] ?>
                         </div>
                         <script>
                           setTimeout(function () {
                             document.getElementById('success-message').remove();
+                          }, 10000); // 10 seconds
+                        </script>
+                      <?php endif; ?>
+                      <?php if (isset($_GET['error'])): ?>
+                        <div id="error-message" class="alert alert-danger" style="margin-top: 10px;">
+                          <?php echo $_SESSION["error_message"] ?>
+                        </div>
+                        <script>
+                          setTimeout(function () {
+                            document.getElementById('error-message').remove();
                           }, 10000); // 10 seconds
                         </script>
                       <?php endif; ?>
@@ -683,7 +668,7 @@ if (!$profs) {
 
 
   <script>font_change("Public-Sans");</script>
-  
+
   <script>
     // Declare passwordinput
     let password = document.querySelector(".passwordInput");
