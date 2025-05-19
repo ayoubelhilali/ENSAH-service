@@ -20,22 +20,9 @@
           <i class="ti ti-dashboard"></i>
         </li>
         <li class="pc-item">
-          <a href="/ENSAH-service/pages/prof-list.php" class="pc-link">
+          <a href="/ENSAH-service/pages/admin/prof-list.php" class="pc-link">
             <span class="pc-micon"><i class="ti ti-user"></i></span>
             <span class="pc-mtext">Professeurs</span>
-          </a>
-        </li>
-        
-        <li class="pc-item">
-          <a href="/ENSAH-service/pages/chef_dep-list.php" class="pc-link">
-            <span class="pc-micon"><i class="ti ti-user"></i></span>
-            <span class="pc-mtext">Chefs des départements</span>
-          </a>
-        </li>
-        <li class="pc-item">
-          <a href="/ENSAH-service/pages/cord-list.php" class="pc-link">
-            <span class="pc-micon"><i class="ti ti-user"></i></span>
-            <span class="pc-mtext">coordinateurs des filières</span>
           </a>
         </li>
 
@@ -44,23 +31,23 @@
           <i class="ti ti-news"></i>
         </li>
         <li class="pc-item">
-          <a href="/ENSAH-service/pages/depart-list.php" class="pc-link">
+          <a href="/ENSAH-service/pages/admin/depart-list.php" class="pc-link">
             <span class="pc-micon"><i class="ti ti-building-community"></i></span>
             <span class="pc-mtext">Les départements</span>
           </a>
         </li>
         <li class="pc-item">
-          <a href="/ENSAH-service/login.php" class="pc-link">
+          <a href="/ENSAH-service/pages/admin/filiere-list.php" class="pc-link">
             <span class="pc-micon"><i class="ti ti-briefcase"></i></span>
             <span class="pc-mtext">Les Filières </span>
           </a>
         </li>
-        <li class="pc-item">
+        <!-- <li class="pc-item">
           <a href="/ENSAH-service/login.php" class="pc-link">
             <span class="pc-micon"><i class="ti ti-book"></i></span>
             <span class="pc-mtext">unité d'enseignement (UE) </span>
           </a>
-        </li>
+        </li> -->
 
         <li style="color:#b08862" class="pc-item pc-caption">
           <label>Other</label>
@@ -68,14 +55,20 @@
         </li>
         
         <li class="pc-item">
-          <a href="../source/other/sample-page.html" class="pc-link">
+          <a href="/ENSAH-service/pages/admin/annonces.php" class="pc-link">
+            <span class="pc-micon"><i class="ti ti-speakerphone"></i></span>
+            <span class="pc-mtext">Annonces</span>
+          </a>
+        </li>
+        <li class="pc-item">
+          <a href="/ENSAH-service/pages/historique.php" class="pc-link">
             <span class="pc-micon"><i class="ti ti-history"></i></span>
             <span class="pc-mtext">Historique</span>
           </a>
         </li>
         <li class="pc-item">
-          <a href="/ENSAH-service/login.php" style="color:red;" class="pc-link">
-            <span class="pc-micon"><i class="fa-solid fa-right-from-bracket fa-flip-horizontal"></i></span>
+          <a href="/ENSAH-service/logout.php" style="color:red;" class="pc-link">
+            <span class="pc-micon"><i class="fa-solid fa-arrow-right-from-bracket fa-flip-horizontal"></i></span>
             <span class="pc-mtext">Logout</span>
           </a>
         </li>

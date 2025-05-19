@@ -15,12 +15,12 @@ if (isset($_POST['add-depart'])) {
     if ($stmt->execute([$departement, $description])) {
         $_SESSION["success_message"] = "Département ajouté avec succès !";
         // Redirect to the depart-list page with a success message
-        header("Location: /ENSAH-service/pages/depart-list.php?success=1");
+        header("Location: /ENSAH-service/pages/admin/depart-list.php?success=1");
         exit;
     } else {
         $_SESSION["error_message"] = "Error: Département n'a pas ajouté !";
         // Redirect to the depart-list page with a success message
-        header("Location: /ENSAH-service/pages/depart-list.php?error=1");
+        header("Location: /ENSAH-service/pages/admin/depart-list.php?error=1");
         exit;
     }
 }

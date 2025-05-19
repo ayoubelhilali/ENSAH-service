@@ -56,7 +56,7 @@ $count = $stmt->fetchColumn();
 </div>
 <!-- [ Pre-loader ] End -->
  <!-- [ Sidebar Menu ] start -->
-<?php require_once(__DIR__ . "/../inc/sidebar/admin-sidebar.php"); ?>
+<?php require_once(__DIR__ . "/../inc/sidebar/cord-sidebar.php"); ?>
 <!-- [ Sidebar Menu ] end --> <!-- [ Header Topbar ] start -->
 <?php require_once(__DIR__ . "/../inc/header/header.php"); ?>
 <!-- [ Header ] end -->
@@ -83,40 +83,42 @@ $count = $stmt->fetchColumn();
       <!-- [ Main Content ] start -->
       <div class="row">
         <!-- [ sample-page ] start -->
-        <div class="col-md-6 col-xl-3">
-          <div class="card">
-            <div class="card-body">
-              <h6 class="mb-2 f-w-400 text-muted">Total des employés</h6>
-              <h4 class="mb-3"><?php $sql = "SELECT COUNT(*) FROM `user`";
-              $stmt = $pdo->query($sql);
-              $count = $stmt->fetchColumn();
-
-              echo $count;
-              ?></h4>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-xl-3">
-          <div class="card">
-            <div class="card-body">
-              <h6 class="mb-2 f-w-400 text-muted">Nombre des professeurs</h6>
-              <h4 class="mb-3"><?php $sql = "SELECT COUNT(*) FROM `professeur`";
-              $stmt = $pdo->query($sql);
-              $count = $stmt->fetchColumn();
-
-              echo $count;
-              ?></h4>
-            </div>
-          </div>
-        </div>
+        
         <div class="col-md-6 col-xl-3">
           <div class="card">
             <div class="card-body">
               <h6 class="mb-2 f-w-400 text-muted">Nombre des vacataires</h6>
               <h4 class="mb-3"><?php $sql = "SELECT COUNT(*) FROM `vacataire`";
+              $stmt = $pdo->query($sql);
+              $count = $stmt->fetchColumn();
+
+              echo $count;
+              ?></h4>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-6 col-xl-3">
+          <div class="card">
+            <div class="card-body">
+              <h6 class="mb-2 f-w-400 text-muted">Nombre des unités d'enseignement</h6>
+              <h4 class="mb-3"><?php $sql = "SELECT COUNT(*) FROM `unite` join `filiere` on unite.filiere_id = filiere.filiere_id where unite.filiere_id=?";
+              $stmt = $pdo->prepare($sql);
+              $stmt->execute([$_SESSION['user']['filiere']]);
+              $count = $stmt->fetchColumn();
+              echo $count;
+              ?></h4>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-xl-3">
+          <div class="card">
+            <div class="card-body">
+              <h6 class="mb-2 f-w-400 text-muted">Nombre des vacants</h6>
+              <h4 class="mb-3"><?php $sql = "SELECT COUNT(*) FROM `unite` WHERE unite_resp = 0";
                   $stmt = $pdo->query($sql);
                   $count = $stmt->fetchColumn();
-
               echo $count;
               ?></h4>
             </div>
@@ -149,8 +151,30 @@ $count = $stmt->fetchColumn();
           </div>
         </div>
         <div class="col-md-12 col-xl-4">
-          <h5 class="mb-3">Les actualités</h5>
-          <div class="card">
+          <h5 class="mb-3">Les annonces</h5>
+          <div class="card p-3 shadow-sm border-0">
+            <?php
+            $sql = "SELECT * FROM `annonces` ORDER BY annonce_date DESC";
+            $stmt = $pdo->query($sql);
+            $hasAnnonces = false;
+
+            while ($annonce = $stmt->fetch(PDO::FETCH_ASSOC)) {
+              $hasAnnonces = true;
+              ?>
+              <div class="mb-4 pb-3 border-bottom">
+                <div class="d-flex justify-content-between align-items-start">
+                  <h6 class="mb-1 text-primary" ><i class="ti ti-speakerphone"></i> <?= htmlspecialchars($annonce["annonce_head"]) ?></h6>
+                  <small class="text-muted"><?= date("d M Y H:i", strtotime($annonce["annonce_date"])) ?></small>
+                </div>
+                <p class="mb-0 text-secondary"><?= nl2br(htmlspecialchars($annonce["annonce_body"])) ?></p>
+              </div>
+              <?php
+            }
+
+            if (!$hasAnnonces) {
+              echo '<p class="text-muted">Aucune annonce pour le moment.</p>';
+            }
+            ?>
           </div>
         </div>
       </div>

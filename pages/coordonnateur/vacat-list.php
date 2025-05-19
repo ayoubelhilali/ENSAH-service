@@ -4,9 +4,8 @@ if (session_status() === PHP_SESSION_NONE) {
   session_start();
 }
 $avatar = '/ENSAH-service/assets/images/avatar-M.jpg'; // chemin par défaut
-include('../inc/functions/connections.php');
-include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongPass.php");
-include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/connections.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/isStrongPass.php");
 ?>
 
 <!DOCTYPE html>
@@ -14,7 +13,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
 <!-- [Head] start -->
 
 <head>
-  <title>ENSAH-service | les professeurs</title>
+  <title>ENSAH-service | les vacataires</title>
   <!-- [Meta] -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
@@ -59,7 +58,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
   </div>
   <!-- [ Pre-loader ] End -->
   <!-- [ Sidebar Menu ] start -->
-  <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/sidebar/admin-sidebar.php") ?>
+  <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/sidebar/cord-sidebar.php") ?>
   <!-- [ Sidebar Menu ] end --> <!-- [ Header Topbar ] start -->
   <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/header/header.php") ?>
   <!-- [ Header ] end -->
@@ -73,13 +72,13 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
           <div class="row align-items-center">
             <div class="col-md-12">
               <ul class="breadcrumb">
-                <li class="breadcrumb-item"><a href="../dashboard/admin-dash.php">Home</a></li>
-                <li class="breadcrumb-item" aria-current="page">Professeurs</li>
+                <li class="breadcrumb-item"><a href="/ENSAH-service/dashboard/index.html">Home</a></li>
+                <li class="breadcrumb-item" aria-current="page">vacataires</li>
               </ul>
             </div>
             <div class="col-md-12">
               <div class="page-header-title">
-                <h2 class="mb-0">Liste des professeurs</h2>
+                <h2 class="mb-0">Liste des vacataires</h2>
               </div>
             </div>
           </div>
@@ -97,7 +96,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
               <div class="text-end p-4 pb-0">
                 <a href="#" class="btn btn-primary d-inline-flex align-items-center" data-bs-toggle="modal"
                   data-bs-target="#user-add-modal">
-                  <i class="ti ti-plus f-18"></i> Ajouter professeur
+                  <i class="ti ti-plus f-18"></i> Ajouter vacataire
                 </a>
 
                 <div id="success-message" class="success-msg" style="color: green; margin-top: 10px;">
@@ -129,11 +128,11 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
                   </thead>
                   <tbody>
                     <?php
-                    $profs = "SELECT * FROM `professeur` P 
+                    $vacats = "SELECT * FROM `vacataire` P 
                   JOIN `user` U ON P.user_ID = U.user_ID";
-                    $all_profs = $pdo->query($profs);
-                    if ($all_profs) {
-                      while ($prof = $all_profs->fetch(PDO::FETCH_ASSOC)) {
+                    $all_vacats = $pdo->query($vacats);
+                    if ($all_vacats) {
+                      while ($vacat = $all_vacats->fetch(PDO::FETCH_ASSOC)) {
                         ?>
                         <tr>
                           <td>
@@ -141,11 +140,11 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
                               <input class="form-check-input" type="checkbox">
                             </div>
                           </td>
-                          <td><?php echo $prof['prof_ID'] ?></td>
+                          <td><?php echo $vacat['vacat_ID'] ?></td>
                           <td>
                             <div class="col-auto pe-0">
-                              <img src="<?php if (!empty($prof['image']))
-                                echo $prof['image'];
+                              <img src="<?php if (!empty($vacat['image']))
+                                echo $vacat['image'];
                               else
                                 echo "/ENSAH-service/assets/images/avatar-M.jpg" ?>" alt="user-image"
                                   class="wid-40 rounded-circle">
@@ -154,55 +153,54 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
                             <td>
                               <div class="row">
                                 <div class="col">
-                                  <h5 class="mb-1"><?php echo $prof['nom'] ?></h5>
+                                  <h5 class="mb-1"><?php echo $vacat['nom'] ?></h5>
                               </div>
                             </div>
                           </td>
                           <td>
                             <tdv class="row">
                               <div class="col">
-                                <h5 class="mb-0"><?php echo $prof['prenom']; ?></h5>
+                                <h5 class="mb-0"><?php echo $vacat['prenom'] ?></h5>
                               </div>
                             </tdv>
                           </td>
-                          <td><?php echo $prof['email'] ?></td>
-                          <td><?php echo $prof['specialite'] ?></td>
+                          <td><?php echo $vacat['email'] ?></td>
+                          <td><?php echo $vacat['specialite'] ?></td>
                           <td class="text-center">
                             <ul class="list-inline me-auto mb-0">
                               <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                                <a href="#" class="avtar avtar-xs btn-link-secondary view-btn" 
-                                  data-bs-toggle="modal"
+                                <a href="#" class="avtar avtar-xs btn-link-secondary view-btn" data-bs-toggle="modal"
                                   data-bs-target="#user-modal" 
-                                  data-nom="<?= $prof['nom']; ?>"
-                                  data-prenom="<?= $prof['prenom']; ?>"
-                                  data-address="<?= $prof['address']; ?>"
-                                  data-email="<?= $prof['email']; ?>"
-                                  data-specialite="<?= $prof['specialite']; ?>"
-                                  data-img="<?= $prof['image']; ?>"
-                                  data-cin="<?= $prof['CIN']; ?>"
-                                  data-genre="<?= $prof['genre']; ?>"
-                                  data-bio="<?= $prof['bio']; ?>"
-                                  data-birthday="<?= $prof['date_naissance']; ?>"
-                                  data-phone="<?= (isset($prof['Phone']) && $prof['Phone'] != "0") ? $prof['Phone'] : '(+212)  - - - - - - - - -   '; ?>"
-                                  data-linkedin="<?= $prof['linkedin']; ?>">
+                                  data-nom="<?= $vacat['nom']; ?>"
+                                  data-prenom="<?= $vacat['prenom']; ?>"
+                                  data-address="<?= $vacat['address']; ?>"
+                                  data-email="<?= $vacat['email']; ?>"
+                                  data-specialite="<?= $vacat['specialite']; ?>"
+                                  data-img="<?= $vacat['image']; ?>"
+                                  data-cin="<?= $vacat['CIN']; ?>"
+                                  data-genre="<?= $vacat['genre']; ?>"
+                                  data-bio="<?= $vacat['bio']; ?>"
+                                  data-birthday="<?= $vacat['date_naissance']; ?>"
+                                  data-phone="<?= (isset($vacat['Phone'])&& $vacat['Phone']!="0") ? $vacat['Phone'] : '(+212)  - - - - - - - - -   '; ?>"
+                                  data-linkedin="<?= $vacat['linkedin']; ?>">
                                   <i class="ti ti-eye f-18"></i>
                                 </a>
 
                               </li>
                               <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
                                 <a href="#" class="avtar avtar-xs btn-link-primary edit-btn" data-bs-toggle="modal"
-                                  data-bs-target="#user-edit-modal" data-nom="<?= $prof['nom']; ?>" 
-                                  data-prenom="<?= $prof['prenom']; ?>" data-email="<?= $prof['email']; ?>"
-                                  data-pass="<?php echo $prof['password']; ?>"
-                                  data-specialite="<?= $prof['specialite']; ?>" data-img="<?= $prof['image']; ?>"
-                                  data-cin="<?= $prof['CIN']; ?>" data-genre="<?= $prof['genre']; ?>"
-                                  data-birthday="<?= $prof['date_naissance']; ?>">
+                                  data-bs-target="#user-edit-modal" data-nom="<?= $vacat['nom']; ?>" 
+                                  data-prenom="<?= $vacat['prenom']; ?>" data-email="<?= $vacat['email']; ?>"
+                                  data-pass="<?php echo $vacat['password']; ?>"
+                                  data-specialite="<?= $vacat['specialite']; ?>" data-img="<?= $vacat['image']; ?>"
+                                  data-cin="<?= $vacat['CIN']; ?>" data-genre="<?= $vacat['genre']; ?>"
+                                  data-birthday="<?= $vacat['date_naissance']; ?>">
                                   <i class="ti ti-edit-circle f-18"></i>
                                 </a>
                               </li>
                               <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
                                 <a href="#" class="avtar avtar-xs btn-link-danger remove-user"
-                                  data-user="<?php echo $prof["user_ID"] ?>" data-prof="<?php echo $prof["prof_ID"] ?>">
+                                  data-user="<?php echo $vacat["user_ID"] ?>" data-vacat="<?php echo $vacat["vacat_ID"] ?>">
                                   <i class="ti ti-trash f-18"></i>
                                 </a>
                               </li>
@@ -228,7 +226,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header border-0 pb-0">
-          <h5 class="mb-0">Détails du professeur</h5>
+          <h5 class="mb-0">Détails de vacataire</h5>
           <a href="#" class="avtar avtar-s btn-link-danger" data-bs-dismiss="modal">
             <i class="ti ti-x f-20"></i>
           </a>
@@ -240,7 +238,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
               <div class="card">
                 <div class="card-body position-relative">
                   <div class="position-absolute end-0 top-0 p-3">
-                    <span class="badge bg-primary">Professeur</span>
+                    <span class="badge bg-primary">vacataire</span>
                   </div>
                   <div class="text-center mt-3">
                     <div class="chat-avtar d-inline-flex mx-auto">
@@ -302,7 +300,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
                     </li>
                     <li class="list-group-item px-0 pb-0">
                       <p class="mb-1 text-muted">Adresse</p>
-                      <h6 class="mb-0" id="modal-address"></h6>
+                      <h6 class="mb-0" id="modal-address">--</h6>
                     </li>
                   </ul>
                 </div>
@@ -314,7 +312,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
                 </div>
                 <div class="card-body">
                   <p class="mb-0" id="modal-bio">
-                    -- À propos du professeur --
+                    -- À propos du vacataire --
                   </p>
                 </div>
               </div>
@@ -324,8 +322,6 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
       </div> <!-- /modal-content -->
     </div> <!-- /modal-dialog -->
   </div>
-
-
   <?php
   // Initialize variables and error messages
   $nom = $prenom = $cin = $birthday_day = $birthday_month = $birthday_year = "";
@@ -398,9 +394,9 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
         $errors++;
       } else {
         // Check if email already exists
-        $check_email_query = "SELECT * FROM professeur WHERE email = ?";
+        $check_email_query = "SELECT * FROM vacataire WHERE email = '$email'";
         $check_email_stmt = $pdo->prepare($check_email_query);
-        $check_email_stmt->execute([$email]);
+        $check_email_stmt->execute();
         if ($check_email_stmt->rowCount() > 0) {
           $email_error = "Email already exists.";
           $errors++;
@@ -438,23 +434,15 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
       if ($stmt->execute()) {
         $user_id = $pdo->lastInsertId();
         if ($user_id) {
-          // Insert into professeur table
-          $add_prof = "INSERT INTO professeur(user_ID, email, password, md5_pass, specialite) 
+          // Insert into vacataire table
+          $add_vacat = "INSERT INTO vacataire(user_ID, email, password, md5_pass, specialite) 
                              VALUES('$user_id', '$email', '$password', '$md5_pass', '$specialite')";
-          if ($pdo->query($add_prof)) {
-            
-            // Send email
-            $email_handler = new PrepareEmail();
-            if ($email_handler->sendEmailtoUser($email, $password, "$nom $prenom")) {
-              $_SESSION['success_message'] = "Professor added successfully and email sent!";
-              header("Location: /ENSAH-service/pages/prof-list.php?success=1");
-            }else {
-              $_SESSION['success_message'] = "Professor added successfully! but email not sent.";
-              header("Location: /ENSAH-service/pages/prof-list.php?success=1");
-            }
+          if ($pdo->query($add_vacat)) {
+            $_SESSION['success_message'] = "vacataire added successfully!";
+            header("Location: /ENSAH-service/pages/coordonnateur/vacat-list.php?success=1");
             exit;
           } else {
-            $general_error = "Failed to add professor.";
+            $general_error = "Failed to add vacataire.";
           }
         } else {
           $general_error = "Failed to retrieve user ID.";
@@ -471,18 +459,18 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
   <?php if ($_SERVER["REQUEST_METHOD"] == "POST" && $errors > 0): ?>
     <script>
       document.addEventListener('DOMContentLoaded', function () {
-        var myModal = new bootstrap.Modal(document.getElementById('user-add-modal'));
+        var myModal = new bootstrap.Modal(document.getElementById('user-edit_add-modal'));
         myModal.show();
       });
     </script>
   <?php endif; ?>
-  <form method="post" class="modal fade" id="user-add-modal" data-bs-keyboard="false" tabindex="-1"
-    aria-hidden="true" enctype="multipart/form-data">
+  <form method="post" class="modal fade" id="user-add-modal" data-bs-keyboard="false" tabindex="-1" aria-hidden="true"
+    enctype="multipart/form-data">
     <input type="hidden" name="avatar_path" id="avatar-path">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="mb-0">Ajouter professeur</h5>
+          <h5 class="mb-0">Ajouter vacataire</h5>
           <a href="#" class="avtar avtar-s btn-link-danger" data-bs-dismiss="modal">
             <i class="ti ti-x f-20"></i>
           </a>
@@ -491,7 +479,8 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
           <div class="row">
             <?php
             // Charger le traitement d'image en premier
-            include "../inc/functions/upload-image.php";
+            include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/upload-image.php");
+
 
             // Mettre à jour l'avatar si l'image a été uploadée
             $avatar = "/ENSAH-service/assets/images/avatar-M.jpg"; // Valeur par défaut
@@ -502,12 +491,14 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
             <div class="col-sm-3 text-center mb-3">
               <div class="user-upload wid-75">
                 <img id="avatar-preview" src="<?php echo $avatar; ?>" alt="img" class="img-fluid">
+
+
                 <label for="uplfile" class="img-avtar-upload">
                   <i class="ti ti-camera f-24 mb-1"></i>
                   <span>Upload</span>
                 </label>
 
-                <input type="file" id="uplfile" name="uplfile" class="d-none uplfile">
+                <input type="file" id="uplfile" name="uplfile" class="d-none">
               </div>
             </div>
             <div class="col-sm-9">
@@ -616,7 +607,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
                     style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
                 </div>
               </div>
-              <p style="color: red" class="error_msj"><?php if (isset($password_error)) {
+              <p style="color: red" class="error-msg"><?php if (isset($password_error)) {
                 echo $password_error;
               } ?></p>
               <div class="form-group">
@@ -659,7 +650,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="mb-0">Modifier professeur</h5>
+          <h5 class="mb-0">Modifier vacataire</h5>
           <a href="#" class="avtar avtar-s btn-link-danger" data-bs-dismiss="modal">
             <i class="ti ti-x f-20"></i>
           </a>
@@ -668,7 +659,8 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
           <div class="row">
             <?php
             // Charger le traitement d'image en premier
-            include "../inc/functions/upload-image.php";
+            include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/upload-image.php");
+
 
             // Mettre à jour l'avatar si l'image a été uploadée
             $avatar = "/ENSAH-service/assets/images/avatar-M.jpg"; // Valeur par défaut
@@ -678,19 +670,20 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
             ?>
             <div class="col-sm-3 text-center mb-3">
               <div class="user-upload wid-75">
-                <img id="avatar-previewh" src="<?php echo $avatar; ?>" alt="img" class="img-fluid prof-img">
+                <img id="avatar-preview" src="<?php echo $avatar; ?>" alt="img" class="img-fluid vacat-img">
                 <label for="uplfile" class="img-avtar-upload">
                   <i class="ti ti-camera f-24 mb-1"></i>
                   <span>Upload</span>
                 </label>
-                <input type="file" id="uplfile" name="uplfile" class="d-none uplfile">
+
+                <input type="file" id="uplfile" name="uplfile" class="d-none">
               </div>
             </div>
             <div class="col-sm-9">
               <div class="form-group">
                 <label class="form-label">Nom</label>
                 <input required name="nom" type="text" class="form-control nameInput" placeholder="Nom" value=""
-                  id="prof-nom">
+                  id="vacat-nom">
               </div>
               <p style="color: red"><?php if (isset($nom_error)) {
                 echo $nom_error;
@@ -698,7 +691,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
               <div class="form-group">
                 <label class="form-label">Prénom</label>
                 <input required name="prenom" type="text" class="form-control prenomInput" placeholder="Prénom" value=""
-                  id="prof-prenom">
+                  id="vacat-prenom">
               </div>
               <p style="color: red"><?php if (isset($prenom_error)) {
                 echo $prenom_error;
@@ -706,25 +699,24 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
               <div class="form-group">
                 <label class="form-label">CIN</label>
                 <input required name="CIN" type="text" class="form-control cinInput" placeholder="CIN" value=""
-                  id="prof-cin">
+                  id="vacat-cin">
               </div>
               <p style="color: red"><?php if (isset($CIN_error)) {
                 echo $CIN_error;
               } ?></p>
               <div class="form-group">
                 <label for="day" class="form-label">Date de naissance :</label><br>
-  
-                <select name="birthday_day" class="selectInput" id="prof_day" required>
+
+                <select name="birthday_day" class="selectInput" id="vacat_day" required>
                   <option value="" class="defaultOption" disabled <?php if (empty($birthday_day))
-                    echo 'selected'; ?>>Jour
-                  </option>
+                    echo 'selected'; ?>>Jour</option>
                   <!-- Jours de 1 à 31 -->
                   <?php for ($i = 1; $i <= 31; $i++) {
                     echo "<option value='$i'>$i</option>";
                   } ?>
                 </select>
-  
-                <select name="birthday_month" class="selectInput" id="prof_month" required>
+
+                <select name="birthday_month" class="selectInput" id="vacat_month" required>
                   <option disabled class="defaultOption" <?php if (empty($birthday_month))
                     echo 'selected'; ?>>Mois
                   </option>
@@ -748,8 +740,8 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
                   }
                   ?>
                 </select>
-  
-                <select name="birthday_year" id="prof_year" class="selectInput" required>
+
+                <select name="birthday_year" id="vacat_year" class="selectInput" required>
                   <option disabled class="defaultOption" value="" <?php if (empty($birthday_year))
                     echo 'selected'; ?>>Année</option>
                   <!-- Années de 2025 à 1900 -->
@@ -763,7 +755,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
               } ?></p>
               <div class="form-group">
                 <label class="form-label">Genre</label>
-                <select name="genre" class="form-select selectInput" required id="prof-genre">
+                <select name="genre" class="form-select selectInput" required id="vacat-genre">
                   <option disabled class="defaultOption" value="" <?php if (empty($genre))
                     echo 'selected'; ?>>
                     Selectionner Genre
@@ -773,7 +765,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
                   <option value="feminin" <?php if ($genre == "Féminin")
                     echo 'selected'; ?>>Féminin</option>
                 </select>
-  
+
               </div>
               <p style="color: red"><?php if (isset($genre_error)) {
                 echo $genre_error;
@@ -781,7 +773,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
               <div class="form-group">
                 <label class="form-label">Email</label>
                 <input name="email" type="email" class="form-control emailInput" placeholder="Email" required value=""
-                  id="prof-email">
+                  id="vacat-email">
               </div>
               <p style="color: red"><?php if (isset($email_error)) {
                 echo $email_error;
@@ -790,7 +782,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
                 <label class="form-label">Password</label>
                 <div style="position: relative;">
                   <input name="password" type="text" placeholder="Enter password" class="form-control passwordInput"
-                    style="padding-right: 40px;" required id="prof-pass">
+                    style="padding-right: 40px;" required id="vacat-pass">
                 </div>
               </div>
               <p style="color: red" class="error-msg"><?php if (isset($password_error)) {
@@ -798,7 +790,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
               } ?></p>
               <div class="form-group">
                 <label class="form-label">Specialité</label>
-                <select name="specialite" class="form-select selectInput" required id="prof-specialite">
+                <select name="specialite" class="form-select selectInput" required id="vacat-specialite">
                   <option disabled class="defaultOption">Specialitée</option>
                   <option value="computer science">Computer science</option>
                   <option value="Data analyst">Data analyst</option>
@@ -833,11 +825,11 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
     <div class="footer-wrapper container-fluid">
       <div class="row">
         <div class="col-sm my-1">
-          <p class="m-0">ENSAH-service &copy; 2025 - All rights reserved; .</p>
+          <p class="m-0">ENSAH-service &copy; 2025-All rights reserved </p>
         </div>
         <div class="col-auto my-1">
           <ul class="list-inline footer-link mb-0">
-            <li class="list-inline-item"><a href="../index.html">Home</a></li>
+            <li class="list-inline-item"><a href="/ENSAH-service/index.html">Home</a></li>
             <li class="list-inline-item"><a href="https://codedthemes.gitbook.io/mantis-bootstrap"
                 target="_blank">Documentation</a></li>
             <li class="list-inline-item"><a href="https://codedthemes.authordesk.app/" target="_blank">Support</a></li>
@@ -846,19 +838,15 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
       </div>
     </div>
   </footer> <!-- Required Js -->
-  <script src="../assets/js/plugins/popper.min.js"></script>
-  <script src="../assets/js/plugins/simplebar.min.js"></script>
-  <script src="../assets/js/plugins/bootstrap.min.js"></script>
-  <script src="../assets/js/fonts/custom-font.js"></script>
-  <script src="../assets/js/pcoded.js"></script>
-  <script src="../assets/js/plugins/feather.min.js"></script>
-  <script src="../assets/js/upload-image.js"></script>
+  <script src="/ENSAH-service/assets/js/plugins/popper.min.js"></script>
+  <script src="/ENSAH-service/assets/js/plugins/simplebar.min.js"></script>
+  <script src="/ENSAH-service/assets/js/plugins/bootstrap.min.js"></script>
+  <script src="/ENSAH-service/assets/js/fonts/custom-font.js"></script>
+  <script src="/ENSAH-service/assets/js/pcoded.js"></script>
+  <script src="/ENSAH-service/assets/js/plugins/feather.min.js"></script>
+  <script src="/ENSAH-service/assets/js/upload-image.js"></script>
 
   <script>layout_change('dark');</script>
-
-
-
-
   <script>change_box_container('false');</script>
 
 
@@ -870,7 +858,6 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
 
 
   <script>font_change("Public-Sans");</script>
-
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       document.querySelectorAll('.view-btn').forEach(button => {
@@ -912,31 +899,31 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
       document.querySelectorAll('.edit-btn').forEach(button => {
         button.addEventListener('click', () => {
           // Get the data from the clicked button
-          const prof_cin = button.getAttribute('data-cin');
-          const prof_nom = button.getAttribute('data-nom');
-          const prof_prenom = button.getAttribute('data-prenom');
-          const prof_birthday = button.getAttribute('data-birthday');
-          const [prof_year, prof_month, prof_day] = prof_birthday.split('-');
-          console.log(prof_year + "-" + prof_month + "-" + prof_day);
-          const prof_genre = button.getAttribute('data-genre');
-          const prof_email = button.getAttribute('data-email');
-          const prof_pass = button.getAttribute('data-pass');
-          const prof_specialite = button.getAttribute('data-specialite');
-          const prof_image = button.getAttribute('data-img') || '/ENSAH-service/assets/images/avatar-M.jpg';
+          const vacat_cin = button.getAttribute('data-cin');
+          const vacat_nom = button.getAttribute('data-nom');
+          const vacat_prenom = button.getAttribute('data-prenom');
+          const vacat_birthday = button.getAttribute('data-birthday');
+          const [vacat_year, vacat_month, vacat_day] = vacat_birthday.split('-');
+          console.log(vacat_year + "-" + vacat_month + "-" + vacat_day);
+          const vacat_genre = button.getAttribute('data-genre');
+          const vacat_email = button.getAttribute('data-email');
+          const vacat_pass = button.getAttribute('data-pass');
+          const vacat_specialite = button.getAttribute('data-specialite');
+          const vacat_image = button.getAttribute('data-img') || '/ENSAH-service/assets/images/avatar-M.jpg';
 
           // Populate the modal with the data
-          document.querySelector('.prof-img').src = prof_image;
-          document.getElementById('prof-nom').value = `${prof_nom}`;
-          document.getElementById('prof-prenom').value = `${prof_prenom}`;
-          document.getElementById('prof-cin').value = prof_cin;
-          document.querySelector(`#prof-genre option[value="${prof_genre}"]`).selected = true;
-          document.getElementById('prof-email').value = prof_email;
-          document.getElementById('prof-pass').value = prof_pass;
-          document.querySelector(`#prof-specialite option[value="${prof_specialite}"]`).selected = true;
+          document.querySelector('.vacat-img').src = vacat_image;
+          document.getElementById('vacat-nom').value = `${vacat_nom}`;
+          document.getElementById('vacat-prenom').value = `${vacat_prenom}`;
+          document.getElementById('vacat-cin').value = vacat_cin;
+          document.querySelector(`#vacat-genre option[value="${vacat_genre}"]`).selected = true;
+          document.getElementById('vacat-email').value = vacat_email;
+          document.getElementById('vacat-pass').value = vacat_pass;
+          document.querySelector(`#vacat-specialite option[value="${vacat_specialite}"]`).selected = true;
           // select the birthday
-          document.querySelector(`#prof_year option[value="${prof_year}"]`).selected = true;
-          document.querySelector(`#prof_month option[value="${prof_month}"]`).selected = true;
-          document.querySelector(`#prof_day option[value="${prof_day}"]`).selected = true;
+          document.querySelector(`#vacat_year option[value="${vacat_year}"]`).selected = true;
+          document.querySelector(`#vacat_month option[value="${vacat_month}"]`).selected = true;
+          document.querySelector(`#vacat_day option[value="${vacat_day}"]`).selected = true;
 
         });
       });
@@ -945,7 +932,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
   <script>
     // Check password strength
     let pass = document.querySelector(".passwordInput");
-    let error_msg = document.querySelector(".error_msj");
+    let error_msg = document.querySelector(".error-msg");
     pass.addEventListener("input", (e) => {
       if (e.target.value.length >= 8) {
         if (/[A-Z]/.test(e.target.value)) {
@@ -972,14 +959,16 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
     });
   </script>
   <script>
+    // remove vacataire from DB
     document.addEventListener('DOMContentLoaded', function () {
       document.querySelectorAll('.remove-user').forEach(button => {
         button.addEventListener('click', () => {
+          console.log("btn clicked!");
           const user_ID = button.getAttribute('data-user');
-          const prof_ID = button.getAttribute('data-prof');
+          const vacat_ID = button.getAttribute('data-vacat');
 
           // Show confirmation dialog
-          if (confirm("Are you sure you want to delete this professor?")) {
+          if (confirm("Are you sure you want to delete this vacataire?")) {
             // Send fetch request to PHP script
             fetch('/ENSAH-service/inc/functions/delete-user.php', {
               method: 'POST',
@@ -998,7 +987,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
                 if (data.success) {
                   let success_msg = document.querySelector(".success-msg");
                   if (success_msg) {
-                    success_msg.innerHTML = "✅" + "Professeur with ID " + prof_ID + " has been deleted!";
+                    success_msg.innerHTML = "✅" + "vacataire with ID " + vacat_ID + " has been deleted!";
                     success_msg.display = "block";
                   }
                   // Optionally, remove the row from the table
@@ -1019,9 +1008,9 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
 
 
   <!-- [Page Specific JS] start -->
-  <script src="../assets/js/plugins/simple-datatables.js"></script>
-  <script src="../assets/js/generatePass.js"></script>
-  <script src="../assets/js/clearForm.js"></script>
+  <script src="/ENSAH-service/assets/js/plugins/simple-datatables.js"></script>
+  <script src="/ENSAH-service/assets/js/generatePass.js"></script>
+  <script src="/ENSAH-service/assets/js/clearForm.js"></script>
   <script>
     const dataTable = new simpleDatatables.DataTable('#pc-dt-simple', {
       sortable: false,
@@ -1083,9 +1072,9 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
               <div class="pct-content">
                 <div class="theme-color themepreset-color theme-layout">
                   <a href="#!" class="active" onclick="layout_change('light')" data-value="false"><span><img
-                        src="../assets/images/customization/default.svg" alt="img"></span><span>Light</span></a>
+                        src="/ENSAH-service/assets/images/customization/default.svg" alt="img"></span><span>Light</span></a>
                   <a href="#!" class="" onclick="layout_change('dark')" data-value="true"><span><img
-                        src="../assets/images/customization/dark.svg" alt="img"></span><span>Dark</span></a>
+                        src="/ENSAH-service/assets/images/customization/dark.svg" alt="img"></span><span>Dark</span></a>
                 </div>
               </div>
             </div>
@@ -1109,23 +1098,23 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
               <div class="pct-content">
                 <div class="theme-color preset-color">
                   <a href="#!" class="active" data-value="preset-1"><span><img
-                        src="../assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 1</span></a>
+                        src="/ENSAH-service/assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 1</span></a>
                   <a href="#!" class="" data-value="preset-2"><span><img
-                        src="../assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 2</span></a>
+                        src="/ENSAH-service/assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 2</span></a>
                   <a href="#!" class="" data-value="preset-3"><span><img
-                        src="../assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 3</span></a>
+                        src="/ENSAH-service/assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 3</span></a>
                   <a href="#!" class="" data-value="preset-4"><span><img
-                        src="../assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 4</span></a>
+                        src="/ENSAH-service/assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 4</span></a>
                   <a href="#!" class="" data-value="preset-5"><span><img
-                        src="../assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 5</span></a>
+                        src="/ENSAH-service/assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 5</span></a>
                   <a href="#!" class="" data-value="preset-6"><span><img
-                        src="../assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 6</span></a>
+                        src="/ENSAH-service/assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 6</span></a>
                   <a href="#!" class="" data-value="preset-7"><span><img
-                        src="../assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 7</span></a>
+                        src="/ENSAH-service/assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 7</span></a>
                   <a href="#!" class="" data-value="preset-8"><span><img
-                        src="../assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 8</span></a>
+                        src="/ENSAH-service/assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 8</span></a>
                   <a href="#!" class="" data-value="preset-9"><span><img
-                        src="../assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 9</span></a>
+                        src="/ENSAH-service/assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 9</span></a>
                 </div>
               </div>
             </div>
@@ -1149,9 +1138,9 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
               <div class="pct-content">
                 <div class="theme-color themepreset-color boxwidthpreset theme-container">
                   <a href="#!" class="active" onclick="change_box_container('false')" data-value="false"><span><img
-                        src="../assets/images/customization/default.svg" alt="img"></span><span>Fluid</span></a>
+                        src="/ENSAH-service/assets/images/customization/default.svg" alt="img"></span><span>Fluid</span></a>
                   <a href="#!" class="" onclick="change_box_container('true')" data-value="true"><span><img
-                        src="../assets/images/customization/container.svg" alt="img"></span><span>Container</span></a>
+                        src="/ENSAH-service/assets/images/customization/container.svg" alt="img"></span><span>Container</span></a>
                 </div>
               </div>
             </div>
