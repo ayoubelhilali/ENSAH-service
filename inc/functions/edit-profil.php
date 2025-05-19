@@ -1,6 +1,5 @@
 <?php
 session_start();
-$_SESSION["user_id"] = 50;
 include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/connections.php");
 
 // Ensure $pdo is initialized
@@ -18,7 +17,7 @@ $nom = $prenom = $birthday_day = $birthday_month = $birthday_year = "";
 $genre = $email = $password = "";
 $md5_pass = ""; // if needed later
 $address = $bio = $linkedin = $phone = "";
-$id = $_SESSION['user_id'] ?? null; // You may need to adjust this depending on your logic
+$id = $_SESSION['user']['user_id'] ?? null; // You may need to adjust this depending on your logic
 
 $errors = 0;
 
@@ -92,19 +91,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Final update if no errors
     if ($errors == 0 && $id !== null) {
-        $edit_user = "UPDATE user 
+        if ($_SESSION['user']['role'] == "admin") {
+            $edit_user = "UPDATE user 
                   INNER JOIN admin ON admin.user_ID = user.user_ID 
                   SET user.nom = ?, user.prenom = ?, user.image = ?, user.address = ?, user.date_naissance=?,user.genre=?,user.bio=?,user.Phone=?,admin.email=?,user.linkedin=?
                   WHERE user.user_ID = ?";
+            
+        }elseif ($_SESSION['user']['role'] == "coordonnateur") {
+            $edit_user = "UPDATE user
+            INNER JOIN professeur ON professeur.user_ID = user.user_ID
+            INNER JOIN coordonnateur ON coordonnateur.prof_ID = professeur.prof_ID
+            SET user.nom = ?, user.prenom = ?, user.image = ?, user.address = ?, user.date_naissance=?,user.genre=?,user.bio=?,user.Phone=?,coordonnateur.cord_email=?,user.linkedin=?
+            WHERE user.user_ID = ?";
+        }
         $stmt = $pdo->prepare($edit_user);
         if ($stmt->execute([$nom, $prenom, $avatar_path, $address, $birthday, $genre, $bio, $phone, $email, $linkedin, $id])) {
+            // Update session data
+            $_SESSION['user'] = [
+                'email' => $email,
+                'nom' => $nom,
+                'prenom' => $prenom,
+                'image' => $avatar_path,
+                'linkedin' => $linkedin,
+                'bio' => $bio,
+                'genre' => $genre,
+                'phone' => $phone,
+                'address' => $address,
+                'birthday' => $birthday,
+            ];
             $_SESSION['success_message'] = "profil edited successfully!";
             header("Location: /ENSAH-service/pages/profil.php?success=1");
+            exit(1);
         } else {
-            $general_error = "❌ Failed to update user in the database.";
+            $_SESSION['error_message'] = "Error dans la modification du profile!";
+            header("Location: /ENSAH-service/pages/profil.php?error=1");
+            exit(1);
         }
     } else {
-        $general_error = "⚠️ Please correct the errors in the form.";
+        $_SESSION['error_message'] = "Error dans la modification du profile!";
+        header("Location: /ENSAH-service/pages/profil.php?error=1");
+        exit(1);
     }
 }
 ?>

@@ -123,14 +123,14 @@ include($_SERVER['DOCUMENT_ROOT'] . '/ENSAH-service/inc/functions/connections.ph
         <li class="dropdown pc-h-item header-user-profile">
           <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#" role="button"
             aria-haspopup="false" data-bs-auto-close="outside" aria-expanded="false">
-            <img src="<?php echo empty($_SESSION["user"]["image"])? "/ENSAH-service/assets/images/avatar-M.jpg": $_SESSION["user"]["image"]?>" alt="user-image" class="user-avtar">
+            <img src="<?php echo empty($_SESSION["user"]["image"])? "/ENSAH-service/assets/images/user_empty.png": $_SESSION["user"]["image"]?>" alt="user-image" class="user-avtar">
             <span><?php echo $_SESSION["user"]["nom"] ?></span>
           </a>
           <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
             <div class="dropdown-header">
               <div class="d-flex mb-1">
                 <div class="flex-shrink-0">
-                  <img src="<?php echo empty($_SESSION["user"]["image"])? "/ENSAH-service/assets/images/avatar-M.jpg": $_SESSION["user"]["image"]?>" alt="user-image" class="user-avtar wid-35">
+                  <img src="<?php echo empty($_SESSION["user"]["image"])? "/ENSAH-service/assets/images/user_empty.png": $_SESSION["user"]["image"]?>" alt="user-image" class="user-avtar wid-35">
                 </div>
                 <div class="flex-grow-1 ms-3">
                   <h6 class="mb-1"><?php echo $_SESSION["user"]["nom"]." ". $_SESSION["user"]["prenom"]?></h6>

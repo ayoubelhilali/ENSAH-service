@@ -17,12 +17,18 @@ try {
     if ($stmt->execute()) {
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $admins[$row['email']] = [
+                'user_id' => $row['user_ID'],
                 'nom' => $row['nom'],
                 'prenom' => $row['prenom'],
                 'password' => $row['password'],
                 'image' => $row['image'],
                 'linkedin' => $row['linkedin'],
                 'bio' => $row['bio'],
+                'genre' => $row['genre'],
+                'phone' => $row['Phone'],
+                'address' => $row['address'],
+                'birthday' => $row['date_naissance'],
+                'email' => $row['email'],
                 'role' => "admin"
             ];
         }
@@ -38,6 +44,7 @@ try {
     if ($stmt->execute()) {
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $cordons[$row['cord_email']] = [
+                'user_id' => $row['user_ID'],
                 'nom' => $row['nom'],
                 'prenom' => $row['prenom'],
                 'filiereID' => $row['filiere_ID'],
@@ -46,6 +53,11 @@ try {
                 'role' => "coordonnateur",
                 'linkedin' => $row['linkedin'],
                 'bio' => $row['bio'],
+                'genre' => $row['genre'],
+                'phone' => $row['Phone'],
+                'address' => $row['address'],
+                'birthday' => $row['birthday'],
+                'email' => $row['cord_email'],
                 'image' => $row['image']
             ];
         }
@@ -68,12 +80,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Verify password (assuming passwords are hashed)
         if ($password == $admins[$email]['password']) {
             $_SESSION['user'] = [
+                'user_id' => $admins[$email]['user_id'],
                 'email' => $email,
                 'nom' => $admins[$email]['nom'],
                 'prenom' => $admins[$email]['prenom'],
                 'image' => $admins[$email]['image'],
                 'linkedin' => $admins[$email]['linkedin'],
                 'bio' => $admins[$email]['bio'],
+                'genre' => $admins[$email]['genre'],
+                'phone' => $admins[$email]['phone'],
+                'address' => $admins[$email]['address'],
+                'birthday' => $admins[$email]['birthday'],
                 'role' => 'admin'
             ];
             header('Location: dashboard/admin-dash.php');
@@ -87,12 +104,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Verify password (assuming passwords are hashed)
         if (password_verify($password, $cordons[$email]['password'])) {
             $_SESSION['user'] = [
+                'user_id' => $cordons[$email]['user_id'],
                 'email' => $email,
                 'nom' => $cordons[$email]['nom'],
                 'prenom' => $cordons[$email]['prenom'],
                 'image' => $cordons[$email]['image'],
                 'linkedin' => $cordons[$email]['linkedin'],
                 'bio' => $cordons[$email]['bio'],
+                'genre' => $cordons[$email]['genre'],
+                'phone' => $cordons[$email]['phone'],
+                'address' => $cordons[$email]['address'],
+                'birthday' => $cordons[$email]['birthday'],
                 'role' => 'coordonnateur'
             ];
             $_SESSION["filiere"]=[
