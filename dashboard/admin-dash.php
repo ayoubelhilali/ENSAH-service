@@ -142,17 +142,18 @@ $count = $stmt->fetchColumn();
         <div class="col-md-12 col-xl-8">
           <div class="d-flex align-items-center justify-content-between mb-3">
             <div class="card" style="width:100%">
-            <ul class="nav nav-pills justify-content-end mb-0" id="chart-tab-tab" role="tablist">
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" id="chart-tab-home-tab" data-bs-toggle="pill" data-bs-target="#chart-tab-home"
-                  type="button" role="tab" aria-controls="chart-tab-home" aria-selected="true">Month</button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="chart-tab-profile-tab" data-bs-toggle="pill"
-                  data-bs-target="#chart-tab-profile" type="button" role="tab" aria-controls="chart-tab-profile"
-                  aria-selected="false">Week</button>
-              </li>
-            </ul>
+              <ul class="nav nav-pills justify-content-end mb-0" id="chart-tab-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="chart-tab-home-tab" data-bs-toggle="pill"
+                    data-bs-target="#chart-tab-home" type="button" role="tab" aria-controls="chart-tab-home"
+                    aria-selected="true">Month</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="chart-tab-profile-tab" data-bs-toggle="pill"
+                    data-bs-target="#chart-tab-profile" type="button" role="tab" aria-controls="chart-tab-profile"
+                    aria-selected="false">Week</button>
+                </li>
+              </ul>
               <div class="card-header">
                 <h5>Les visites du siteweb</h5>
               </div>
@@ -164,9 +165,9 @@ $count = $stmt->fetchColumn();
         </div>
         <div class="col-md-12 col-xl-4">
           <h5 class="mb-3">Les annonces</h5>
-          <div class="card p-3 shadow-sm border-0">
+          <div class="card p-3 shadow-sm border-0 annonces-card">
             <?php
-            $sql = "SELECT * FROM `annonces` ORDER BY annonce_date DESC";
+            $sql = "SELECT * FROM `annonces` ORDER BY annonce_date DESC limit 4";
             $stmt = $pdo->query($sql);
             $hasAnnonces = false;
 
@@ -175,7 +176,8 @@ $count = $stmt->fetchColumn();
               ?>
               <div class="mb-4 pb-3 border-bottom">
                 <div class="d-flex justify-content-between align-items-start">
-                  <h6 class="mb-1 text-primary" ><i class="ti ti-speakerphone"></i> <?= htmlspecialchars($annonce["annonce_head"]) ?></h6>
+                  <h6 class="mb-1 text-primary"><i class="ti ti-speakerphone"></i>
+                    <?= htmlspecialchars($annonce["annonce_head"]) ?></h6>
                   <small class="text-muted"><?= date("d M Y H:i", strtotime($annonce["annonce_date"])) ?></small>
                 </div>
                 <p class="mb-0 text-secondary"><?= nl2br(htmlspecialchars($annonce["annonce_body"])) ?></p>
@@ -187,6 +189,9 @@ $count = $stmt->fetchColumn();
               echo '<p class="text-muted">Aucune annonce pour le moment.</p>';
             }
             ?>
+            <div class="text-center py-2" style="padding: 0;">
+              <a href="/ENSAH-service/pages/annonces-list.php" class="link-primary">View all</a>
+            </div>
           </div>
         </div>
       </div>
@@ -213,7 +218,7 @@ $count = $stmt->fetchColumn();
   <script src="/ENSAH-service/assets/js/pages/dashboard-default.js"></script>
   <!-- [Page Specific JS] start -->
   <script src="../assets/js/plugins/apexcharts.min.js"></script>
-    <script src="../assets/js/pages/chart-apex.js"></script>
+  <script src="../assets/js/pages/chart-apex.js"></script>
   <!-- [Page Specific JS] end -->
   <!-- Required Js -->
   <script src="/ENSAH-service/assets/js/plugins/popper.min.js"></script>

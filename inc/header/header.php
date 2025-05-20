@@ -62,7 +62,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/ENSAH-service/inc/functions/connections.ph
             </div>
             <div class="dropdown-divider"></div>
             <div class="dropdown-header px-0 text-wrap header-notification-scroll position-relative"
-              style="max-height: calc(100vh - 215px)">
+              style="max-height: calc(100vh - 255px)">
               <div class="list-group list-group-flush w-100">
                 <?php
                 $sql = "SELECT * FROM `annonces` ORDER BY annonce_date DESC limit 4";
@@ -100,7 +100,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/ENSAH-service/inc/functions/connections.ph
             </div>
             <div class="dropdown-divider"></div>
             <div class="text-center py-2">
-              <a href="#!" class="link-primary">View all</a>
+              <a href="/ENSAH-service/pages/annonces-list.php" class="link-primary">View all</a>
             </div>
           </div>
         </li>

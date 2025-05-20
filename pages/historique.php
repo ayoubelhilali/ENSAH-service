@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 if (!isset($_SESSION['user'])) {
   // Redirect to login if not authenticated
   header('Location: /ENSAH-service/login.php');
@@ -55,7 +57,11 @@ if (!isset($_SESSION['user'])) {
   </div>
   <!-- [ Pre-loader ] End -->
   <!-- [ Sidebar Menu ] start -->
-  <?php require_once __DIR__ . "/../inc/sidebar/cord-sidebar.php"; ?>
+   <?php if($_SESSION["user"]["role"] == "admin") { ?>
+      <?php require_once __DIR__ . "/../inc/sidebar/admin-sidebar.php"; ?>
+   <?php } else { ?>
+      <?php require_once __DIR__ . "/../inc/sidebar/cord-sidebar.php"; ?>
+   <?php } ?>
   <!-- [ Sidebar Menu ] end --> <!-- [ Header Topbar ] start -->
   <?php require_once(__DIR__ . "/../inc/header/header.php"); ?>
   <!-- [ Header ] end -->

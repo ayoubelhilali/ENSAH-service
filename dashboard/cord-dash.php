@@ -154,7 +154,7 @@ $count = $stmt->fetchColumn();
           <h5 class="mb-3">Les annonces</h5>
           <div class="card p-3 shadow-sm border-0">
             <?php
-            $sql = "SELECT * FROM `annonces` ORDER BY annonce_date DESC";
+            $sql = "SELECT * FROM `annonces` ORDER BY annonce_date DESC limit 4";
             $stmt = $pdo->query($sql);
             $hasAnnonces = false;
 
@@ -175,6 +175,9 @@ $count = $stmt->fetchColumn();
               echo '<p class="text-muted">Aucune annonce pour le moment.</p>';
             }
             ?>
+            <div class="text-center py-2" style="padding: 0;">
+              <a href="/ENSAH-service/pages/annonces-list.php" class="link-primary">View all</a>
+            </div>
           </div>
         </div>
       </div>
