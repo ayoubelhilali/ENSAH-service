@@ -53,65 +53,49 @@ include($_SERVER['DOCUMENT_ROOT'] . '/ENSAH-service/inc/functions/connections.ph
         <li class="dropdown pc-h-item">
           <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#" role="button"
             aria-haspopup="false" aria-expanded="false">
-            <i class="ti ti-mail"></i>
+            <i class="ti ti-speakerphone"></i>
           </a>
           <div class="dropdown-menu dropdown-notification dropdown-menu-end pc-h-dropdown">
             <div class="dropdown-header d-flex align-items-center justify-content-between">
-              <h5 class="m-0">Message</h5>
+              <h5 class="m-0">Annonces</h5>
               <a href="#!" class="pc-head-link bg-transparent"><i class="ti ti-x text-danger"></i></a>
             </div>
             <div class="dropdown-divider"></div>
             <div class="dropdown-header px-0 text-wrap header-notification-scroll position-relative"
               style="max-height: calc(100vh - 215px)">
               <div class="list-group list-group-flush w-100">
-                <a class="list-group-item list-group-item-action">
-                  <div class="d-flex">
-                    <div class="flex-shrink-0">
-                      <img src="../dist/assets/images/avatar-M.jpg" alt="user-image" class="user-avtar">
+                <?php
+                $sql = "SELECT * FROM `annonces` ORDER BY annonce_date DESC limit 4";
+                $stmt = $pdo->query($sql);
+                $hasAnnonces = false;
+
+                while ($annonce = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                  $hasAnnonces = true;
+                  ?>
+                  <a class="list-group-item list-group-item-action">
+                    <div class="d-flex">
+                      <div class="flex-grow-1 ms-1">
+                        <span class="float-end text-muted"><?= date("d M Y H:i", strtotime($annonce["annonce_date"])) ?></span>
+                        <h6 class="text-body mb-1"> <b><?=$annonce["annonce_head"]?> </b></h6>
+                        <p class="text-body mb-1"><?= $annonce["annonce_body"] ?></p>
+                        <span class="text-muted">
+                          <?php
+                            $annonceDate = new DateTime($annonce["annonce_date"]);
+                            $now = new DateTime();
+                            $diff = date_diff($annonceDate, $now);
+                            if ($diff->d == 0) {
+                              echo "Today";
+                            } elseif ($diff->d == 1) {
+                              echo "Yesterday";
+                            } else {
+                              echo $diff->d . " days ago";
+                            }
+                          ?>
+                        </span>
+                      </div>
                     </div>
-                    <div class="flex-grow-1 ms-1">
-                      <span class="float-end text-muted">3:00 AM</span>
-                      <p class="text-body mb-1">It's <b>Christina </b> birthday today.</p>
-                      <span class="text-muted">2 min ago</span>
-                    </div>
-                  </div>
-                </a>
-                <a class="list-group-item list-group-item-action">
-                  <div class="d-flex">
-                    <div class="flex-shrink-0">
-                      <img src="../dist/assets/images/avatar-M.jpg" alt="user-image" class="user-avtar">
-                    </div>
-                    <div class="flex-grow-1 ms-1">
-                      <span class="float-end text-muted">6:00 PM</span>
-                      <p class="text-body mb-1"><b>Aida Burg</b> commented your post.</p>
-                      <span class="text-muted">5 August</span>
-                    </div>
-                  </div>
-                </a>
-                <a class="list-group-item list-group-item-action">
-                  <div class="d-flex">
-                    <div class="flex-shrink-0">
-                      <img src="../dist/assets/images/avatar-M.jpg" alt="user-image" class="user-avtar">
-                    </div>
-                    <div class="flex-grow-1 ms-1">
-                      <span class="float-end text-muted">2:45 PM</span>
-                      <p class="text-body mb-1"><b>There was a failure to your setup.</b></p>
-                      <span class="text-muted">7 hours ago</span>
-                    </div>
-                  </div>
-                </a>
-                <a class="list-group-item list-group-item-action">
-                  <div class="d-flex">
-                    <div class="flex-shrink-0">
-                      <img src="../dist/assets/images/user/avatar-4.jpg" alt="user-image" class="user-avtar">
-                    </div>
-                    <div class="flex-grow-1 ms-1">
-                      <span class="float-end text-muted">9:10 PM</span>
-                      <p class="text-body mb-1"><b>Cristina Danny </b> invited to join <b> Meeting.</b></p>
-                      <span class="text-muted">Daily scrum meeting time</span>
-                    </div>
-                  </div>
-                </a>
+                  </a>
+                <?php } ?>
               </div>
             </div>
             <div class="dropdown-divider"></div>
@@ -123,20 +107,25 @@ include($_SERVER['DOCUMENT_ROOT'] . '/ENSAH-service/inc/functions/connections.ph
         <li class="dropdown pc-h-item header-user-profile">
           <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#" role="button"
             aria-haspopup="false" data-bs-auto-close="outside" aria-expanded="false">
-            <img src="<?php echo empty($_SESSION["user"]["image"])? "/ENSAH-service/assets/images/user_empty.png": $_SESSION["user"]["image"]?>" alt="user-image" class="user-avtar">
+            <img
+              src="<?php echo empty($_SESSION["user"]["image"]) ? "/ENSAH-service/assets/images/user_empty.png" : $_SESSION["user"]["image"] ?>"
+              alt="user-image" class="user-avtar">
             <span><?php echo $_SESSION["user"]["nom"] ?></span>
           </a>
           <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
             <div class="dropdown-header">
               <div class="d-flex mb-1">
                 <div class="flex-shrink-0">
-                  <img src="<?php echo empty($_SESSION["user"]["image"])? "/ENSAH-service/assets/images/user_empty.png": $_SESSION["user"]["image"]?>" alt="user-image" class="user-avtar wid-35">
+                  <img
+                    src="<?php echo empty($_SESSION["user"]["image"]) ? "/ENSAH-service/assets/images/user_empty.png" : $_SESSION["user"]["image"] ?>"
+                    alt="user-image" class="user-avtar wid-35">
                 </div>
                 <div class="flex-grow-1 ms-3">
-                  <h6 class="mb-1"><?php echo $_SESSION["user"]["nom"]." ". $_SESSION["user"]["prenom"]?></h6>
+                  <h6 class="mb-1"><?php echo $_SESSION["user"]["nom"] . " " . $_SESSION["user"]["prenom"] ?></h6>
                   <span><?php echo $_SESSION["user"]["role"] ?></span>
                 </div>
-                <a href="/ENSAH-service/logout.php" class="pc-head-link bg-transparent"><i class="ti ti-power text-danger"></i></a>
+                <a href="/ENSAH-service/logout.php" class="pc-head-link bg-transparent"><i
+                    class="ti ti-power text-danger"></i></a>
               </div>
             </div>
             <ul class="nav drp-tabs nav-fill nav-tabs" id="mydrpTab" role="tablist">

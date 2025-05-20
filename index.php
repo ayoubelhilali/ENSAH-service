@@ -1,15 +1,22 @@
 <?php
-session_start();
-if (isset($_SESSION['user_id'])) {
+if(session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+if (isset($_SESSION['user'])) {
     // Redirection vers le bon dashboard selon le rôle
-    switch ($_SESSION['role']) {
+    switch ($_SESSION['user']['role']) {
+        case 'coordonnateur':
+            header('Location: dashboard/cord-dash.php');
+            break;
         case 'admin':
-            header('Location: dashboard/admin.php');
+            header('Location: dashboard/admin-dash.php');
             break;
-        case 'enseignant':
-            header('Location: dashboard/enseignant.php');
+        case 'professeur':
+            header('Location: dashboard/prof-dash.php');
             break;
-        // autres rôles ici...
+        case 'vacataire':
+            header('Location: dashboard/vac-dash.php');
+            break;
     }
     exit;
 } else {

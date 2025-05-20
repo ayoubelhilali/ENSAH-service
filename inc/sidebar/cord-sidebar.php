@@ -42,7 +42,7 @@
                 data-feather="chevron-right"></i></span></a>
           <ul class="pc-submenu">
             <li class="pc-item">
-              <a href="/ENSAH-service/pages/historique.php" class="pc-link">
+              <a href="/ENSAH-service/pages/coordonnateur/affect_ue_list.php" class="pc-link">
                 <span class="pc-micon"><i class="ti ti-clipboard-check"></i></span>
                 <span class="pc-mtext">consulter les affectaions </span>
               </a>
@@ -62,7 +62,13 @@
         </li>
 
         <li class="pc-item">
-          <a href="../source/other/sample-page.html" class="pc-link">
+          <a href="/ENSAH-service/pages/annonces.php" class="pc-link">
+            <span class="pc-micon"><i class="ti ti-speakerphone"></i></span>
+            <span class="pc-mtext">annonce</span>
+          </a>
+        </li>
+        <li class="pc-item">
+          <a href="#" class="pc-link">
             <span class="pc-micon"><i class="ti ti-history"></i></span>
             <span class="pc-mtext">Historique</span>
           </a>
