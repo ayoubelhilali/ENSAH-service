@@ -3,9 +3,14 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
+<<<<<<< HEAD
+ 
+require_once 'C:\xampp\htdocs\ENSAH-service\inc\functions\connections.php' ;
+=======
 
 
 require_once __DIR__ . '/inc/functions/connections.php';
+>>>>>>> 5211e6d43579a6a51b7fef64fea6a5f08d53d2f9
 
 try {
     // Get admins data
@@ -39,6 +44,7 @@ try {
                         JOIN filiere F ON F.filiere_ID=C.filiere_ID
                         JOIN professeur P ON P.prof_ID = C.prof_ID 
                         JOIN user U ON P.user_ID = U.user_ID";
+
     $stmt = $pdo->prepare($cordon_data);
     if ($stmt->execute()) {
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -61,6 +67,21 @@ try {
             ];
         }
     }
+
+    //get prof data
+    $prof_data="SELECT * FROM professeur " ;
+    $stmt= $pdo->prepare($prof_data) ;
+    if($stmt->execute()){
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+            $profs[$row['email']]=[
+                'user_id'=>$row['prof_ID'] ,
+                'password'=>$row['password'] ,
+                'role' => 'professeur'
+            ] ;
+        }
+    }
+
+
 
 } catch (PDOException $e) {
     // Handle database errors
@@ -128,6 +149,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
         } else {
             header("Location: login.php?message=mot+de+passe+invalide");
+            exit();
+        }
+    }
+    elseif(isset($profs[$email])){
+        if($password==$profs[$email]['password']){
+            $_SESSION['user']=[
+                'user_id'=> $profs[$email]['user_id']
+            ]  ; 
+            header("Location: Prof_interface.php") ;
+            exit() ;
+        }
+        else {
+            $message = $profs[$email]['password'];
+            header("Location: login.php?message=mot+de+passe+invalide $message");
             exit();
         }
     }

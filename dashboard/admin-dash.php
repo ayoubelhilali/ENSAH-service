@@ -89,6 +89,16 @@ $count = $stmt->fetchColumn();
         <!-- [ sample-page ] start -->
         <div class="col-md-6 col-xl-3">
           <div class="card">
+<<<<<<< HEAD
+            <div class="card-body">
+              <h6 class="mb-2 f-w-400 text-muted">Total des employés</h6>
+              <h4 class="mb-3"><?php $sql = "SELECT COUNT(*) FROM `user`";
+                 $stmt = $pdo->query($sql);
+                 $count = $stmt->fetchColumn();
+
+              echo $count;
+              ?></h4>
+=======
             <div class="card-body d-flex align-items-center">
               <div class="me-3">
                 <span class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
@@ -148,6 +158,7 @@ $count = $stmt->fetchColumn();
                 echo $count;
                 ?></h4>
               </div>
+>>>>>>> 5211e6d43579a6a51b7fef64fea6a5f08d53d2f9
             </div>
           </div>
         </div>
