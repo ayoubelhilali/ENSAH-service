@@ -63,3 +63,14 @@
     border-color: #007BFF;
     padding: 0 5px;
 }
+.annonces-card{
+    padding-bottom: 0;
+}
+.table-header > * {
+    color: #000061;
+}
+.card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    transition: ease 0.7s;
+}

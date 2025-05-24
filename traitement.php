@@ -1,12 +1,16 @@
 <?php
 // Start session if not already started
 if (session_status() == PHP_SESSION_NONE) {
-    if (!session_start()) {
-        die('Failed to start session');
-    }
+    session_start();
 }
+<<<<<<< HEAD
  
 require_once 'C:\xampp\htdocs\ENSAH-service\inc\functions\connections.php' ;
+=======
+
+
+require_once __DIR__ . '/inc/functions/connections.php';
+>>>>>>> 5211e6d43579a6a51b7fef64fea6a5f08d53d2f9
 
 try {
     // Get admins data
@@ -57,7 +61,7 @@ try {
                 'genre' => $row['genre'],
                 'phone' => $row['Phone'],
                 'address' => $row['address'],
-                'birthday' => $row['birthday'],
+                'birthday' => $row['date_naissance'],
                 'email' => $row['cord_email'],
                 'image' => $row['image']
             ];
@@ -83,18 +87,20 @@ try {
     // Handle database errors
     error_log("Database error: " . $e->getMessage());
     // You might want to redirect to an error page or display a message
+    header("Location: error.php?message=Database+error");
 }
 
 
 // Check login credentials
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    echo "<script>console.log('POST request received');</script>";
     $email = $_POST['email'] ?? '';
     $password = $_POST['password'] ?? '';
 
     // Check if email exists in admins
     if (isset($admins[$email])) {
         // Verify password (assuming passwords are hashed)
-        if ($password == $admins[$email]['password']) {
+        if (password_verify($password, $admins[$email]['password'])) {
             $_SESSION['user'] = [
                 'user_id' => $admins[$email]['user_id'],
                 'email' => $email,
@@ -112,7 +118,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header('Location: dashboard/admin-dash.php');
             exit();
         } else {
-            $error = "Invalid password";
+            $error = "password incorrect";
+            header("Location: login.php?message= $error");
+            exit();
         }
     }
     // Check if email exists in coordinators
@@ -140,8 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header("Location: dashboard/cord-dash.php?filiere");
             exit();
         } else {
-            $message = $cordons[$email]['password'];
-            header("Location: login.php?message=mot+de+passe+invalide $message");
+            header("Location: login.php?message=mot+de+passe+invalide");
             exit();
         }
     }
@@ -165,6 +172,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 }
-
-header("Location: dashboard/admin-dash.php");
+header("Location: login.php?message=formulaire+invalide");
 exit();

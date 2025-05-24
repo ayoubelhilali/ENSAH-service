@@ -1,41 +1,6 @@
 'use strict';
 setTimeout(function () {
   (function () {
-    var options = {
-      chart: {
-        height: 300,
-        type: 'line',
-        zoom: {
-          enabled: false
-        }
-      },
-      dataLabels: {
-        enabled: false,
-        width: 2
-      },
-      stroke: {
-        curve: 'straight'
-      },
-      colors: ['#1890ff'],
-      series: [
-        {
-          name: 'Desktops',
-          data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
-        }
-      ],
-      grid: {
-        row: {
-          colors: ['#f3f6ff', 'transparent'],
-          opacity: 0.5
-        }
-      },
-      xaxis: {
-        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep']
-      }
-    };
-    var chart = new ApexCharts(document.querySelector('#line-chart-1'), options);
-    chart.render();
-
     // real-time line chart
     var lastDate = 0;
     var data = [];
@@ -77,7 +42,7 @@ setTimeout(function () {
     var options_real_time = {
       chart: {
         height: 300,
-        type: 'line',
+        type: 'bar',
         animations: {
           enabled: true,
           easing: 'linear',

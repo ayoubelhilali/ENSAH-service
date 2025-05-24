@@ -4,6 +4,8 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/connections.php");
 include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/isStrongPass.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php");
+
 
 if (!isset($_SESSION["user"])) {
     header("Location: /ENSAH-service/pages/profil.php#profile-4?error=1");
@@ -12,6 +14,9 @@ if (!isset($_SESSION["user"])) {
 
 // Initialize variables
 $id = $_SESSION['user']['user_id'] ?? null;
+$nom= $_SESSION['user']['nom'] ?? null;
+$prenom= $_SESSION['user']['prenom'] ?? null;
+$email = $_SESSION['user']['email'] ?? null;
 $errors = 0;
 $changepass_error = $oldpass_error = $newpass_error = $confirmpass_error = "";
 $success = 0;
@@ -78,12 +83,21 @@ $redirect_url = "/ENSAH-service/pages/profil.php";
 
 if ($success == 1) {
     $redirect_url .= "?success=1";
-    $_SESSION['success_message'] = "Profile edited successfully!";
+    // Send email
+    $email_handler = new PrepareEmail();
+    if ($email_handler->changePassEmail($email, $_POST["newpassword"], "$nom $prenom")) {
+        $_SESSION['success_message'] = "Profile edité avec succès et l'email a été envoyé!";
+    } else {
+        $_SESSION['success_message'] = "Profile edité avec succès mais l'email n'a pas été envoyé.";
+    }
 } else {
     $redirect_url .= "?error=1";
     $_SESSION['error_message'] = $changepass_error;
 }
 
 header("Location: " . $redirect_url);
+// Clear the session variables
+unset($_SESSION['success_message']);
+unset($_SESSION['error_message']);
 exit();
 ?>

@@ -1,10 +1,13 @@
 <?php
-session_start();
+if(session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
 if (!isset($_SESSION['user'])) {
   // Redirect to login if not authenticated
   header('Location: ../login.php');
   exit();
 }
+$role=$_SESSION['user']['role'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -55,7 +58,13 @@ if (!isset($_SESSION['user'])) {
   </div>
   <!-- [ Pre-loader ] End -->
   <!-- [ Sidebar Menu ] start -->
-  <?php require_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/sidebar/admin-sidebar.php"); ?>
+  <?php 
+    if ($role == "admin") {
+      require_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/sidebar/admin-sidebar.php");
+    } else if ($role == "coordonnateur") {
+      require_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/sidebar/cord-sidebar.php");
+    }
+  ?>
   <!-- [ Sidebar Menu ] end --> <!-- [ Header Topbar ] start -->
   <?php require_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/header/header.php"); ?>
   <!-- [ Header ] end -->
@@ -84,7 +93,7 @@ if (!isset($_SESSION['user'])) {
       <!-- [ breadcrumb ] end -->
 
       <!-- [ Main Content ] start -->
-      <form action="/ENSAH-service/inc/functions/admin/add-anonce.php" method="post" class="row">
+      <form action="/ENSAH-service/inc/functions/add-annonce.php" method="post" class="row">
         <!-- [ form-element ] start -->
         <div class="col-sm-6" style="width: 100%;">
           <!-- Basic Inputs -->

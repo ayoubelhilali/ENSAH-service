@@ -454,7 +454,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
             
             // Send email
             $email_handler = new PrepareEmail();
-            if ($email_handler->sendEmailtoUser($email, $password, "$nom $prenom")) {
+            if ($email_handler->sendEmailnewProf($email, $password, "$nom $prenom")) {
               $_SESSION['success'] = "le professeur a ajouté et l'email a été envoyé!";
               header("Location: /ENSAH-service/pages/admin/prof-list.php?success=1");
             } else {

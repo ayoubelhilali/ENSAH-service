@@ -1,12 +1,12 @@
-<nav class="pc-sidebar">
+<nav class="pc-sidebar" >
   <div class="navbar-wrapper">
-    <div class="m-header">
+    <div class="m-header" style="background-color:#000075;">
       <a href="#" class="b-brand text-primary">
         <!-- ========   Change your logo from here   ============ -->
         <img src="/ENSAH-service/assets/images/logo-withoutBG.png" class="img-fluid" alt="logo">
       </a>
     </div>
-    <div class="navbar-content" >
+    <div class="navbar-content" style="background-color:#000075;">
       <ul class="pc-navbar" style=" margin-bottom:30px;">
         <li class="pc-item">
           <a href="/ENSAH-service/dashboard/admin-dash.php" class="pc-link">
@@ -55,7 +55,7 @@
         </li>
         
         <li class="pc-item">
-          <a href="/ENSAH-service/pages/admin/annonces.php" class="pc-link">
+          <a href="/ENSAH-service/pages/annonces.php" class="pc-link">
             <span class="pc-micon"><i class="ti ti-speakerphone"></i></span>
             <span class="pc-mtext">Annonces</span>
           </a>
