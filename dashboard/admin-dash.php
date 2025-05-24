@@ -133,7 +133,8 @@ $count = $stmt->fetchColumn();
           <div class="card ">
             <div class="card-body d-flex align-items-center">
               <div class="me-3">
-                <span class="bg-success bg-gradient text-white rounded-circle d-flex align-items-center justify-content-center"
+                <span
+                  class="bg-success bg-gradient text-white rounded-circle d-flex align-items-center justify-content-center"
                   style="width:48px; height:48px;">
                   <i class="fa-solid fa-graduation-cap fa-lg"></i>
                 </span>
@@ -154,7 +155,8 @@ $count = $stmt->fetchColumn();
           <div class="card">
             <div class="card-body d-flex align-items-center">
               <div class="me-3">
-                <span class="bg-warning bg-gradient text-white rounded-circle d-flex align-items-center justify-content-center"
+                <span
+                  class="bg-warning bg-gradient text-white rounded-circle d-flex align-items-center justify-content-center"
                   style="width:48px; height:48px;">
                   <i class="fa-solid fa-school fa-lg"></i>
                 </span>
@@ -185,27 +187,29 @@ $count = $stmt->fetchColumn();
         </div>
         <div class="col-md-12 col-xl-4">
           <h5 class="mb-3">Les annonces</h5>
-          <div class="card p-3 shadow-sm border-0 annonces-card">
+          <div class="card p-3 shadow-sm border-0 announcement-card"> <!-- Added announcement-card class -->
             <?php
-            $sql = "SELECT * FROM `annonces` ORDER BY annonce_date DESC limit 4";
+            $sql = "SELECT * FROM annonces ORDER BY annonce_date DESC LIMIT 4";
             $stmt = $pdo->query($sql);
-            $hasAnnonces = false;
+            $annonceCount = 0;
 
             while ($annonce = $stmt->fetch(PDO::FETCH_ASSOC)) {
-              $hasAnnonces = true;
+              $annonceCount++;
               ?>
-              <div class="mb-4 pb-3 border-bottom">
+              <div class="mb-4 pb-3 border-bottom announcement-item"> <!-- Added announcement-item class -->
                 <div class="d-flex justify-content-between align-items-start">
-                  <h6 class="mb-1 text-primary"><i class="ti ti-speakerphone"></i>
+                  <h6 class="mb-1 text-primary announcement-title"><i class="ti ti-speakerphone"></i>
                     <?= htmlspecialchars($annonce["annonce_head"]) ?></h6>
-                  <small class="text-muted"><?= date("d M Y H:i", strtotime($annonce["annonce_date"])) ?></small>
+                  <small
+                    class="text-muted announcement-date"><?= date("d M Y H:i", strtotime($annonce["annonce_date"])) ?></small>
                 </div>
-                <p class="mb-0 text-secondary"><?= nl2br(htmlspecialchars($annonce["annonce_body"])) ?></p>
+                <p class="mb-0 text-secondary announcement-body"><?= nl2br(htmlspecialchars($annonce["annonce_body"])) ?>
+                </p>
               </div>
               <?php
             }
 
-            if (!$hasAnnonces) {
+            if ($annonceCount === 0) {
               echo '<p class="text-muted">Aucune annonce pour le moment.</p>';
             }
             ?>

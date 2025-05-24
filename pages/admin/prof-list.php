@@ -500,10 +500,10 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
           <div class="row">
             <?php
             // Charger le traitement d'image en premier
-            include "../inc/functions/upload-image.php";
+            include $_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/upload-image.php";
 
             // Mettre à jour l'avatar si l'image a été uploadée
-            $avatar = "/ENSAH-service/assets/images/avatar-M.jpg"; // Valeur par défaut
+            $avatar = "/ENSAH-service/assets/images/avatar-M.jpg";
             if (isset($_SESSION['avatar_path'])) {
               $avatar = $_SESSION['avatar_path'];
             }
