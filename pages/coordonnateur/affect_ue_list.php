@@ -243,7 +243,6 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/isStrongP
 
                                                     <td class="text-center">
                                                         <ul class="list-inline me-auto mb-0">
-
                                                             <li class="list-inline-item align-bottom" data-bs-toggle="tooltip"
                                                                 title="Affecter">
                                                                 <a href="#" class="avtar avtar-xs btn-link-primary affect-btn"

@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 if (!isset($_SESSION['user'])) {
@@ -10,7 +9,7 @@ include('../inc/functions/connections.php');
 $sql = "SELECT COUNT(*) FROM `user`";
 $stmt = $pdo->query($sql);
 $count = $stmt->fetchColumn();
- ?>
+?>
 <!DOCTYPE html>
 <html lang="en">
 <!-- [Head] start -->
@@ -21,25 +20,29 @@ $count = $stmt->fetchColumn();
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="description" content="Mantis is made using Bootstrap 5 design framework. Download the free admin template & use it for your project.">
-  <meta name="keywords" content="Mantis, Dashboard UI Kit, Bootstrap 5, Admin Template, Admin Dashboard, CRM, CMS, Bootstrap Admin Template">
+  <meta name="description"
+    content="Mantis is made using Bootstrap 5 design framework. Download the free admin template & use it for your project.">
+  <meta name="keywords"
+    content="Mantis, Dashboard UI Kit, Bootstrap 5, Admin Template, Admin Dashboard, CRM, CMS, Bootstrap Admin Template">
   <meta name="author" content="CodedThemes">
   <!-- [Favicon] icon -->
-  <link rel="icon" href="/ENSAH-service/assets/images/logo-small_noBG.png" type="image/x-icon"> 
+  <link rel="icon" href="/ENSAH-service/assets/images/logo-small_noBG.png" type="image/x-icon">
   <!-- [Google Font] Family -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap" id="main-font-link">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap"
+    id="main-font-link">
   <!-- [Tabler Icons] https://tablericons.com -->
-  <link rel="stylesheet" href="/ENSAH-service/assets/fonts/tabler-icons.min.css" >
+  <link rel="stylesheet" href="/ENSAH-service/assets/fonts/tabler-icons.min.css">
   <!-- [Feather Icons] https://feathericons.com -->
-  <link rel="stylesheet" href="/ENSAH-service/assets/fonts/feather.css" >
+  <link rel="stylesheet" href="/ENSAH-service/assets/fonts/feather.css">
   <!-- [Font Awesome Icons] https://fontawesome.com/icons -->
-  <link rel="stylesheet" href="/ENSAH-service/assets/fonts/fontawesome.css" >
+  <link rel="stylesheet" href="/ENSAH-service/assets/fonts/fontawesome.css">
   <!-- [Material Icons] https://fonts.google.com/icons -->
-  <link rel="stylesheet" href="/ENSAH-service/assets/fonts/material.css" >
+  <link rel="stylesheet" href="/ENSAH-service/assets/fonts/material.css">
   <!-- [Template CSS Files] -->
   <link rel="stylesheet" href="/ENSAH-service/assets/css/style.css">
-  <link rel="stylesheet" href="/ENSAH-service/assets/css/style-preset.css" >
-  <link rel="stylesheet" href="/ENSAH-service/assets/css/main.css" >
+  <link rel="stylesheet" href="/ENSAH-service/assets/css/style-preset.css">
+  <link rel="stylesheet" href="/ENSAH-service/assets/css/main.css">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
@@ -49,17 +52,17 @@ $count = $stmt->fetchColumn();
 
 <body data-pc-preset="preset-1" data-pc-direction="ltr" data-pc-theme="light">
   <!-- [ Pre-loader ] start -->
-<div class="loader-bg">
-  <div class="loader-track">
-    <div class="loader-fill"></div>
+  <div class="loader-bg">
+    <div class="loader-track">
+      <div class="loader-fill"></div>
+    </div>
   </div>
-</div>
-<!-- [ Pre-loader ] End -->
- <!-- [ Sidebar Menu ] start -->
-<?php require_once(__DIR__ . "/../inc/sidebar/cord-sidebar.php"); ?>
-<!-- [ Sidebar Menu ] end --> <!-- [ Header Topbar ] start -->
-<?php require_once(__DIR__ . "/../inc/header/header.php"); ?>
-<!-- [ Header ] end -->
+  <!-- [ Pre-loader ] End -->
+  <!-- [ Sidebar Menu ] start -->
+  <?php require_once(__DIR__ . "/../inc/sidebar/cord-sidebar.php"); ?>
+  <!-- [ Sidebar Menu ] end --> <!-- [ Header Topbar ] start -->
+  <?php require_once(__DIR__ . "/../inc/header/header.php"); ?>
+  <!-- [ Header ] end -->
   <!-- [ Main Content ] start -->
   <div class="pc-container">
     <div class="pc-content">
@@ -83,7 +86,7 @@ $count = $stmt->fetchColumn();
       <!-- [ Main Content ] start -->
       <div class="row">
         <!-- [ sample-page ] start -->
-        
+
         <div class="col-md-6 col-xl-3">
           <div class="card">
             <div class="card-body">
@@ -97,7 +100,7 @@ $count = $stmt->fetchColumn();
             </div>
           </div>
         </div>
-        
+
         <div class="col-md-6 col-xl-3">
           <div class="card">
             <div class="card-body">
@@ -117,8 +120,8 @@ $count = $stmt->fetchColumn();
             <div class="card-body">
               <h6 class="mb-2 f-w-400 text-muted">Nombre des vacants</h6>
               <h4 class="mb-3"><?php $sql = "SELECT COUNT(*) FROM `unite` WHERE unite_resp = 0";
-                  $stmt = $pdo->query($sql);
-                  $count = $stmt->fetchColumn();
+              $stmt = $pdo->query($sql);
+              $count = $stmt->fetchColumn();
               echo $count;
               ?></h4>
             </div>
@@ -163,7 +166,8 @@ $count = $stmt->fetchColumn();
               ?>
               <div class="mb-4 pb-3 border-bottom">
                 <div class="d-flex justify-content-between align-items-start">
-                  <h6 class="mb-1 text-primary" ><i class="ti ti-speakerphone"></i> <?= htmlspecialchars($annonce["annonce_head"]) ?></h6>
+                  <h6 class="mb-1 text-primary"><i class="ti ti-speakerphone"></i>
+                    <?= htmlspecialchars($annonce["annonce_head"]) ?></h6>
                   <small class="text-muted"><?= date("d M Y H:i", strtotime($annonce["annonce_date"])) ?></small>
                 </div>
                 <p class="mb-0 text-secondary"><?= nl2br(htmlspecialchars($annonce["annonce_body"])) ?></p>
@@ -188,9 +192,7 @@ $count = $stmt->fetchColumn();
     <div class="footer-wrapper container-fluid">
       <div class="row">
         <div class="col-sm my-1">
-          <p class="m-0"
-            >ENSAH-service &copy; 2025 All rights reserved</p
-          >
+          <p class="m-0">ENSAH-service &copy; 2025 All rights reserved</p>
         </div>
         <div class="col-auto my-1">
           <ul class="list-inline footer-link mb-0">
@@ -200,7 +202,7 @@ $count = $stmt->fetchColumn();
       </div>
     </div>
   </footer>
-
+  <!-- [ Chart script ] -->
   <!-- [Page Specific JS] start -->
   <script src="/ENSAH-service/assets/js/plugins/apexcharts.min.js"></script>
   <script src="/ENSAH-service/assets/js/pages/dashboard-default.js"></script>
@@ -213,27 +215,27 @@ $count = $stmt->fetchColumn();
   <script src="/ENSAH-service/assets/js/pcoded.js"></script>
   <script src="/ENSAH-service/assets/js/plugins/feather.min.js"></script>
 
-  
-  
-  
-  
+
+
+
+
   <script>layout_change('light');</script>
-  
-  
-  
-  
+
+
+
+
   <script>change_box_container('false');</script>
-  
-  
-  
+
+
+
   <script>layout_rtl_change('false');</script>
-  
-  
+
+
   <script>preset_change("preset-1");</script>
-  
-  
+
+
   <script>font_change("Public-Sans");</script>
-  
+
 </body>
 <!-- [Body] end -->
 

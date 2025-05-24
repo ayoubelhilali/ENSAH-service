@@ -128,9 +128,9 @@ if (!isset($_SESSION['user'])) {
                             <div class="table-responsive">
                                 <table class="table table-hover" id="pc-dt-simple">
                                     <thead>
-                                        <tr>
+                                        <tr class="table-header">
                                             <th>#</th>
-                                            <th>Titre de l'annonce</th>
+                                            <th >Titre de l'annonce</th>
                                             <th>Description</th>
                                             <th>Date de publication</th>
                                             <th class="text-center">Actions</th>
@@ -155,7 +155,7 @@ if (!isset($_SESSION['user'])) {
                                                     <div class="row">
                                                         <div class="col">
                                                             <h6 class="mb-1">
-                                                                <span><?= $annonce['annonce_body'] ?></span>
+                                                                <span><?= (strlen($annonce['annonce_body']) > 50) ? substr(htmlspecialchars($annonce['annonce_body'], ENT_QUOTES, 'UTF-8'), 0, 50) . ' . . .' : htmlspecialchars($annonce['annonce_body'], ENT_QUOTES, 'UTF-8') ?></span>
                                                             </h6>
                                                         </div>
                                                     </div>
@@ -172,6 +172,16 @@ if (!isset($_SESSION['user'])) {
 
                                                 <td class="text-center">
                                                     <ul class="list-inline me-auto mb-0">
+                                                    <li class="list-inline-item align-bottom" data-bs-toggle="tooltip"
+                                                            title="View">
+                                                            <a href="#" class="avtar avtar-xs btn-link-secondary view-btn"
+                                                                data-bs-toggle="modal" data-bs-target="#annonce-modal"
+                                                                data-annonce_Head="<?= $annonce['annonce_head']; ?>"
+                                                                data-desc="<?= $annonce['annonce_body']; ?>"
+                                                                data-date="<?= $annonce['annonce_date']; ?>">
+                                                                <i class="ti ti-eye f-18"></i>
+                                                            </a>
+                                                        </li>
                                                         <?php if ($_SESSION['user']['role'] == 'admin') { ?>
                                                             <li class="list-inline-item align-bottom" data-bs-toggle="tooltip">
                                                                 <a href="#" class="avtar avtar-xs btn-link-danger affect-btn"
@@ -197,6 +207,45 @@ if (!isset($_SESSION['user'])) {
             <!-- [ Main Content ] end -->
         </div>
     </section>
+    <div class="modal fade" id="annonce-modal" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content" style="">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="mb-0">Détails de l'annonce</h5>
+                    <a href="#" class="avtar avtar-s btn-link-danger" data-bs-dismiss="modal">
+                        <i class="ti ti-x f-20"></i>
+                    </a>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card mb-0">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Détails de l'annonce</h5>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item px-0 pt-0">
+                                            <p class="mb-1 text-muted">Titre de l'annonce</p>
+                                            <h6 class="mb-0" id="modal-titre" style="color:#000061;"></h6>
+                                        </li>
+                                        <li class="list-group-item px-0">
+                                            <p class="mb-1 text-muted">Description</p>
+                                            <h6 class="mb-0" id="modal-desc" style="color:#000061;"></h6>
+                                        </li>
+                                        <li class="list-group-item px-0">
+                                            <p class="mb-1 text-muted">Date de publication</p>
+                                            <h6 class="mb-0" id="modal-date" style="color:#000061;"></h6>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- /row -->
+                </div> <!-- /modal-body -->
+            </div> <!-- /modal-content -->
+        </div> <!-- /modal-dialog -->
+    </div>
     <!-- [ Main Content ] end -->
     <footer class="pc-footer">
         <div class="footer-wrapper container-fluid">
@@ -282,7 +331,24 @@ if (!isset($_SESSION['user'])) {
         }
     }
     ?>
+    <script>
+        // afficher les details d'une annonce
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.view-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    // Get the data from the clicked button
+                    const titre = button.getAttribute('data-annonce_Head');
+                    const desc = button.getAttribute('data-desc');
+                    const date = button.getAttribute('data-date');
 
+                    // Populate the modal with the data
+                    document.getElementById('modal-titre').textContent = `${titre}`;
+                    document.getElementById('modal-desc').textContent = `${desc}`;
+                    document.getElementById('modal-date').textContent = `${date}`;
+                });
+            });
+        });
+    </script>
 
     <div class="offcanvas pct-offcanvas offcanvas-end" tabindex="-1" id="offcanvas_pc_layout">
         <div class="offcanvas-header bg-primary">

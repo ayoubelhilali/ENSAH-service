@@ -89,76 +89,96 @@ $count = $stmt->fetchColumn();
         <!-- [ sample-page ] start -->
         <div class="col-md-6 col-xl-3">
           <div class="card">
-            <div class="card-body">
-              <h6 class="mb-2 f-w-400 text-muted">Total des employés</h6>
-              <h4 class="mb-3"><?php $sql = "SELECT COUNT(*) FROM `user`";
-              $stmt = $pdo->query($sql);
-              $count = $stmt->fetchColumn();
-
-              echo $count;
-              ?></h4>
+            <div class="card-body d-flex align-items-center">
+              <div class="me-3">
+                <span class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
+                  style="width:48px; height:48px;">
+                  <i class="fa fa-users fa-lg"></i>
+                </span>
+              </div>
+              <div>
+                <h6 class="mb-1 f-w-400 text-muted">Total des employés</h6>
+                <h4 class="mb-0"><?php
+                $sql = "SELECT COUNT(*) FROM `user`";
+                $stmt = $pdo->query($sql);
+                $count = $stmt->fetchColumn();
+                echo $count;
+                ?></h4>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+          <div class="card ">
+            <div class="card-body d-flex align-items-center">
+              <div class="me-3">
+                <span class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center"
+                  style="width:48px; height:48px;">
+                  <i class="fa fa-users fa-lg"></i>
+                </span>
+              </div>
+              <div>
+                <h6 class="mb-1 f-w-400 text-muted">Total des professeurs</h6>
+                <h4 class="mb-0"><?php
+                $sql = "SELECT COUNT(*) FROM `professeur`";
+                $stmt = $pdo->query($sql);
+                $count = $stmt->fetchColumn();
+                echo $count;
+                ?></h4>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+          <div class="card ">
+            <div class="card-body d-flex align-items-center">
+              <div class="me-3">
+                <span class="bg-success bg-gradient text-white rounded-circle d-flex align-items-center justify-content-center"
+                  style="width:48px; height:48px;">
+                  <i class="fa-solid fa-graduation-cap fa-lg"></i>
+                </span>
+              </div>
+              <div>
+                <h6 class="mb-1 f-w-400 text-muted">Total des filieres</h6>
+                <h4 class="mb-0"><?php
+                $sql = "SELECT COUNT(*) FROM `filiere`";
+                $stmt = $pdo->query($sql);
+                $count = $stmt->fetchColumn();
+                echo $count;
+                ?></h4>
+              </div>
             </div>
           </div>
         </div>
         <div class="col-md-6 col-xl-3">
           <div class="card">
-            <div class="card-body">
-              <h6 class="mb-2 f-w-400 text-muted">Nombre des professeurs</h6>
-              <h4 class="mb-3"><?php $sql = "SELECT COUNT(*) FROM `professeur`";
-              $stmt = $pdo->query($sql);
-              $count = $stmt->fetchColumn();
-
-              echo $count;
-              ?></h4>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-xl-3">
-          <div class="card">
-            <div class="card-body">
-              <h6 class="mb-2 f-w-400 text-muted">Nombre des fillières</h6>
-              <h4 class="mb-3"><?php $sql = "SELECT COUNT(*) FROM `filiere`";
-              $stmt = $pdo->query($sql);
-              $count = $stmt->fetchColumn();
-
-              echo $count;
-              ?></h4>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-xl-3">
-          <div class="card">
-            <div class="card-body">
-              <h6 class="mb-2 f-w-400 text-muted">Nombre des départements</h6>
-              <h4 class="mb-3"><?php $sql = "SELECT COUNT(*) FROM `departement`";
-              $stmt = $pdo->query($sql);
-              $count = $stmt->fetchColumn();
-              echo $count;
-              ?></h4>
-              </p>
+            <div class="card-body d-flex align-items-center">
+              <div class="me-3">
+                <span class="bg-warning bg-gradient text-white rounded-circle d-flex align-items-center justify-content-center"
+                  style="width:48px; height:48px;">
+                  <i class="fa-solid fa-school fa-lg"></i>
+                </span>
+              </div>
+              <div>
+                <h6 class="mb-1 f-w-400 text-muted">Total des départements</h6>
+                <h4 class="mb-0"><?php
+                $sql = "SELECT COUNT(*) FROM `departement`";
+                $stmt = $pdo->query($sql);
+                $count = $stmt->fetchColumn();
+                echo $count;
+                ?></h4>
+              </div>
             </div>
           </div>
         </div>
         <div class="col-md-12 col-xl-8">
           <div class="d-flex align-items-center justify-content-between mb-3">
             <div class="card" style="width:100%">
-              <ul class="nav nav-pills justify-content-end mb-0" id="chart-tab-tab" role="tablist">
-                <li class="nav-item" role="presentation">
-                  <button class="nav-link" id="chart-tab-home-tab" data-bs-toggle="pill"
-                    data-bs-target="#chart-tab-home" type="button" role="tab" aria-controls="chart-tab-home"
-                    aria-selected="true">Month</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                  <button class="nav-link active" id="chart-tab-profile-tab" data-bs-toggle="pill"
-                    data-bs-target="#chart-tab-profile" type="button" role="tab" aria-controls="chart-tab-profile"
-                    aria-selected="false">Week</button>
-                </li>
-              </ul>
               <div class="card-header">
-                <h5>Les visites du siteweb</h5>
+                <h5>Les personnels</h5>
               </div>
               <div class="card-body">
-                <div id="line-chart-1"></div>
+                <div id="bar-chart-1"></div>
               </div>
             </div>
           </div>
@@ -227,6 +247,7 @@ $count = $stmt->fetchColumn();
   <script src="/ENSAH-service/assets/js/fonts/custom-font.js"></script>
   <script src="/ENSAH-service/assets/js/pcoded.js"></script>
   <script src="/ENSAH-service/assets/js/plugins/feather.min.js"></script>
+  <script src="/ENSAH-service/assets/js/users-chart.js"></script>
 
 
 
