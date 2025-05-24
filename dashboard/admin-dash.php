@@ -92,8 +92,8 @@ $count = $stmt->fetchColumn();
             <div class="card-body">
               <h6 class="mb-2 f-w-400 text-muted">Total des employés</h6>
               <h4 class="mb-3"><?php $sql = "SELECT COUNT(*) FROM `user`";
-              $stmt = $pdo->query($sql);
-              $count = $stmt->fetchColumn();
+                 $stmt = $pdo->query($sql);
+                 $count = $stmt->fetchColumn();
 
               echo $count;
               ?></h4>

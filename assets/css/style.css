@@ -501,6 +501,15 @@ svg {
 table {
   caption-side: bottom;
   border-collapse: collapse;
+
+}
+
+#table_unite{
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+    padding: 0;
+    table-layout: fixed; /* empêche les débordements */
 }
 
 caption {
@@ -19623,6 +19632,11 @@ pre[class*=language-]>code {
   min-height: calc(100vh - 121px);
 }
 
+#pc-container-unite{
+   margin-left: 0px;
+}
+
+
 .pc-container .pc-content {
   padding-left: 35px;
   padding-right: 35px;
@@ -20642,12 +20656,14 @@ pre[class*=language-]>code {
 
 .marketing-card .table tbody td p {
   margin-bottom: 0;
-  display: inline-block;
+  /*display: inline-block;*/
 }
 
 .marketing-card .table tbody td .table-contain {
   display: inline-block;
-  margin-left: 10px;
+  margin-left: 10px ;
+  padding: 0px ;
+  margin : 0px ;
 }
 
 .marketing-card .table tbody td span {
