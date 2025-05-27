@@ -464,14 +464,18 @@
           </div>
         </div>
 
-    <?php 
-      if(isset($_GET['page'])){
-        if($_GET['page']=='note'){
-          
-        }
-      }
+   <?php
     
-    ?>  
+     if(!isset($_GET['page']) || $_GET['page']=="unite"){
+        include_once 'table_unite.php' ;
+     }
+     elseif($_GET['page']=="note") {
+      include_once 'uploader_note.php' ;
+     }
+     
+     else include_once 'unite_assure.php' ;
+   
+   ?>
  
     <!-- [ Main Content ] end -->
     <footer class="pc-footer">

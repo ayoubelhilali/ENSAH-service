@@ -1,0 +1,271 @@
+[33mcommit 5e8caedf629f27b4b0a8bb0a818f104aac5ca1a8[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Ibrahim20041220 <brahim20041220@gmail.com>
+Date:   Sat May 24 20:22:10 2025 +0100
+
+    hhhhhhh
+
+[33mcommit f09a4fc37be0c648ef27f8238be1fc7f981483d3[m
+Merge: 9e0ab34 5211e6d
+Author: Ibrahim20041220 <brahim20041220@gmail.com>
+Date:   Sat May 24 20:17:37 2025 +0100
+
+    hhh
+
+[33mcommit 9e0ab34a2066c780fe6df1c0ffabf8ccd1d6b96c[m
+Author: Ibrahim20041220 <brahim20041220@gmail.com>
+Date:   Sat May 24 20:14:06 2025 +0100
+
+    yyyyyyyyy
+
+[33mcommit 5211e6d43579a6a51b7fef64fea6a5f08d53d2f9[m
+Author: ayoubelhilali <elhilaliayoub2020@gmail.com>
+Date:   Sat May 24 12:15:19 2025 +0100
+
+    users-chart for admin
+
+[33mcommit 0a4a1ca090e714bd03740e9844837ca19a7f50e1[m
+Author: ayoubelhilali <elhilaliayoub2020@gmail.com>
+Date:   Sat May 24 12:14:57 2025 +0100
+
+    users-chart for admin
+
+[33mcommit a728bfb281d2c6302d4debf4ddb5b9e431585caa[m
+Author: ayoubelhilali <elhilaliayoub2020@gmail.com>
+Date:   Tue May 20 12:04:27 2025 +0100
+
+    send Email after password change
+
+[33mcommit ec7d6c928204fa14c20547005f39dc7ae9c688a2[m
+Author: ayoubelhilali <elhilaliayoub2020@gmail.com>
+Date:   Tue May 20 10:28:28 2025 +0100
+
+    affect vacant a un vacataire
+
+[33mcommit 2c82e8552222ecf2d1c239ae5b99e7b3b77680ee[m
+Merge: bd5fe02 dce03ba
+Author: Ibrahim20041220 <brahim20041220@gmail.com>
+Date:   Mon May 19 19:06:31 2025 +0100
+
+    Merge branch 'main' of https://github.com/ayoubelhilali/ENSAH-service
+
+[33mcommit dce03ba91bfe3606581c26bd1bb97ce1116f8372[m
+Author: ayoubelhilali <elhilaliayoub2020@gmail.com>
+Date:   Mon May 19 18:59:12 2025 +0100
+
+    export db
+
+[33mcommit bd5fe0298b9d9e7031ca2e12bf5e85dbec01b2e6[m
+Merge: 6a59507 29ca8f4
+Author: Ibrahim20041220 <brahim20041220@gmail.com>
+Date:   Mon May 19 18:14:41 2025 +0100
+
+    Merge branch 'main' of https://github.com/ayoubelhilali/ENSAH-service
+
+[33mcommit 6a59507d91bc7e189d5cb34f032211d24ac244a5[m
+Author: Ibrahim20041220 <brahim20041220@gmail.com>
+Date:   Mon May 19 18:12:56 2025 +0100
+
+    iiiiii
+
+[33mcommit 13c3c2ac79a4df2bc030058627bf026bf012e069[m
+Author: ayoubelhilali <elhilaliayoub2020@gmail.com>
+Date:   Mon May 19 18:08:08 2025 +0100
+
+    edit password by user
+
+[33mcommit 29ca8f44fca2e0c35e4573eff979f38a783f5271[m
+Author: ayoubelhilali <elhilaliayoub2020@gmail.com>
+Date:   Mon May 19 01:01:01 2025 +0100
+
+    Remove .env from tracking
+
+[33mcommit 479099e5103d12c1eb10f1347ff37a18151f3da2[m
+Author: ayoubelhilali <elhilaliayoub2020@gmail.com>
+Date:   Mon May 19 00:57:37 2025 +0100
+
+    test ignore
+
+[33mcommit dcb1850e7d211353d91acc11ab585a34c67a968b[m
+Author: ayoubelhilali <elhilaliayoub2020@gmail.com>
+Date:   Mon May 19 00:54:09 2025 +0100
+
+    add edit or delete unit by coord
+
+[33mcommit 4f9d89613d8a72bad0ea4569d5828f25099f3c5c[m
+Author: ayoubelhilali <elhilaliayoub2020@gmail.com>
+Date:   Sun May 18 14:30:35 2025 +0100
+
+    add unit by cordon
+
+[33mcommit 6606417ad3b85112b2247fd11a9edb238fb3f600[m
+Merge: e40c3e3 5e9be54
+Author: Ibrahim20041220 <brahim20041220@gmail.com>
+Date:   Wed May 14 13:00:04 2025 +0100
+
+    Merge branch 'main' of https://github.com/ayoubelhilali/ENSAH-service
+
+[33mcommit e40c3e3dd4a1178d04aad0a34c9958fc77274293[m
+Merge: 757d200 ffc61de
+Author: Ibrahim20041220 <brahim20041220@gmail.com>
+Date:   Wed May 14 12:59:56 2025 +0100
+
+    LOGIN
+
+[33mcommit 015e3753533497608b61498a032c826f8f070329[m
+Merge: 9818d82 6606417
+Author: ayoubelhilali <elhilaliayoub2020@gmail.com>
+Date:   Wed May 14 12:57:34 2025 +0100
+
+    Merge branch 'main' of https://github.com/ayoubelhilali/ENSAH-service
+
+[33mcommit 9818d826ddb37cf36e9c68839b032fd6bc942743[m
+Author: ayoubelhilali <elhilaliayoub2020@gmail.com>
+Date:   Wed May 14 12:57:27 2025 +0100
+
+    ajouter filiere
+
+[33mcommit 6e7b48aac6b78344b6bf3b6f8b45b9c6c5a2a083[m
+Author: ayoubelhilali <elhilaliayoub2020@gmail.com>
+Date:   Tue May 13 23:17:04 2025 +0100
+
+    add filiere to departement
+
+[33mcommit 5e9be5405815639944a2b1aee2d2b9b5f0d7c22c[m
+Author: ayoubelhilali <elhilaliayoub2020@gmail.com>
+Date:   Mon May 12 00:29:34 2025 +0100
+
+    add departemens by admin
+
+[33mcommit f656516e9588dbcb1af547cbb0d0263eb7860ad9[m
+Author: ayoubelhilali <elhilaliayoub2020@gmail.com>
+Date:   Fri May 9 18:35:57 2025 +0100
+
+    send email to user when account created
+
+[33mcommit 3db0a244ef5314117d2138de833b5977d285f0a8[m
+Author: ayoubelhilali <elhilaliayoub2020@gmail.com>
+Date:   Fri May 9 16:59:52 2025 +0100
+
+    email sender added
+
+[33mcommit f312d884c802a5571b69ba2d9c71e8e1596e30a8[m
+Author: ayoubelhilali <elhilaliayoub2020@gmail.com>
+Date:   Fri May 9 16:58:41 2025 +0100
+
+    email sender added
+
+[33mcommit 757d200606869f613e1a922aad9e97285c249399[m
+Author: Ibrahim20041220 <brahim20041220@gmail.com>
+Date:   Thu May 8 18:53:37 2025 +0100
+
+    ttttttt
+
+[33mcommit ffc61de11e4eb3dc09928d8d5a0caa3c098079f5[m
+Author: ayoubelhilali <elhilaliayoub2020@gmail.com>
+Date:   Thu May 8 18:25:12 2025 +0100
+
+    db exported
+
+[33mcommit 9f5e1467ad59f2bcafab53012196de4861016881[m
+Author: ayoubelhilali <elhilaliayoub2020@gmail.com>
+Date:   Thu May 8 18:21:32 2025 +0100
+
+    traitement eror fixed
+
+[33mcommit 59b4bbbe7e03d24c8a7a7222ef4da0f4e7729501[m
+Merge: 1d1c7c0 6c6e07c
+Author: ayoubelhilali <elhilaliayoub2020@gmail.com>
+Date:   Thu May 8 18:20:12 2025 +0100
+
+    Merge branch 'main' of https://github.com/ayoubelhilali/ENSAH-service
+
+[33mcommit 1d1c7c002727c844cef9d120ee69625daa5780b5[m
+Author: ayoubelhilali <elhilaliayoub2020@gmail.com>
+Date:   Thu May 8 18:19:26 2025 +0100
+
+    view prof added
+
+[33mcommit 6c6e07cdf7c8b07bdc01a0058065878f6d01a090[m
+Merge: a8e8bba 41377d7
+Author: Ibrahim20041220 <brahim20041220@gmail.com>
+Date:   Thu May 8 15:33:07 2025 +0100
+
+    Merge branch 'main' of https://github.com/ayoubelhilali/ENSAH-service
+
+[33mcommit a8e8bba052198873ef0a0da733e5a47b83873565[m
+Merge: 8161bc9 b76b340
+Author: Ibrahim20041220 <brahim20041220@gmail.com>
+Date:   Thu May 8 15:28:08 2025 +0100
+
+    Merge branch 'main' of https://github.com/ayoubelhilali/ENSAH-service
+
+[33mcommit 41377d79aa364f908ac7a4395c5e7511643fdd14[m
+Author: ayoubelhilali <elhilaliayoub2020@gmail.com>
+Date:   Thu May 8 15:21:21 2025 +0100
+
+    error login fixed
+
+[33mcommit b6a0ef2e95a5d28c5ad93cdf3b0718ad78135804[m
+Author: ayoubelhilali <elhilaliayoub2020@gmail.com>
+Date:   Thu May 8 15:20:44 2025 +0100
+
+    login error fixed
+
+[33mcommit fbf5e183ff89c47ec9e51d715a1e130269deef1e[m
+Author: ayoubelhilali <elhilaliayoub2020@gmail.com>
+Date:   Thu May 8 01:46:21 2025 +0100
+
+    remove vacataire by admin
+
+[33mcommit 6ec7f0df7979c4eb4d8f26c7f57dae95bf6405f0[m
+Author: ayoubelhilali <elhilaliayoub2020@gmail.com>
+Date:   Wed May 7 17:29:07 2025 +0100
+
+    remove prof by admin added
+
+[33mcommit 1c0e80224595b7648a6c58147b33e4bccfca3693[m
+Author: ayoubelhilali <elhilaliayoub2020@gmail.com>
+Date:   Mon May 5 16:47:56 2025 +0100
+
+    admin profil edited
+
+[33mcommit 8161bc92b74032e9f02ed35a216da87372c77e45[m
+Author: Ibrahim20041220 <brahim20041220@gmail.com>
+Date:   Wed Apr 30 02:55:51 2025 +0100
+
+    yhtf
+
+[33mcommit b76b34009c13e1133254a2dfca9ffcb7d669aee1[m
+Author: ayoubelhilali <elhilaliayoub2020@gmail.com>
+Date:   Wed Apr 30 02:44:30 2025 +0100
+
+    error fixed
+
+[33mcommit 2b025e43a43560e18fd791d3c0588cf301097b0b[m
+Author: Ibrahim20041220 <brahim20041220@gmail.com>
+Date:   Wed Apr 30 02:17:02 2025 +0100
+
+    eeeeeeeeeeeeeeeee
+
+[33mcommit f32c960a1ce8fbe8623ce97872da96d2653c69bf[m
+Author: Ibrahim20041220 <brahim20041220@gmail.com>
+Date:   Wed Apr 30 02:15:19 2025 +0100
+
+    rfffffffffffffffff
+
+[33mcommit 06de3fb89a7d649a3b29465626d1d8d7f6716023[m
+Merge: 14010c8 2b025e4
+Author: ayoubelhilali <elhilaliayoub2020@gmail.com>
+Date:   Wed Apr 30 02:13:17 2025 +0100
+
+    Merge branch 'main' of https://github.com/ayoubelhilali/ENSAH-service
+
+[33mcommit 14010c8f28f86a1c2b9e69801b946ecaa737526a[m
+Author: ayoubelhilali <elhilaliayoub2020@gmail.com>
+Date:   Wed Apr 30 02:11:05 2025 +0100
+
+    rzrttt
+
+[33mcommit 0be6b344cdee9c3bb96f9588d5a1ebee0254c9e4[m
+Merge: 9a1abc6 48e114f
+Author: Ibrahim

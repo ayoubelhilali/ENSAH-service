@@ -3,14 +3,8 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-<<<<<<< HEAD
  
 require_once 'C:\xampp\htdocs\ENSAH-service\inc\functions\connections.php' ;
-=======
-
-
-require_once __DIR__ . '/inc/functions/connections.php';
->>>>>>> 5211e6d43579a6a51b7fef64fea6a5f08d53d2f9
 
 try {
     // Get admins data
@@ -157,7 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user']=[
                 'user_id'=> $profs[$email]['user_id']
             ]  ; 
-            header("Location: Prof_interface.php") ;
+            header("Location:Prof_interface.php") ;
             exit() ;
         }
         else {
