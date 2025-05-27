@@ -9,7 +9,7 @@
     <div class="navbar-content" style="background-color:#000075;">
       <ul class="pc-navbar" style=" margin-bottom:30px;">
         <li class="pc-item">
-          <a href="/ENSAH-service/dashboard/cord-dash.php" class="pc-link">
+          <a href="/ENSAH-service/dashboard/vacat-dash.php" class="pc-link">
             <span class="pc-micon"><i class="ti ti-dashboard"></i></span>
             <span class="pc-mtext">Dashboard</span>
           </a>
@@ -20,7 +20,7 @@
           <i class="ti ti-dashboard"></i>
         </li>
         <li class="pc-item">
-          <a href="/ENSAH-service/pages/coordonnateur/vacat-list.php" class="pc-link">
+          <a href="#" class="pc-link">
             <span class="pc-micon"><i class="ti ti-user"></i></span>
             <span class="pc-mtext">vacataires</span>
           </a>
@@ -31,7 +31,7 @@
           <i class="ti ti-news"></i>
         </li>
         <li class="pc-item">
-          <a href="/ENSAH-service/pages/coordonnateur/ue_list.php" class="pc-link">
+          <a href="#" class="pc-link">
             <span class="pc-micon"><i class="ti ti-book"></i></span>
             <span class="pc-mtext">unité d'enseignement (UE) </span>
           </a>
@@ -42,13 +42,13 @@
                 data-feather="chevron-right"></i></span></a>
           <ul class="pc-submenu">
             <li class="pc-item">
-              <a href="/ENSAH-service/pages/coordonnateur/affect_ue_list.php" class="pc-link">
+              <a href="#" class="pc-link">
                 <span class="pc-micon"><i class="ti ti-clipboard-check"></i></span>
                 <span class="pc-mtext">consulter les affectaions </span>
               </a>
             </li>
             <li class="pc-item">
-              <a href="/ENSAH-service/pages/coordonnateur/affect_vacant.php" class="pc-link">
+              <a href="#" class="pc-link">
                 <span class="pc-micon"><i class="ti ti-user-plus"></i></span>
                 <span class="pc-mtext">affecter une UE</span>
               </a>
@@ -61,12 +61,6 @@
           <i class="ti ti-brand-chrome"></i>
         </li>
 
-        <li class="pc-item">
-          <a href="/ENSAH-service/pages/annonces.php" class="pc-link">
-            <span class="pc-micon"><i class="ti ti-speakerphone"></i></span>
-            <span class="pc-mtext">annonce</span>
-          </a>
-        </li>
         <li class="pc-item">
           <a href="/ENSAH-service/pages/historique.php" class="pc-link">
             <span class="pc-micon"><i class="ti ti-history"></i></span>

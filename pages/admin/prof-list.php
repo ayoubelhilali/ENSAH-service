@@ -420,7 +420,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
     // Validate Password
     if (isStrongPassword($_POST["password"])) {
       $password = htmlspecialchars($_POST["password"], ENT_QUOTES, 'UTF-8');
-      $md5_pass = md5($password); // Hash the password
+      $password = password_hash($password, PASSWORD_DEFAULT); // Hash the password
     } else {
       $password_error = "Password should include at least: 1 uppercase, 1 lowercase, 1 digit, 1 special character, and be at least 8 characters long.";
       $errors++;
@@ -448,8 +448,8 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
         $user_id = $pdo->lastInsertId();
         if ($user_id) {
           // Insert into professeur table
-          $add_prof = "INSERT INTO professeur(user_ID, email, password, md5_pass, specialite) 
-                             VALUES('$user_id', '$email', '$password', '$md5_pass', '$specialite')";
+          $add_prof = "INSERT INTO professeur(user_ID, email, password, specialite) 
+                             VALUES('$user_id', '$email', '$password',  '$specialite')";
           if ($pdo->query($add_prof)) {
             
             // Send email

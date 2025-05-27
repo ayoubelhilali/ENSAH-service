@@ -1,3 +1,11 @@
+<?php 
+if(session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+require_once 'uploader_note.php';
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <!-- [Head] start -->
@@ -463,16 +471,12 @@
             </div>
           </div>
         </div>
+        <?php
+        require_once 'table_unite.php';
+        require_once 'uploader_note.php';
+        ?>
 
-    <?php 
-      if(isset($_GET['page'])){
-        if($_GET['page']=='note'){
-          
-        }
-      }
-    
-    ?>  
- 
+      </div>
     <!-- [ Main Content ] end -->
     <footer class="pc-footer">
         <div class="footer-wrapper container-fluid">

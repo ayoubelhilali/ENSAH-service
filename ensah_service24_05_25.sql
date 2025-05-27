@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 -- Structure de la table `admin`
 --
 
-CREATE TABLE `admin` (
+CREATE TABLE IF NOT EXISTS `admin` (
   `admin_ID` int(11) NOT NULL,
   `email` varchar(30) NOT NULL,
   `password` varchar(30) NOT NULL,
@@ -281,7 +281,7 @@ INSERT INTO `user` (`user_ID`, `nom`, `prenom`, `CIN`, `image`, `date_naissance`
 -- Structure de la table `vacataire`
 --
 
-CREATE TABLE `vacataire` (
+CREATE TABLE IF NOT EXISTS `vacataire` (
   `vacat_ID` int(11) NOT NULL,
   `email` varchar(40) NOT NULL,
   `password` varchar(30) NOT NULL,

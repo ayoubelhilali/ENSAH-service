@@ -66,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors++;
     } else {
         $motdepasse = mysqli_real_escape_string($conne, $_POST["motdepasse"]);
-        $md5_pass = md5($motdepasse); // Hash the password
+        $motdepasse = password_hash($motdepasse, PASSWORD_DEFAULT); // Hash the password
     }
 
     // Validate Specialite
@@ -89,8 +89,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($user_id) {
                 // Ajouter le professeur dans la table des professeurs avec l'ID utilisateur
-                $add_prof = "INSERT INTO professeur(user_ID, email, password, md5_pass, specialite) 
-                VALUES('$user_id', '$email', '$motdepasse', '$md5_pass', '$specialite')";
+                $add_prof = "INSERT INTO professeur(user_ID, email, password, specialite) 
+                VALUES('$user_id', '$email', '$motdepasse', '$specialite')";
                 if (mysqli_query($conne, $add_prof)) {
                     $_SESSION['success_message'] = "Professor added successfully!";  // Optional: set a success message
                     header("Location: /ENSAH-service/dashboard/admin-dash.php");  // Redirect to the dashboard

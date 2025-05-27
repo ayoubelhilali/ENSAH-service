@@ -5,18 +5,13 @@ if (!isset($_SESSION['user'])) {
   header('Location: ../login.php');
   exit();
 }
-if ($_SESSION['user']['role'] !== 'coordonnateur') {
+if ($_SESSION['user']['role'] !== 'vacataire') {
   // Redirect to unauthorized access page if not an admin
   header('Location: /ENSAH-service/login.php');
   exit();
 }
 include('../inc/functions/connections.php');
-$sql = "SELECT COUNT(*) FROM `user`";
-$stmt = $pdo->query($sql);
-$count = $stmt->fetchColumn();
-
 // global data
-$filiere_ID = $_SESSION['filiere']['filiereID'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -67,7 +62,7 @@ $filiere_ID = $_SESSION['filiere']['filiereID'];
   </div>
   <!-- [ Pre-loader ] End -->
   <!-- [ Sidebar Menu ] start -->
-  <?php require_once(__DIR__ . "/../inc/sidebar/cord-sidebar.php"); ?>
+  <?php require_once(__DIR__ . "/../inc/sidebar/vacat-sidebar.php"); ?>
   <!-- [ Sidebar Menu ] end --> <!-- [ Header Topbar ] start -->
   <?php require_once(__DIR__ . "/../inc/header/header.php"); ?>
   <!-- [ Header ] end -->
@@ -189,23 +184,6 @@ $filiere_ID = $_SESSION['filiere']['filiereID'];
             </div>
           </div>
         </div>
-
-        <div class="col-md-12 col-xl-8">
-          <div class="d-flex align-items-center justify-content-between mb-3">
-            <h5 class="mb-0">Unique Visitor</h5>
-            <ul class="nav nav-pills justify-content-end mb-0" id="chart-tab-tab" role="tablist">
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" id="chart-tab-home-tab" data-bs-toggle="pill" data-bs-target="#chart-tab-home"
-                  type="button" role="tab" aria-controls="chart-tab-home" aria-selected="true">Month</button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="chart-tab-profile-tab" data-bs-toggle="pill"
-                  data-bs-target="#chart-tab-profile" type="button" role="tab" aria-controls="chart-tab-profile"
-                  aria-selected="false">Week</button>
-              </li>
-            </ul>
-          </div>
-        </div>
         <div class="col-md-12 col-xl-4">
           <h5 class="mb-3">Les annonces</h5>
           <div class="card p-3 shadow-sm border-0">
@@ -217,17 +195,17 @@ $filiere_ID = $_SESSION['filiere']['filiereID'];
             while ($annonce = $stmt->fetch(PDO::FETCH_ASSOC)) {
               $annonceCount++;
               ?>
-              <div class="mb-4 pb-3 border-bottom">
-                <div class="d-flex justify-content-between align-items-start">
-                  <h6 class="mb-1 text-primary"><i class="ti ti-speakerphone"></i>
-                    <?= htmlspecialchars($annonce["annonce_head"]) ?></h6>
-                  <small class="text-muted"><?= date("d M Y H:i", strtotime($annonce["annonce_date"])) ?></small>
+                <div class="mb-4 pb-3 border-bottom">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <h6 class="mb-1 text-primary"><i class="ti ti-speakerphone"></i>
+                      <?= htmlspecialchars($annonce["annonce_head"]) ?></h6>
+                    <small class="text-muted"><?= date("d M Y H:i", strtotime($annonce["annonce_date"])) ?></small>
+                  </div>
+                  <p class="mb-0 text-secondary">
+                    <?= (strlen($annonce['annonce_body']) > 50) ? substr(htmlspecialchars($annonce['annonce_body'], ENT_QUOTES, 'UTF-8'), 0, 50) . ' . . .' : htmlspecialchars($annonce['annonce_body'], ENT_QUOTES, 'UTF-8') ?>
+                  </p>
                 </div>
-                <p class="mb-0 text-secondary">
-                  <?= (strlen($annonce['annonce_body']) > 50) ? substr(htmlspecialchars($annonce['annonce_body'], ENT_QUOTES, 'UTF-8'), 0, 50) . ' . . .' : htmlspecialchars($annonce['annonce_body'], ENT_QUOTES, 'UTF-8') ?>
-                </p>
-              </div>
-              <?php
+                <?php
             }
 
             if ($annonceCount === 0) { // Check the counter

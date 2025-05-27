@@ -3,14 +3,8 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-<<<<<<< HEAD
- 
-require_once 'C:\xampp\htdocs\ENSAH-service\inc\functions\connections.php' ;
-=======
-
 
 require_once __DIR__ . '/inc/functions/connections.php';
->>>>>>> 5211e6d43579a6a51b7fef64fea6a5f08d53d2f9
 
 try {
     // Get admins data
@@ -74,10 +68,36 @@ try {
     if($stmt->execute()){
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
             $profs[$row['email']]=[
-                'user_id'=>$row['prof_ID'] ,
+                'prof_id'=>$row['prof_ID'] ,
                 'password'=>$row['password'] ,
                 'role' => 'professeur'
             ] ;
+        }
+    }
+    // get vacataires data
+    $vacats = [];
+    $vacats_data = "SELECT * FROM vacataire V 
+                        JOIN user U ON V.user_ID = U.user_ID";
+
+    $stmt = $pdo->prepare($vacats_data);
+    if ($stmt->execute()) {
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $vacats[$row['email']] = [
+                'user_id' => $row['user_ID'],
+                'nom' => $row['nom'],
+                'prenom' => $row['prenom'],
+                'password' => $row['password'],
+                'role' => "vacataire",
+                'linkedin' => $row['linkedin'],
+                'bio' => $row['bio'],
+                'genre' => $row['genre'],
+                'phone' => $row['Phone'],
+                'address' => $row['address'],
+                'birthday' => $row['date_naissance'],
+                'email' => $row['email'],
+                'image' => $row['image'],
+                'specialite' => $row['specialite'],
+            ];
         }
     }
 
@@ -153,16 +173,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
     elseif(isset($profs[$email])){
-        if($password==$profs[$email]['password']){
+        if(password_verify($password, $profs[$email]['password'])){
             $_SESSION['user']=[
-                'user_id'=> $profs[$email]['user_id']
-            ]  ; 
+                'prof_id'=> $profs[$email]['prof_id']
+            ] ;
             header("Location: Prof_interface.php") ;
             exit() ;
         }
         else {
-            $message = $profs[$email]['password'];
-            header("Location: login.php?message=mot+de+passe+invalide $message");
+            header("Location: login.php?message=mot+de+passe+invalide ");
+            exit();
+        }
+    }
+    // Check if email exists in vacataires
+    elseif (isset($vacats[$email])) {
+        // Verify password (assuming passwords are hashed)
+        if (password_verify($password, $vacats[$email]['password'])) {
+            $_SESSION['user'] = [
+                'user_id' => $vacats[$email]['user_id'],
+                'email' => $email,
+                'nom' => $vacats[$email]['nom'],
+                'prenom' => $vacats[$email]['prenom'],
+                'image' => $vacats[$email]['image'],
+                'linkedin' => $vacats[$email]['linkedin'],
+                'bio' => $vacats[$email]['bio'],
+                'genre' => $vacats[$email]['genre'],
+                'phone' => $vacats[$email]['phone'],
+                'address' => $vacats[$email]['address'],
+                'birthday' => $vacats[$email]['birthday'],
+                'specialite' => $vacats[$email]['specialite'],
+                'role' => 'vacataire'
+            ];
+            print($session['user']) ;
+            header("Location: dashboard/vacat-dash.php");
+            exit();
+        } else {
+            header("Location: login.php?message=mot+de+passe+invalide");
             exit();
         }
     }
