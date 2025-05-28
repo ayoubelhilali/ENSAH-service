@@ -1,5 +1,7 @@
 <?php
-session_start();
+if(session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/functions/connections.php");
 
 // Ensure $pdo is initialized
@@ -104,6 +106,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             SET user.nom = ?, user.prenom = ?, user.image = ?, user.address = ?, user.date_naissance=?,user.genre=?,user.bio=?,user.Phone=?,coordonnateur.cord_email=?,user.linkedin=?
             WHERE user.user_ID = ?";
         }
+        elseif ($_SESSION['user']['role'] == "vacataire") {
+            $edit_user = "UPDATE user
+            INNER JOIN vacataire ON vacataire.user_ID = user.user_ID
+            SET user.nom = ?, user.prenom = ?, user.image = ?, user.address = ?, user.date_naissance=?,user.genre=?,user.bio=?,user.Phone=?,email=?,user.linkedin=?
+            WHERE user.user_ID = ?";
+        }
         $stmt = $pdo->prepare($edit_user);
         if ($stmt->execute([$nom, $prenom, $avatar_path, $address, $birthday, $genre, $bio, $phone, $email, $linkedin, $id])) {
             // Update session data
@@ -118,6 +126,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 'phone' => $phone,
                 'address' => $address,
                 'birthday' => $birthday,
+                'role' => $_SESSION['user']['role']
             ];
             $_SESSION['success_message'] = "profil edited successfully!";
             header("Location: /ENSAH-service/pages/profil.php?success=1");

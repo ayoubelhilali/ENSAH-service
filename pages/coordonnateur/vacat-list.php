@@ -325,7 +325,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/isStrongP
   <?php
   // Initialize variables and error messages
   $nom = $prenom = $cin = $birthday_day = $birthday_month = $birthday_year = "";
-  $genre = $email = $password = $md5_pass = $specialite = "";
+  $genre = $email = $password =  $specialite = "";
   $errors = 0;
 
   $CIN_error = $nom_error = $prenom_error = $birthday_error = "";
@@ -407,7 +407,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/isStrongP
     // Validate Password
     if (isStrongPassword($_POST["password"])) {
       $password = htmlspecialchars($_POST["password"], ENT_QUOTES, 'UTF-8');
-      $md5_pass = md5($password); // Hash the password
+      $password = password_hash($password, PASSWORD_DEFAULT); // Hash the password
     } else {
       $password_error = "Password should include at least: 1 uppercase, 1 lowercase, 1 digit, 1 special character, and be at least 8 characters long.";
       $errors++;
@@ -435,8 +435,8 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/isStrongP
         $user_id = $pdo->lastInsertId();
         if ($user_id) {
           // Insert into vacataire table
-          $add_vacat = "INSERT INTO vacataire(user_ID, email, password, md5_pass, specialite) 
-                             VALUES('$user_id', '$email', '$password', '$md5_pass', '$specialite')";
+          $add_vacat = "INSERT INTO vacataire(user_ID, email, password, specialite) 
+                             VALUES('$user_id', '$email', '$password', '$specialite')";
           if ($pdo->query($add_vacat)) {
             $_SESSION['success_message'] = "vacataire added successfully!";
             header("Location: /ENSAH-service/pages/coordonnateur/vacat-list.php?success=1");

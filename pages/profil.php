@@ -2,7 +2,7 @@
 session_start();
 if (!isset($_SESSION['user'])) {
   // Redirect to login if not authenticated
-  header('Location: ../login.php');
+  header('Location: /ENSAH-service/login.php');
   exit();
 }
 if (session_status() === PHP_SESSION_NONE) {
@@ -21,6 +21,7 @@ $phone = $_SESSION["user"]["phone"];
 $linkedin = $_SESSION["user"]["linkedin"];
 $address = $_SESSION["user"]["address"];
 $bio = $_SESSION["user"]["bio"];
+echo "----------------------$role";
 
 
 // Calculate the age:
@@ -79,8 +80,11 @@ $age = $birthDate->diff($today)->y; // 'y' gives the number of full years
   <!-- [ Sidebar Menu ] start -->
   <?php if($_SESSION["user"]["role"] == "admin") { ?>
       <?php require_once __DIR__ . "/../inc/sidebar/admin-sidebar.php"; ?>
-   <?php } else { ?>
+   <?php } else if ($_SESSION["user"]["role"] == "coordonnateur") { ?>
       <?php require_once __DIR__ . "/../inc/sidebar/cord-sidebar.php"; ?>
+   <?php } else if ($_SESSION["user"]["role"] == "vacataire") { ?>
+      <?php require_once __DIR__ . "/../inc/sidebar/vacat-sidebar.php"; ?>
+
    <?php } ?>  <!-- [ Sidebar Menu ] end --> <!-- [ Header Topbar ] start -->
   <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/header/header.php") ?>
   <!-- [ Header ] end -->
@@ -259,7 +263,7 @@ $age = $birthDate->diff($today)->y; // 'y' gives the number of full years
                     </div>
                   </div>
                 </div>
-                <form action="../inc/functions/edit-profil.php" method="post" class="tab-pane" id="profile-2"
+                <form action="/ENSAH-service/inc/functions/edit-profil.php" method="post" class="tab-pane" id="profile-2"
                   role="tabpanel" aria-labelledby="profile-tab-2">
                   <div class="row">
                     <div class="col-lg-6">

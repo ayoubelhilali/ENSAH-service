@@ -71,7 +71,7 @@ session_start();
            $unites = $pdo->prepare("SELECT * FROM voeux v 
                                     JOIN unite u ON v.id_unite=u.unite_ID 
                                     WHERE v.id_prof=? AND v.status=? ") ;
-           if($unites->execute([$_SESSION['user']['user_id'],1])){
+           if($unites->execute([$_SESSION["user"]["prof_id"],1])){
               $rows = $unites->fetchAll(PDO::FETCH_ASSOC);
               foreach($rows as $row){
 

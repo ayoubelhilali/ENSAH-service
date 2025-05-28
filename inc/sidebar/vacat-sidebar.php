@@ -9,7 +9,7 @@
     <div class="navbar-content" style="background-color:#000075;">
       <ul class="pc-navbar" style=" margin-bottom:30px;">
         <li class="pc-item">
-          <a href="/ENSAH-service/dashboard/cord-dash.php" class="pc-link">
+          <a href="/ENSAH-service/dashboard/vacat-dash.php" class="pc-link">
             <span class="pc-micon"><i class="ti ti-dashboard"></i></span>
             <span class="pc-mtext">Dashboard</span>
           </a>
@@ -20,7 +20,7 @@
           <i class="ti ti-dashboard"></i>
         </li>
         <li class="pc-item">
-          <a href="/ENSAH-service/pages/coordonnateur/vacat-list.php" class="pc-link">
+          <a href="#" class="pc-link">
             <span class="pc-micon"><i class="ti ti-user"></i></span>
             <span class="pc-mtext">vacataires</span>
           </a>
@@ -30,23 +30,11 @@
           <label>Gestion académique </label>
           <i class="ti ti-news"></i>
         </li>
-        <li class="pc-item pc-hasmenu">
-          <a href="#!" class="pc-link"><span class="pc-micon"><i class="ti ti-menu"></i></span><span
-              class="pc-mtext">Descriptif</span><span class="pc-arrow"><i data-feather="chevron-right"></i></span></a>
-          <ul class="pc-submenu">
-            <li class="pc-item">
-              <a href="/ENSAH-service/pages/coordonnateur/ue_list.php" class="pc-link">
-                <span class="pc-micon"><i class="ti ti-book"></i></span>
-                <span class="pc-mtext">consulter descriptif </span>
-              </a>
-            </li>
-            <li class="pc-item">
-              <a href="/ENSAH-service/pages/coordonnateur/import-desc.php" class="pc-link">
-                <span class="pc-micon"><i class="ti ti-file-import"></i></span>
-                <span class="pc-mtext">Importer descriptif </span>
-              </a>
-            </li>
-          </ul>
+        <li class="pc-item">
+          <a href="#" class="pc-link">
+            <span class="pc-micon"><i class="ti ti-book"></i></span>
+            <span class="pc-mtext">unité d'enseignement (UE) </span>
+          </a>
         </li>
         <li class="pc-item pc-hasmenu">
           <a href="#!" class="pc-link"><span class="pc-micon"><i class="ti ti-menu"></i></span><span
@@ -54,13 +42,13 @@
                 data-feather="chevron-right"></i></span></a>
           <ul class="pc-submenu">
             <li class="pc-item">
-              <a href="/ENSAH-service/pages/coordonnateur/affect_ue_list.php" class="pc-link">
+              <a href="#" class="pc-link">
                 <span class="pc-micon"><i class="ti ti-clipboard-check"></i></span>
                 <span class="pc-mtext">consulter les affectaions </span>
               </a>
             </li>
             <li class="pc-item">
-              <a href="/ENSAH-service/pages/coordonnateur/affect_vacant.php" class="pc-link">
+              <a href="#" class="pc-link">
                 <span class="pc-micon"><i class="ti ti-user-plus"></i></span>
                 <span class="pc-mtext">affecter une UE</span>
               </a>
@@ -74,12 +62,6 @@
         </li>
 
         <li class="pc-item">
-          <a href="/ENSAH-service/pages/annonces.php" class="pc-link">
-            <span class="pc-micon"><i class="ti ti-speakerphone"></i></span>
-            <span class="pc-mtext">annonce</span>
-          </a>
-        </li>
-        <li class="pc-item">
           <a href="/ENSAH-service/pages/historique.php" class="pc-link">
             <span class="pc-micon"><i class="ti ti-history"></i></span>
             <span class="pc-mtext">Historique</span>
@@ -87,14 +69,7 @@
         </li>
         <li class="pc-item">
           <a href="/ENSAH-service/logout.php" style="color:red;" class="pc-link">
-            <span class="pc-micon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="icon icon-tabler icons-tabler-outline icon-tabler-logout-2">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                <path d="M10 8v-2a2 2 0 0 1 2 -2h7a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-7a2 2 0 0 1 -2 -2v-2" />
-                <path d="M15 12h-12l3 -3" />
-                <path d="M6 15l-3 -3" />
-              </svg></span>
+            <span class="pc-micon"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-logout-2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 8v-2a2 2 0 0 1 2 -2h7a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-7a2 2 0 0 1 -2 -2v-2" /><path d="M15 12h-12l3 -3" /><path d="M6 15l-3 -3" /></svg></span>
             <span class="pc-mtext">Logout</span>
           </a>
         </li>
