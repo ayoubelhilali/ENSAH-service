@@ -2,12 +2,14 @@
 $charge_min = 180;
 $charge_horaire_selectionne = 0;
 
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 $_SESSION['charge_min'] = $charge_min;
 
 require_once 'C:\xampp\htdocs\ENSAH-service\inc\functions\connections.php';
 
-$prof_id = $_SESSION['user']['user_id'] ?? null;
+$prof_id = $_SESSION['user']['prof_id'] ?? null;
 
 if (!$prof_id) {
     die("Vous devez être connecté pour soumettre des vœux.");

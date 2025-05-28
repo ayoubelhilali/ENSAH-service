@@ -72,7 +72,6 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
   <!-- [ Sidebar Menu ] end --> <!-- [ Header Topbar ] start -->
   <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/header/header.php") ?>
   <!-- [ Header ] end -->
-
   <!-- [ Main Content ] start -->
   <div class="pc-container">
     <div class="pc-content">

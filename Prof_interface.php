@@ -3,7 +3,6 @@ if(session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-require_once 'uploader_note.php';
 ?>
 
 <!DOCTYPE html>
@@ -475,7 +474,6 @@ require_once 'uploader_note.php';
         require_once 'table_unite.php';
         require_once 'uploader_note.php';
         ?>
-
       </div>
     <!-- [ Main Content ] end -->
     <footer class="pc-footer">
