@@ -1,5 +1,6 @@
 <?php
-session_start();
+
+
 require_once 'C:\xampp\htdocs\ENSAH-service\inc\functions\connections.php';
 
 if (isset($_FILES['fichier_notes']) && $_FILES['fichier_notes']['error'] == 0) {
@@ -31,9 +32,9 @@ if (isset($_FILES['fichier_notes']) && $_FILES['fichier_notes']['error'] == 0) {
     $succes=-1 ;
 }
 
-$_SESSION['succes']=$succes ;
 
-header("Location:Prof_interface.php") ;
+
+header("Location:Prof_interface.php?page=note&succes=$succes") ;
        
 
 ?>

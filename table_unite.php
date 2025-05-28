@@ -1,5 +1,4 @@
-<div id="pc-container-unite">
-          <div class="pc-content">            
+   <div class="pc-content">            
             <!-- [ Main Content ] start -->
             <div class="row">
                 <!-- [ sample-page ] start -->
@@ -90,10 +89,9 @@
                         </div>
                     </div>
                 </div>
-                  <h5>Vous pouvez consulter les unités d'enseignement que vous avez assuré  <a href='#' onclick="loadContent('unite_assure')">ici</a></h5>
+                  <h5>Vous pouvez consulter les unités d'enseignement que vous avez assuré  <a href='Prof_interface.php?page=unite_assure' >ici</a></h5>
 
                 <!-- [ sample-page ] end -->
             </div>
             <!-- [ Main Content ] end -->
-        </div>   
-    </div>
+        </div>
