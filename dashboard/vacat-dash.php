@@ -91,7 +91,7 @@ include('../inc/functions/connections.php');
         <!-- [ sample-page ] start -->
 
         <div class="col-md-6 col-xl-3">
-          <div class="card ">
+          <div class="card " style="background-color:rgb(188, 196, 255);border-radius: 0.375rem;">
             <div class="card-body d-flex align-items-center">
               <div class="me-3">
                 <span
@@ -114,13 +114,13 @@ include('../inc/functions/connections.php');
         </div>
 
         <div class="col-md-6 col-xl-3">
-          <div class="card ">
+          <div class="card " style="background-color:rgb(207, 207, 207);border-radius: 0.375rem;">
             <div class="card-body d-flex align-items-center">
               <div class="me-3">
                 <span
                   class="bg-secondary bg-gradient text-white rounded-circle d-flex align-items-center justify-content-center"
                   style="width:48px; height:48px;">
-                  <i class="fa-solid fa-graduation-cap fa-lg"></i>
+                  <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-notes"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" /><path d="M9 7l6 0" /><path d="M9 11l6 0" /><path d="M9 15l4 0" /></svg>
                 </span>
               </div>
               <div>
@@ -139,7 +139,7 @@ include('../inc/functions/connections.php');
         </div>
 
         <div class="col-md-6 col-xl-3">
-          <div class="card ">
+          <div class="card " style="background-color: #d4edda;">
             <div class="card-body d-flex align-items-center">
               <div class="me-3">
                 <span
@@ -149,11 +149,11 @@ include('../inc/functions/connections.php');
                 </span>
               </div>
               <div>
-                <h6 class="mb-1 f-w-400 text-muted">Total des unités</h6>
+                <h6 class="mb-1 f-w-400 text-muted">Les unités affectées</h6>
                 <h4 class="mb-0"><?php
-                $sql = "SELECT COUNT(*) FROM `unite` where filiere_ID=:filiereID";
+                $sql = "SELECT COUNT(*) FROM affect_ue_vac A join unite U on A.unite_ID=U.unite_ID  join filiere F on F.filiere_ID=U.filiere_ID  where A.vacataire_ID = :vacataire_ID";
                 $stmt = $pdo->prepare($sql);
-                $stmt->bindParam(':filiereID', $filiere_ID, PDO::PARAM_INT);
+                $stmt->bindParam(':vacataire_ID', $_SESSION['user']['vacat_ID'], PDO::PARAM_INT);
                 $stmt->execute();
                 $count = $stmt->fetchColumn();
                 echo $count;
@@ -163,23 +163,37 @@ include('../inc/functions/connections.php');
           </div>
         </div>
         <div class="col-md-6 col-xl-3">
-          <div class="card ">
+          <div class="card " style="background-color: #f8d7da;border-radius: 0.375rem;">
             <div class="card-body d-flex align-items-center">
               <div class="me-3">
                 <span
                   class="bg-danger bg-gradient text-white rounded-circle d-flex align-items-center justify-content-center"
                   style="width:48px; height:48px;">
-                  <i class="fa-solid fa-graduation-cap fa-lg"></i>
+                  <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-stopwatch"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 13a7 7 0 1 0 14 0a7 7 0 0 0 -14 0z" /><path d="M14.5 10.5l-2.5 2.5" /><path d="M17 8l1 -1" /><path d="M14 3h-4" /></svg>
                 </span>
               </div>
               <div>
-                <h6 class="mb-1 f-w-400 text-muted">Total des vacataires</h6>
+                <h6 class="mb-1 f-w-400 text-muted">Total de volume horaire</h6>
                 <h4 class="mb-0"><?php
-                $sql = "SELECT COUNT(*) FROM `vacataire`";
-                $stmt = $pdo->query($sql);
+                $sql = "SELECT SUM(volume_cours + volume_td + volume_tp) FROM affect_ue_vac A join unite U on A.unite_ID=U.unite_ID  join filiere F on F.filiere_ID=U.filiere_ID  where A.vacataire_ID = :vacataire_ID";
+                $stmt = $pdo->prepare($sql);
+                $stmt->bindParam(':vacataire_ID', $_SESSION['user']['vacat_ID'], PDO::PARAM_INT);
+                $stmt->execute();
                 $count = $stmt->fetchColumn();
-                echo $count;
+                echo $count . " h";
                 ?></h4>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 col-xl-8">
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <div class="card" style="width:100%">
+              <div class="card-header">
+                <h5>Les volumes horaires</h5>
+              </div>
+              <div class="card-body">
+                <div id="bar-chart-2"></div>
               </div>
             </div>
           </div>
@@ -247,6 +261,8 @@ include('../inc/functions/connections.php');
   <script src="/ENSAH-service/assets/js/fonts/custom-font.js"></script>
   <script src="/ENSAH-service/assets/js/pcoded.js"></script>
   <script src="/ENSAH-service/assets/js/plugins/feather.min.js"></script>
+  <script src="/ENSAH-service/assets/js/users-chart.js"></script>
+
 
 
 

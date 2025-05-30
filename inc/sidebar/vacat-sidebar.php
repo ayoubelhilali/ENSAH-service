@@ -30,14 +30,14 @@
                 data-feather="chevron-right"></i></span></a>
           <ul class="pc-submenu">
             <li class="pc-item">
-              <a href="#" class="pc-link">
+              <a href="/ENSAH-service/pages/vacataire/notes_list.php" class="pc-link">
                 <span class="pc-micon"><i class="ti ti-clipboard-check"></i></span>
                 <span class="pc-mtext">consulter les notes </span>
               </a>
             </li>
             <li class="pc-item">
               <a href="/ENSAH-service/pages/vacataire/uploader_note.php" class="pc-link">
-                <span class="pc-micon"><i class="ti ti-user-plus"></i></span>
+                <span class="pc-micon"><i class="ti ti-upload"></i></span>
                 <span class="pc-mtext">Uploader les notes</span>
               </a>
             </li>
@@ -48,6 +48,18 @@
           <i class="ti ti-brand-chrome"></i>
         </li>
 
+        <li class="pc-item">
+          <a href="/ENSAH-service/pages/profil.php" class="pc-link">
+            <span class="pc-micon"><i class="ti ti-user"></i></span>
+            <span class="pc-mtext">Profile</span>
+          </a>
+        </li>
+        <li class="pc-item">
+          <a href="/ENSAH-service/pages/annonces-list.php" class="pc-link">
+            <span class="pc-micon"><i class="ti ti-speakerphone"></i></span>
+            <span class="pc-mtext">Annoncements</span>
+          </a>
+        </li>
         <li class="pc-item">
           <a href="/ENSAH-service/pages/historique.php" class="pc-link">
             <span class="pc-micon"><i class="ti ti-history"></i></span>

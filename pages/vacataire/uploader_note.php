@@ -108,7 +108,7 @@ $role = $_SESSION['user']['role'];
             ]);
             $all_units = $stmt;
             ?>
-            <form action="/ENSAH-service/inc/functions/add-annonce.php" method="post" class="row">
+            <form action="/ENSAH-service/inc/functions/vacataire/upload_note.php" method="post" class="row" enctype="multipart/form-data">
                 <!-- [ form-element ] start -->
                 <div class="col-sm-6" style="width: 100%;">
                     <!-- Basic Inputs -->
@@ -125,10 +125,15 @@ $role = $_SESSION['user']['role'];
 
                                     ?>
                                 </div><?php } ?>
+                            <script>
+                                setTimeout(() => {
+                                    document.querySelector(".alert").style.display = "none";
+                                }, timeout = 5000);
+                            </script>
                             <div class="card-body">
                                 <div class="form-group">
                                     <label class="form-label">Session</label>
-                                    <select name="genre" class="form-select selectInput" required>
+                                    <select name="session" class="form-select selectInput" required>
                                         <option disabled class="defaultOption">Selectionner la session
                                         </option>
                                         <option>Normale</option>
@@ -137,18 +142,18 @@ $role = $_SESSION['user']['role'];
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Unité</label>
-                                    <select name="genre" class="form-select selectInput" required>
+                                    <select name="unite" class="form-select selectInput" required>
                                         <option disabled class="defaultOption" selected>Selectionner la session
                                         </option>
                                         <?php foreach ($all_units as $unit) { ?>
-                                            <option><?= $unit['unite_name'] ?></option>
+                                            <option value="<?= $unit['unite_ID'] ?>"><?= $unit['unite_name'] ?></option>
                                         <?php } ?>
                                     </select>
                                 </div>
                                 <div class="form-group mb-0">
                                     <label class="form-label" for="exampleTextarea">Uploader le document (.pdf / .doc /.docx)</label>
                                     <div class="mb-3">
-                                        <input class="form-control" type="file" id="formFile" accept=".pdf, .doc, .docx">
+                                        <input class="form-control" name="document" type="file" id="formFile" accept=".pdf, .doc, .docx">
                                     </div>
                                 </div>
                             </div>

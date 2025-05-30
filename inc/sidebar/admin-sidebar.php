@@ -66,6 +66,7 @@
             <span class="pc-mtext">Historique</span>
           </a>
         </li>
+        <form action="" method="post"></form>
         <li class="pc-item">
           <a href="/ENSAH-service/logout.php" style="color:red;" class="pc-link">
             <span class="pc-micon"><i class="fa-solid fa-arrow-right-from-bracket fa-flip-horizontal"></i></span>

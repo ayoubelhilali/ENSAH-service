@@ -75,3 +75,8 @@
     transition: ease 0.7s;
 }
 /* Style des annonces */
+.pc-submenu .pc-item:hover {
+    color: green;
+    background-color: #f0f0f0;
+    border-color: green;
+}
