@@ -14,48 +14,35 @@
             <span class="pc-mtext">Dashboard</span>
           </a>
         </li>
-
-        <li style="color:#b08862" class="pc-item pc-caption">
-          <label>Personnels</label>
-          <i class="ti ti-dashboard"></i>
-        </li>
-        <li class="pc-item">
-          <a href="#" class="pc-link">
-            <span class="pc-micon"><i class="ti ti-user"></i></span>
-            <span class="pc-mtext">vacataires</span>
-          </a>
-        </li>
-
         <li style="color:#b08862" class="pc-item pc-caption">
           <label>Gestion académique </label>
           <i class="ti ti-news"></i>
         </li>
         <li class="pc-item">
-          <a href="#" class="pc-link">
+          <a href="/ENSAH-SERVICE/pages/vacataire/consult_unite_affect.php" class="pc-link">
             <span class="pc-micon"><i class="ti ti-book"></i></span>
-            <span class="pc-mtext">unité d'enseignement (UE) </span>
+            <span class="pc-mtext">consulter les unités (UE) </span>
           </a>
         </li>
         <li class="pc-item pc-hasmenu">
           <a href="#!" class="pc-link"><span class="pc-micon"><i class="ti ti-menu"></i></span><span
-              class="pc-mtext">Affectation des UE</span><span class="pc-arrow"><i
+              class="pc-mtext">Gestion des notes</span><span class="pc-arrow"><i
                 data-feather="chevron-right"></i></span></a>
           <ul class="pc-submenu">
             <li class="pc-item">
               <a href="#" class="pc-link">
                 <span class="pc-micon"><i class="ti ti-clipboard-check"></i></span>
-                <span class="pc-mtext">consulter les affectaions </span>
+                <span class="pc-mtext">consulter les notes </span>
               </a>
             </li>
             <li class="pc-item">
-              <a href="#" class="pc-link">
+              <a href="/ENSAH-service/pages/vacataire/uploader_note.php" class="pc-link">
                 <span class="pc-micon"><i class="ti ti-user-plus"></i></span>
-                <span class="pc-mtext">affecter une UE</span>
+                <span class="pc-mtext">Uploader les notes</span>
               </a>
             </li>
           </ul>
         </li>
-
         <li style="color:#b08862" class="pc-item pc-caption">
           <label>Other</label>
           <i class="ti ti-brand-chrome"></i>

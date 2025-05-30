@@ -84,6 +84,7 @@ try {
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $vacats[$row['email']] = [
                 'user_id' => $row['user_ID'],
+                'vacat_ID' => $row['vacat_ID'],
                 'nom' => $row['nom'],
                 'prenom' => $row['prenom'],
                 'password' => $row['password'],
@@ -191,6 +192,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (password_verify($password, $vacats[$email]['password'])) {
             $_SESSION['user'] = [
                 'user_id' => $vacats[$email]['user_id'],
+                'vacat_ID' => $vacats[$email]['vacat_ID'],
                 'email' => $email,
                 'nom' => $vacats[$email]['nom'],
                 'prenom' => $vacats[$email]['prenom'],
@@ -204,7 +206,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'specialite' => $vacats[$email]['specialite'],
                 'role' => 'vacataire'
             ];
-            print($session['user']) ;
             header("Location: dashboard/vacat-dash.php");
             exit();
         } else {
