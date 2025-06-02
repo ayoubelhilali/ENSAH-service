@@ -67,6 +67,25 @@
             </li>
           </ul>
         </li>
+        <li class="pc-item pc-hasmenu">
+          <a href="#!" class="pc-link"><span class="pc-micon"><i class="fa-solid fa-calendar-days"></i></span><span
+              class="pc-mtext">Emploi du temps</span><span class="pc-arrow"><i
+                data-feather="chevron-right"></i></span></a>
+          <ul class="pc-submenu">
+            <li class="pc-item">
+              <a href="/ENSAH-service/pages/coordonnateur/emploi_list.php" class="pc-link">
+                <span class="pc-micon"><i class="fa-regular fa-calendar-days"></i></span>
+                <span class="pc-mtext">consulter les emploi </span>
+              </a>
+            </li>
+            <li class="pc-item">
+              <a href="/ENSAH-service/pages/coordonnateur/uploader-emploi.php" class="pc-link">
+                <span class="pc-micon"><i class="fa-solid fa-calendar-plus"></i></span>
+                <span class="pc-mtext">uploader emploi</span>
+              </a>
+            </li>
+          </ul>
+        </li>
 
         <li style="color:#b08862" class="pc-item pc-caption">
           <label>Other</label>
@@ -74,11 +93,31 @@
         </li>
 
         <li class="pc-item">
-          <a href="/ENSAH-service/pages/annonces.php" class="pc-link">
-            <span class="pc-micon"><i class="ti ti-speakerphone"></i></span>
-            <span class="pc-mtext">annonce</span>
+          <a href="/ENSAH-service/pages/profil.php" class="pc-link">
+            <span class="pc-micon"><i class="ti ti-user"></i></span>
+            <span class="pc-mtext">Profile</span>
           </a>
         </li>
+        <li class="pc-item pc-hasmenu">
+          <a href="#!" class="pc-link"><span class="pc-micon"><i class="ti ti-speakerphone"></i></span><span
+              class="pc-mtext">Les annonces</span><span class="pc-arrow"><i
+                data-feather="chevron-right"></i></span></a>
+          <ul class="pc-submenu">
+            <li class="pc-item">
+              <a href="/ENSAH-service/pages/annonces-list.php" class="pc-link">
+                <span class="pc-micon"><i class="ti ti-list"></i></span>
+                <span class="pc-mtext">consulter les annonces </span>
+              </a>
+            </li>
+            <li class="pc-item">
+          <a href="/ENSAH-service/pages/annonces.php" class="pc-link">
+            <span class="pc-micon"><i class="ti ti-speakerphone"></i></span>
+            <span class="pc-mtext"> creer une annonce</span>
+          </a>
+        </li>
+          </ul>
+        </li>
+        
         <li class="pc-item">
           <a href="/ENSAH-service/pages/historique.php" class="pc-link">
             <span class="pc-micon"><i class="ti ti-history"></i></span>

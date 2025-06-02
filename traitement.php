@@ -166,7 +166,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 "filiereID" => $cordons[$email]['filiereID'],
                 "filiereNom" => $cordons[$email]['filiereNom'],
             ];
-            header("Location: dashboard/cord-dash.php?filiere");
+            header("Location: dashboard/cord-dash.php");
             exit();
         } else {
             header("Location: login.php?message=mot+de+passe+invalide");

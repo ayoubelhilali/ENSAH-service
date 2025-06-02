@@ -19,7 +19,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/ENSAH-service/inc/functions/connections.ph
 <!-- [Head] start -->
 
 <head>
-    <title>ENSAH-service | les notes</title>
+    <title>ENSAH-service | les emplois</title>
     <!-- [Meta] -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
@@ -64,7 +64,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/ENSAH-service/inc/functions/connections.ph
     </div>
     <!-- [ Pre-loader ] End -->
     <!-- [ Sidebar Menu ] start -->
-    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/sidebar/vacat-sidebar.php") ?>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/sidebar/cord-sidebar.php") ?>
     <!-- [ Sidebar Menu ] end --> <!-- [ Header Topbar ] start -->
     <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/header/header.php") ?>
     <!-- [ Header ] end -->
@@ -79,12 +79,12 @@ include($_SERVER['DOCUMENT_ROOT'] . '/ENSAH-service/inc/functions/connections.ph
                         <div class="col-md-12">
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="/ENSAH-service/dashboard/index.html">Home</a></li>
-                                <li class="breadcrumb-item" aria-current="page">liste des notes</li>
+                                <li class="breadcrumb-item" aria-current="page">liste des emplois</li>
                             </ul>
                         </div>
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h2 class="mb-0">Consulter les notes</h2>
+                                <h2 class="mb-0">Consulter les emplois</h2>
                             </div>
                         </div>
                     </div>
@@ -102,10 +102,15 @@ include($_SERVER['DOCUMENT_ROOT'] . '/ENSAH-service/inc/functions/connections.ph
                             <div class="text-end p-4 pb-0">
 
                                 <div id="success-msg" class="success-msg" style="color: green; margin-top: 10px;">
-                                    <?php if (isset($_GET['success']) && isset($_SESSION["success_message"])): ?>
-                                        <?= "✅" . htmlspecialchars($_SESSION["success_message"], ENT_QUOTES, 'UTF-8'); ?>
-                                        <?php unset($_SESSION["success_message"]); ?>
-                                    <?php endif; ?>
+                                    <?php 
+                                    if (isset($_GET['success']) && isset($_SESSION["success_message"])): 
+                                        echo "✅" . htmlspecialchars($_SESSION["success_message"], ENT_QUOTES, 'UTF-8');
+                                        unset($_SESSION["success_message"]);
+                                    elseif (!isset($_GET['success'])):
+                                        // Always unset the message if not on a success page
+                                        unset($_SESSION["success_message"]);
+                                    endif; 
+                                    ?>
                                 </div>
 
                                 <div id="error-msg" class="error-msg" style="color: red; margin-top: 10px;">
@@ -124,89 +129,55 @@ include($_SERVER['DOCUMENT_ROOT'] . '/ENSAH-service/inc/functions/connections.ph
 
                             <!---------------------------------->
                             <div class="table-responsive">
-                                <table class="table table-hover" id="pc-dt-simple">
-                                    <thead>
+                                <h2 class="text-center text-primary mb-4">📆 Liste des emplois du temps</h2>
+                                <table class="table table-bordered table-striped">
+                                    <thead class="table-dark">
                                         <tr>
-                                            <th>#</th>
-                                            <th>Unité d'enseignement</th>
-                                            <th>Session</th>
-                                            <th>Filière</th>
-                                            <th>semestre</th>
-                                            <th>année</th>
+                                            <th>filiere</th>
+                                            <th>Semestre</th>
+                                            <th>Date de publication</th>
+                                            <th>année universitaire</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php
-                                        $units_query = "SELECT * FROM vacataire_note VA join unite U on VA.unite_ID=U.unite_ID  join filiere F on F.filiere_ID=U.filiere_ID  where VA.vacataire_ID = :vacataire_ID";
-                                        $stmt = $pdo->prepare($units_query);
-                                        $stmt->execute([
-                                            ':vacataire_ID' => $_SESSION['user']['vacat_ID']
-                                        ]);
-                                        $all_notes = $stmt;
-                                        while ($note = $all_notes->fetch(PDO::FETCH_ASSOC)) {
-                                            $resp_query = $pdo->prepare("SELECT * FROM affect_ue_vac A  
-                                            join vacataire V on A.vacataire_ID=V.vacat_ID 
-                                            join user U2 on V.user_ID=U2.user_ID
-                                            WHERE A.vacataire_ID = :affect_ue");
-                                            $resp_query->execute([':affect_ue' => $note['vacataire_ID']]);
-                                            $resp_ue = $resp_query->fetch(PDO::FETCH_ASSOC);
+                                        $stmt = $pdo->prepare("SELECT * FROM emploi join filiere on emploi.filiereID = filiere.filiere_ID where emploi.filiereID = :filiereID ORDER BY date_publication DESC");
+                                        $stmt->execute([':filiereID' => $_SESSION['filiere']['filiereID']]);
+                                        while ($emploi = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                             ?>
                                             <tr>
-                                                <td><?= $note['note_ID'] ?></td>
-                                                <td>
-                                                    <div class="row">
-                                                        <div class="col">
-                                                            <h6 class="mb-1">
-                                                                <?= htmlspecialchars($note['unite_name'], ENT_QUOTES, 'UTF-8') ?>
-                                                            </h6>
-                                                        </div>
-                                                    </div>
+                                                <td><?php echo htmlspecialchars($emploi['filiere_nom'], ENT_QUOTES, 'UTF-8'); ?>
+                                                </td>
+                                                <td><?php echo htmlspecialchars($emploi['semestre'], ENT_QUOTES, 'UTF-8'); ?>
                                                 </td>
                                                 <td>
-                                                    <div class="row">
-                                                        <div class="col">
-                                                            <h6 class="mb-1"><?= $note['session'] ?></h6>
-                                                        </div>
-                                                    </div>
+                                                    <?php $emploiDate = new DateTime($emploi['date_publication']);
+                                                    $now = new DateTime();
+                                                    $diff = date_diff($emploiDate, $now);
+                                                    if ($diff->d == 0) {
+                                                    echo "Today";
+                                                    } elseif ($diff->d == 1) {
+                                                    echo "Yesterday";
+                                                    } else {
+                                                    echo $diff->d . " days ago";
+                                                    }?>
                                                 </td>
-                                                <td>
-                                                    <div class="row">
-                                                        <div class="col">
-                                                            <h6 class="mb-1"><?= $note['filiere_nom'] ?></h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="row">
-                                                        <div class="col">
-                                                            <h6 class="mb-1">
-                                                                <?= htmlspecialchars($note["semestre"], ENT_QUOTES, 'UTF-8') ?>
-                                                            </h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="row">
-                                                        <div class="col">
-                                                            <h6 class="mb-1">
-                                                                <?= htmlspecialchars($note["annee"], ENT_QUOTES, 'UTF-8') ?>
-                                                            </h6>
-                                                        </div>
-                                                    </div>
+                                                <td><?php echo htmlspecialchars($emploi['annee'], ENT_QUOTES, 'UTF-8'); ?>
                                                 </td>
                                                 <td class="text-center">
                                                     <ul class="list-inline me-auto mb-0">
                                                         <li class="list-inline-item align-bottom" data-bs-toggle="tooltip"
                                                             title="Download">
-                                                            <a href="<?php echo $note['file_path']; ?>" download="" class="avtar avtar-xs btn-link-danger remove-user">
-                                                                <i class="ti ti-download f-18"></i>
-                                                            </a>
+                                                            <a href="<?php echo $emploi['file_path']; ?>"
+                                                                class="btn btn-sm btn-danger" download>📥 Télécharger
+                                                                PDF</a>
                                                         </li>
                                                     </ul>
                                                 </td>
                                             </tr>
                                         <?php } ?>
+                                        <!-- Tu peux ajouter d'autres emplois ici dynamiquement -->
                                     </tbody>
                                 </table>
                             </div>

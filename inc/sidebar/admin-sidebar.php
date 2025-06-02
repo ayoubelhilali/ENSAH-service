@@ -55,6 +55,12 @@
         </li>
         
         <li class="pc-item">
+          <a href="/ENSAH-service/pages/profil.php" class="pc-link">
+            <span class="pc-micon"><i class="ti ti-user"></i></span>
+            <span class="pc-mtext">Profile</span>
+          </a>
+        </li>
+        <li class="pc-item">
           <a href="/ENSAH-service/pages/annonces.php" class="pc-link">
             <span class="pc-micon"><i class="ti ti-speakerphone"></i></span>
             <span class="pc-mtext">Annonces</span>

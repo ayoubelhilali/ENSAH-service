@@ -4,7 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 if (isset($_POST['add-depart'])) {
     // Include the database connection file
-    require_once __DIR__ . '/connections.php';
+    require_once __DIR__ . '/../connections.php';
     print_r($_POST);
     // Get the form data
     $departement = $_POST['depart_nom'];
