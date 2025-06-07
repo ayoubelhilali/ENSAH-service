@@ -95,7 +95,7 @@ $filiere_ID = $_SESSION['filiere']['filiereID'];
       <div class="row">
         <!-- [ sample-page ] start -->
 
-        <div class="col-md-6 col-xl-3">
+        <a href="/ENSAH-service/pages/coordonnateur/vacat-list.php" class="col-md-6 col-xl-3">
           <div class="card ">
             <div class="card-body d-flex align-items-center">
               <div class="me-3">
@@ -116,9 +116,9 @@ $filiere_ID = $_SESSION['filiere']['filiereID'];
               </div>
             </div>
           </div>
-        </div>
+        </a>
 
-        <div class="col-md-6 col-xl-3">
+        <a href="/ENSAH-service/pages/coordonnateur/affect_vacant.php" class="col-md-6 col-xl-3">
           <div class="card ">
             <div class="card-body d-flex align-items-center">
               <div class="me-3">
@@ -141,16 +141,16 @@ $filiere_ID = $_SESSION['filiere']['filiereID'];
               </div>
             </div>
           </div>
-        </div>
+        </a>
 
-        <div class="col-md-6 col-xl-3">
+        <a href="/ENSAH-service/pages/coordonnateur/ue_list.php" class="col-md-6 col-xl-3">
           <div class="card ">
             <div class="card-body d-flex align-items-center">
               <div class="me-3">
                 <span
                   class="bg-success bg-gradient text-white rounded-circle d-flex align-items-center justify-content-center"
                   style="width:48px; height:48px;">
-                  <i class="fa-solid fa-graduation-cap fa-lg"></i>
+                  <i class="fa-solid fa-book fa-lg"></i>
                 </span>
               </div>
               <div>
@@ -166,7 +166,7 @@ $filiere_ID = $_SESSION['filiere']['filiereID'];
               </div>
             </div>
           </div>
-        </div>
+        </a>
         <div class="col-md-6 col-xl-3">
           <div class="card ">
             <div class="card-body d-flex align-items-center">
@@ -174,14 +174,16 @@ $filiere_ID = $_SESSION['filiere']['filiereID'];
                 <span
                   class="bg-danger bg-gradient text-white rounded-circle d-flex align-items-center justify-content-center"
                   style="width:48px; height:48px;">
-                  <i class="fa-solid fa-graduation-cap fa-lg"></i>
+                  <i class="fa-solid fa-calendar-days fa-lg"></i>
                 </span>
               </div>
               <div>
-                <h6 class="mb-1 f-w-400 text-muted">Total des vacataires</h6>
+                <h6 class="mb-1 f-w-400 text-muted">Total des emplois</h6>
                 <h4 class="mb-0"><?php
-                $sql = "SELECT COUNT(*) FROM `vacataire`";
-                $stmt = $pdo->query($sql);
+                $sql = "SELECT COUNT(*) FROM `emploi` WHERE filiereID=:filiereID";
+                $stmt = $pdo->prepare($sql);
+                $stmt->bindParam(':filiereID', $_SESSION['filiere']['filiereID'], PDO::PARAM_INT);
+                $stmt->execute();
                 $count = $stmt->fetchColumn();
                 echo $count;
                 ?></h4>
@@ -192,18 +194,14 @@ $filiere_ID = $_SESSION['filiere']['filiereID'];
 
         <div class="col-md-12 col-xl-8">
           <div class="d-flex align-items-center justify-content-between mb-3">
-            <h5 class="mb-0">Unique Visitor</h5>
-            <ul class="nav nav-pills justify-content-end mb-0" id="chart-tab-tab" role="tablist">
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" id="chart-tab-home-tab" data-bs-toggle="pill" data-bs-target="#chart-tab-home"
-                  type="button" role="tab" aria-controls="chart-tab-home" aria-selected="true">Month</button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="chart-tab-profile-tab" data-bs-toggle="pill"
-                  data-bs-target="#chart-tab-profile" type="button" role="tab" aria-controls="chart-tab-profile"
-                  aria-selected="false">Week</button>
-              </li>
-            </ul>
+            <div class="card" style="width:100%">
+              <div class="card-header">
+                <h5>Les personnels</h5>
+              </div>
+              <div class="card-body">
+                <div id="bar-chart-1"></div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="col-md-12 col-xl-4">
@@ -251,7 +249,7 @@ $filiere_ID = $_SESSION['filiere']['filiereID'];
         </div>
         <div class="col-auto my-1">
           <ul class="list-inline footer-link mb-0">
-            <li class="list-inline-item"><a href="/ENSAH-service/dashboard/admin-dash.php">Home</a></li>
+            <li class="list-inline-item"><a href="/ENSAH-service/">Home</a></li>
           </ul>
         </div>
       </div>
@@ -269,6 +267,8 @@ $filiere_ID = $_SESSION['filiere']['filiereID'];
   <script src="/ENSAH-service/assets/js/fonts/custom-font.js"></script>
   <script src="/ENSAH-service/assets/js/pcoded.js"></script>
   <script src="/ENSAH-service/assets/js/plugins/feather.min.js"></script>
+  <script src="/ENSAH-service/assets/js/users-chart.js"></script>
+
 
 
 

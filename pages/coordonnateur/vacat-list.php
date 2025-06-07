@@ -6,6 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 $avatar = '/ENSAH-service/assets/images/avatar-M.jpg'; // chemin par défaut
 include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/connections.php");
 include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/isStrongPass.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/email/sendEmail.php");
 ?>
 
 <!DOCTYPE html>
@@ -406,8 +407,8 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/isStrongP
 
     // Validate Password
     if (isStrongPassword($_POST["password"])) {
-      $password = htmlspecialchars($_POST["password"], ENT_QUOTES, 'UTF-8');
-      $password = password_hash($password, PASSWORD_DEFAULT); // Hash the password
+      $original_password = htmlspecialchars($_POST["password"], ENT_QUOTES, 'UTF-8');
+      $password = password_hash($original_password, PASSWORD_DEFAULT); // Hash the password
     } else {
       $password_error = "Password should include at least: 1 uppercase, 1 lowercase, 1 digit, 1 special character, and be at least 8 characters long.";
       $errors++;
@@ -437,15 +438,26 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/isStrongP
           // Insert into vacataire table
           $add_vacat = "INSERT INTO vacataire(user_ID, email, password, specialite) 
                              VALUES('$user_id', '$email', '$password', '$specialite')";
+
           if ($pdo->query($add_vacat)) {
-            $_SESSION['success_message'] = "vacataire added successfully!";
-            header("Location: /ENSAH-service/pages/coordonnateur/vacat-list.php?success=1");
-            exit;
+            // select nom
+            $select_nom = "SELECT nom, prenom FROM user WHERE user_ID = '$user_id'";
+            $stmt = $pdo->prepare($select_nom);
+            $stmt->execute();
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            // Send email
+            $email_handler = new PrepareEmail();
+            if ($email_handler->sendEmailnewProf($email, $original_password, "{$user['nom']} {$user['prenom']}")) {
+              // add notification
+              $add_notification = "INSERT INTO notifications(id_user, date_time, title, content,status) 
+                                   VALUES('$user_id', NOW(), 'Nouvelle notification', 'Vous avez été ajouté en tant que vacataire.', 'unread')";
+              $pdo->query($add_notification);
+              $_SESSION['success_message'] = "Le vacataire a été ajouté avec succès! et l'email a été envoyé.";
+              header("Location: /ENSAH-service/pages/coordonnateur/vacat-list.php?success=1");
+            }
           } else {
-            $general_error = "Failed to add vacataire.";
+            $general_error = "Failed to retrieve user ID.";
           }
-        } else {
-          $general_error = "Failed to retrieve user ID.";
         }
       } else {
         $general_error = "Failed to add user to the database.";
@@ -829,10 +841,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/isStrongP
         </div>
         <div class="col-auto my-1">
           <ul class="list-inline footer-link mb-0">
-            <li class="list-inline-item"><a href="/ENSAH-service/index.html">Home</a></li>
-            <li class="list-inline-item"><a href="https://codedthemes.gitbook.io/mantis-bootstrap"
-                target="_blank">Documentation</a></li>
-            <li class="list-inline-item"><a href="https://codedthemes.authordesk.app/" target="_blank">Support</a></li>
+            <li class="list-inline-item"><a href="/ENSAH-service/">Home</a></li>
           </ul>
         </div>
       </div>
@@ -1190,5 +1199,4 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/isStrongP
   </div>
 </body>
 <!-- [Body] end -->
-
 </html>

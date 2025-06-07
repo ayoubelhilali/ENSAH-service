@@ -6,7 +6,7 @@ function generatePass(length = 8) {
     const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const lower = upper.toLowerCase();
     const digits = "0123456789";
-    const special = "!@#$%&*?";
+    const special = "!@#$%&*";
     const all = upper + lower + digits + special;
 
     let password = '';

@@ -506,10 +506,7 @@ if (session_status() === PHP_SESSION_NONE) {
         </div>
         <div class="col-auto my-1">
           <ul class="list-inline footer-link mb-0">
-            <li class="list-inline-item"><a href="/ENSAH-service/dashboard/admin-dash.php">Home</a></li>
-            <li class="list-inline-item"><a href="https://codedthemes.gitbook.io/mantis-bootstrap"
-                target="_blank">Documentation</a></li>
-            <li class="list-inline-item"><a href="https://codedthemes.authordesk.app/" target="_blank">Support</a>
+            <li class="list-inline-item"><a href="/ENSAH-service/">Home</a></li>
             </li>
           </ul>
         </div>

@@ -845,10 +845,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
         </div>
         <div class="col-auto my-1">
           <ul class="list-inline footer-link mb-0">
-            <li class="list-inline-item"><a href="/ENSAH-service/index.html">Home</a></li>
-            <li class="list-inline-item"><a href="https://codedthemes.gitbook.io/mantis-bootstrap"
-                target="_blank">Documentation</a></li>
-            <li class="list-inline-item"><a href="https://codedthemes.authordesk.app/" target="_blank">Support</a></li>
+            <li class="list-inline-item"><a href="/ENSAH-service/">Home</a></li>
           </ul>
         </div>
       </div>

@@ -243,7 +243,7 @@ include('../inc/functions/connections.php');
         </div>
         <div class="col-auto my-1">
           <ul class="list-inline footer-link mb-0">
-            <li class="list-inline-item"><a href="/ENSAH-service/dashboard/admin-dash.php">Home</a></li>
+            <li class="list-inline-item"><a href="/ENSAH-service/">Home</a></li>
           </ul>
         </div>
       </div>
