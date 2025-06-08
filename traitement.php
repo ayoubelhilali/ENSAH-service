@@ -74,6 +74,21 @@ try {
             ] ;
         }
     }
+
+     //get chef depart data
+    $chef_depart_data="SELECT * FROM chef_depart " ;
+    $stmt= $pdo->prepare($chef_depart_data) ;
+    if($stmt->execute()){
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+            $chefs_depart[$row['chef_email']]=[
+                'chef_depart_id'=>$row['chef_ID'] ,
+                'depart_id'=>$row['depart_ID'],
+                'password'=>$row['chef_password'] ,
+                'role' => 'chef_depart'
+            ] ;
+        }
+    }
+
     // get vacataires data
     $vacats = [];
     $vacats_data = "SELECT * FROM vacataire V 
@@ -173,7 +188,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
     elseif(isset($profs[$email])){
-        if(password_verify($password, $profs[$email]['password'])){
+        if($password==$profs[$email]['password']){
             $_SESSION['user']=[
                 'prof_id'=> $profs[$email]['prof_id']
             ] ;
@@ -182,6 +197,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         else {
             header("Location: login.php?message=mot+de+passe+invalide ");
+            exit();
+        }
+    }
+        // Check if email exists in chefs depart
+
+    elseif(isset($chefs_depart[$email])){
+        if($password == $chefs_depart[$email]['password']){
+            $_SESSION['user']=[
+                'chef_depart_id'=> $chefs_depart[$email]['chef_depart_id'],
+                'depart_id'=> $chefs_depart[$email]['depart_id']
+            ] ;
+            header("Location: chef_depar.php") ;
+            exit() ;
+        }
+        else {
+            header("Location: login.php?message=mot+de+passe+invalide+$chefs_depart[$email]['chef_depart_id'] ");
             exit();
         }
     }

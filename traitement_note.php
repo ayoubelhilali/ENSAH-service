@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         
 
-        $destinationDir = __DIR__ . '/uploads/notes/'.$doc_filiere ;
+        $destinationDir = __DIR__ . '/uploads/notes/'.$doc_filiere.'/' ;
 
         // Crée le dossier s'il n'existe pas
 
