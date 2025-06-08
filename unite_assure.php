@@ -1,4 +1,7 @@
 <?php
+if (session_status() == PHP_SESSION_NONE) {
+session_start();
+}
 require_once 'C:\xampp\htdocs\ENSAH-service\inc\functions\connections.php';
 ?>
 

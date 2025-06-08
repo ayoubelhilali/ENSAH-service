@@ -2,12 +2,23 @@
 <?php
 if (session_status() === PHP_SESSION_NONE) {
   session_start();
+<<<<<<< HEAD
+} 
+
+if (!isset($_SESSION['user'])) {
+  // Redirect to login if not authenticated
+  header('Location: /ENSAH-service/login.php');
+  exit();
+}
+
+=======
 }
 if (!isset($_SESSION['user'])) {
   // Redirect to login if not authenticated
   header('Location: ../login.php');
   exit();
 }
+>>>>>>> 1c5b0b1a32218548ee01e39a6858b1614348ea7f
 include($_SERVER['DOCUMENT_ROOT'] . '/ENSAH-service/inc/functions/connections.php');
 ?>
 <header class="pc-header">

@@ -1,0 +1,190 @@
+<?php 
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+require_once 'C:\xampp\htdocs\ENSAH-service\inc\functions\connections.php';
+?>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Formulaire d'upload des notes pour les professeurs ENSAH.">
+  <meta name="keywords" content="ENSAH, professeur, notes, upload, csv, excel">
+  <meta name="author" content="ENSAH-service">
+
+  <title>ENSAH-service | Professeurs </title>
+
+  <link rel="icon" href="/ENSAH-service/assets/images/logo-small_noBG.png" type="image/png"> 
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="/ENSAH-service/assets/fonts/tabler-icons.min.css">
+  <link rel="stylesheet" href="/ENSAH-service/assets/fonts/feather.css">
+  <link rel="stylesheet" href="/ENSAH-service/assets/fonts/fontawesome.css">
+  <link rel="stylesheet" href="/ENSAH-service/assets/fonts/material.css">
+  <link rel="stylesheet" href="/ENSAH-service/assets/css/style.css">
+  <link rel="stylesheet" href="/ENSAH-service/assets/css/style-preset.css">
+</head>
+
+<body data-pc-preset="preset-1" data-pc-direction="ltr" data-pc-theme="light">
+
+  <!-- Pre-loader -->
+  <div class="loader-bg">
+    <div class="loader-track">
+      <div class="loader-fill"></div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <?php 
+    include_once 'C:\xampp\htdocs\ENSAH-service\inc\sidebar\chef-sidebar.php';
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/header/header.php");
+  ?>
+
+  <!-- Contenu principal -->
+  <div class="pc-container">
+    <div class="pc-content container-fluid">
+
+      <!-- Section Professeurs -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h4 class="mb-0">Les professeurs appartenant au département</h4>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover" id="pc-dt-prof">
+              <thead>
+                <tr>
+                  <th>Nom</th>
+                  <th>Prénom</th>
+                  <th>CIN</th>
+                  <th>Spécialité</th>
+                  <th>Email</th>
+                  <th>Numéro de téléphone</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php 
+                $sql = "SELECT * FROM professeur p 
+                        JOIN filiere f ON f.filiere_ID=p.filiere_id 
+                        JOIN user u ON u.user_ID=p.user_ID 
+                        WHERE depart_ID=?";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute([$_SESSION['user']['depart_id']]);
+                while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+                  echo "<tr>";
+                  echo "<td>".htmlspecialchars($row["nom"])."</td>";
+                  echo "<td>".htmlspecialchars($row["prenom"])."</td>";
+                  echo "<td>".htmlspecialchars($row["CIN"])."</td>";
+                  echo "<td>".htmlspecialchars($row["specialite"])."</td>";
+                  echo "<td>".htmlspecialchars($row["email"])."</td>";
+                  echo "<td>".htmlspecialchars($row["Phone"])."</td>";
+                  echo "</tr>";
+                }
+                ?>
+              </tbody>
+            </table>
+          </div>
+          <form method="POST" action="export_prof.php" target="_blank" class="m-3">
+  <button type="submit" class="btn btn-success">
+      Exporter
+  </button>
+</form>
+        </div>
+      </div>
+
+      <!-- Section Vœux -->
+      <div class="card">
+        <div class="card-header">
+          <h4 class="mb-0">Les vœux des professeurs</h4>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover" id="pc-dt-voeux">
+              <thead>
+                <tr>
+                  <th>Nom</th>
+                  <th>Prénom</th>
+                  <th>CIN</th>
+                  <th>Vœux</th>
+                  <th>Date soumission</th>
+                  <th>Charge totale </th>
+                  <th>Valider</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php 
+              $sql = "SELECT 
+            us.nom, 
+            us.prenom, 
+            us.CIN, 
+            un.unite_name, 
+            (un.volume_cours + un.volume_td + un.volume_tp) AS charge_voeu,
+            v.date_soumission, 
+            v.id_voeux, 
+            v.id_prof, 
+            v.id_unite,
+            total.charge_totale
+        FROM voeux v
+        JOIN user us ON us.user_ID = v.id_prof
+        JOIN unite un ON un.unite_ID = v.id_unite
+        JOIN (
+            SELECT v2.id_prof, 
+                   SUM(un2.volume_cours + un2.volume_td + un2.volume_tp) AS charge_totale
+            FROM voeux v2
+            JOIN unite un2 ON un2.unite_ID = v2.id_unite
+            WHERE v2.status = ?
+            GROUP BY v2.id_prof
+        ) AS total ON total.id_prof = v.id_prof
+        WHERE v.status = ?
+        ORDER BY total.charge_totale < 4 DESC, v.date_soumission DESC";
+
+
+
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute([0,0]);
+                $voeux = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                if (empty($voeux)) {
+                  echo '</tbody></table></div>';
+                  echo '<div class="alert alert-warning text-center mt-3" role="alert">';
+                  echo "Aucun voeu n'a été soumis pour le moment.";
+                  echo '</div>';
+                } else {
+                 $seuil_min = 180 ;
+
+foreach ($voeux as $row) {
+    $classe = ($row['charge_totale'] < 4) ? 'table-danger fw-bold' : '';
+    echo "<form method='POST' action='valider_voeux.php'>";
+    echo "<input type='hidden' name='id_voeux' value='". $row['id_voeux'] ."'>";
+    echo "<input type='hidden' name='id_unite' value='". $row['id_unite'] ."'>";
+    echo "<input type='hidden' name='id_prof' value='". $row['id_prof'] ."'>";
+    echo "<input type='hidden' name='charge_totale' value='".$row['charge_totale']."' >" ;
+
+    echo "<tr class='$classe'>";
+    echo "<td>" . htmlspecialchars($row["nom"]) . "</td>";
+    echo "<td>" . htmlspecialchars($row["prenom"]) . "</td>";
+    echo "<td>" . htmlspecialchars($row["CIN"]) . "</td>";
+    echo "<td>" . htmlspecialchars($row["unite_name"])."(".htmlspecialchars($row["charge_voeu"])." h)" . "</td>";
+    echo "<td>" . htmlspecialchars($row["date_soumission"]) . "</td>";
+    echo "<td>" . htmlspecialchars($row["charge_totale"]) . " h</td>";
+
+    echo "<td><button type='submit' class='btn btn-sm btn-primary ms-2'>Valider</button></td>";
+    echo "</tr>";
+    echo "</form>";
+}
+
+
+                  echo '</tbody></table></div>';
+                }
+                ?>
+          </div>
+        </div>
+        
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>
