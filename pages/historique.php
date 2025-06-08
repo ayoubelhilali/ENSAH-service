@@ -7,6 +7,10 @@ if (!isset($_SESSION['user'])) {
   header('Location: /ENSAH-service/login.php');
   exit();
 }
+if(!isset($_SESSION['user']['role'])) {
+  header('Location: /ENSAH-service/login.php');
+  exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -59,9 +63,13 @@ if (!isset($_SESSION['user'])) {
   <!-- [ Sidebar Menu ] start -->
    <?php if($_SESSION["user"]["role"] == "admin") { ?>
       <?php require_once __DIR__ . "/../inc/sidebar/admin-sidebar.php"; ?>
-   <?php } else { ?>
+   <?php } else if($_SESSION["user"]["role"] == "cord") { ?>
       <?php require_once __DIR__ . "/../inc/sidebar/cord-sidebar.php"; ?>
-   <?php } ?>
+   <?php }else if($_SESSION["user"]["role"] == "vacataire") { ?>
+      <?php require_once __DIR__ . "/../inc/sidebar/vacat-sidebar.php"; ?>
+  <?php } else if($_SESSION["user"]["role"] == "professeur") { ?>
+      <?php require_once __DIR__ . "/../inc/sidebar/prof-sidebar.php"; ?>
+  <?php } ?>
   <!-- [ Sidebar Menu ] end --> <!-- [ Header Topbar ] start -->
   <?php require_once(__DIR__ . "/../inc/header/header.php"); ?>
   <!-- [ Header ] end -->
@@ -103,10 +111,7 @@ if (!isset($_SESSION['user'])) {
         </div>
         <div class="col-auto my-1">
           <ul class="list-inline footer-link mb-0">
-            <li class="list-inline-item"><a href="/ENSAH-service/index.html">Home</a></li>
-            <li class="list-inline-item"><a href="https://codedthemes.gitbook.io/mantis-bootstrap"
-                target="_blank">Documentation</a></li>
-            <li class="list-inline-item"><a href="https://codedthemes.authordesk.app/" target="_blank">Support</a></li>
+            <li class="list-inline-item"><a href="/ENSAH-service/">Home</a></li>
           </ul>
         </div>
       </div>

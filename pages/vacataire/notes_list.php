@@ -1,19 +1,25 @@
 <?php
+ob_start();
+session_start();
+if (!isset($_SESSION['user'])) {
+    // Redirect to login if not authenticated
+    header('Location: ../../login.php');
+    exit();
+}
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-if (!isset($_SESSION['user'])) {
-    // Redirect to login if not authenticated
-    header('Location: /ENSAH-service/login.php');
-    exit();
-}
+
+$avatar = '/ENSAH-service/assets/images/avatar-M.jpg'; // chemin par défaut
+include($_SERVER['DOCUMENT_ROOT'] . '/ENSAH-service/inc/functions/connections.php');
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <!-- [Head] start -->
 
 <head>
-    <title>ENSAH services - Les annonces</title>
+    <title>ENSAH-service | les notes</title>
     <!-- [Meta] -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
@@ -44,11 +50,12 @@ if (!isset($_SESSION['user'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet" href="/ENSAH-service/assets/css/main.css">
 
+
 </head>
 <!-- [Head] end -->
 <!-- [Body] Start -->
 
-<body data-pc-preset="preset-1" data-pc-direction="ltr" data-pc-theme="light">
+<body>
     <!-- [ Pre-loader ] start -->
     <div class="loader-bg">
         <div class="loader-track">
@@ -57,20 +64,13 @@ if (!isset($_SESSION['user'])) {
     </div>
     <!-- [ Pre-loader ] End -->
     <!-- [ Sidebar Menu ] start -->
-    <?php if ($_SESSION['user']['role'] == 'admin') {
-        require_once(__DIR__ . "/../inc/sidebar/admin-sidebar.php");
-    } else if ($_SESSION['user']['role'] == 'coordonnateur') {
-        require_once __DIR__ . "/../inc/sidebar/cord-sidebar.php";
-    } else if ($_SESSION['user']['role'] == 'vacataire') {
-        require_once __DIR__ . "/../inc/sidebar/vacat-sidebar.php";
-    } else if ($_SESSION['user']['role'] == 'professeur') {
-        require_once __DIR__ . "/../inc/sidebar/prof-sidebar.php";
-    } ?>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/sidebar/vacat-sidebar.php") ?>
     <!-- [ Sidebar Menu ] end --> <!-- [ Header Topbar ] start -->
-    <?php require_once(__DIR__ . "/../inc/header/header.php"); ?>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/header/header.php") ?>
     <!-- [ Header ] end -->
+
     <!-- [ Main Content ] start -->
-    <section class="pc-container">
+    <div class="pc-container">
         <div class="pc-content">
             <!-- [ breadcrumb ] start -->
             <div class="page-header">
@@ -79,12 +79,12 @@ if (!isset($_SESSION['user'])) {
                         <div class="col-md-12">
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="/ENSAH-service/dashboard/index.html">Home</a></li>
-                                <li class="breadcrumb-item" aria-current="page">Les annonces</li>
+                                <li class="breadcrumb-item" aria-current="page">liste des notes</li>
                             </ul>
                         </div>
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h2 class="mb-0">Les annonces</h2>
+                                <h2 class="mb-0">Consulter les notes</h2>
                             </div>
                         </div>
                     </div>
@@ -98,59 +98,90 @@ if (!isset($_SESSION['user'])) {
                 <div class="col-sm-12">
                     <div class="card table-card">
                         <div class="card-body">
-                            <!-- -------------------------------------->
-                            <!-- success and error messages -->
+                            <!-------------------------------------->
                             <div class="text-end p-4 pb-0">
+
                                 <div id="success-msg" class="success-msg" style="color: green; margin-top: 10px;">
                                     <?php if (isset($_GET['success']) && isset($_SESSION["success_message"])): ?>
                                         <?= "✅" . htmlspecialchars($_SESSION["success_message"], ENT_QUOTES, 'UTF-8'); ?>
                                         <?php unset($_SESSION["success_message"]); ?>
                                     <?php endif; ?>
                                 </div>
+
                                 <div id="error-msg" class="error-msg" style="color: red; margin-top: 10px;">
                                     <?php if (isset($_GET['error']) && isset($_SESSION["error_message"])): ?>
                                         <?= htmlspecialchars($_SESSION["error_message"], ENT_QUOTES, 'UTF-8'); ?>
                                         <?php unset($_SESSION["error_message"]); ?>
                                     <?php endif; ?>
                                 </div>
+
                                 <script>
                                     setTimeout(function () {
                                         document.getElementById('success-msg').style.display = 'none';
                                     }, 10000); // 10 seconds
                                 </script>
                             </div>
-                            <!-------------------------------------->
-                            <!-- get annonces data -->
-                            <?php
-                            // Get all annonces from database
-                            $annonces_query = "SELECT * FROM annonces A order by annonce_date DESC";
-                            $stmt = $pdo->prepare($annonces_query);
-                            $stmt->execute();
-                            $all_annonces = $stmt;
-                            ?>
+
                             <!---------------------------------->
                             <div class="table-responsive">
                                 <table class="table table-hover" id="pc-dt-simple">
                                     <thead>
-                                        <tr class="table-header">
+                                        <tr>
                                             <th>#</th>
-                                            <th >Titre de l'annonce</th>
-                                            <th>Description</th>
-                                            <th>Date de publication</th>
-                                            <th class="text-center">Actions</th>
+                                            <th>Unité d'enseignement</th>
+                                            <th>Session</th>
+                                            <th>Filière</th>
+                                            <th>semestre</th>
+                                            <th>année</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php
-                                        while ($annonce = $all_annonces->fetch(PDO::FETCH_ASSOC)) {
+                                        $units_query = "SELECT * FROM vacataire_note VA join unite U on VA.unite_ID=U.unite_ID  join filiere F on F.filiere_ID=U.filiere_ID  where VA.vacataire_ID = :vacataire_ID";
+                                        $stmt = $pdo->prepare($units_query);
+                                        $stmt->execute([
+                                            ':vacataire_ID' => $_SESSION['user']['vacat_ID']
+                                        ]);
+                                        $all_notes = $stmt;
+                                        while ($note = $all_notes->fetch(PDO::FETCH_ASSOC)) {
+                                            $resp_query = $pdo->prepare("SELECT * FROM affect_ue_vac A  
+                                            join vacataire V on A.vacataire_ID=V.vacat_ID 
+                                            join user U2 on V.user_ID=U2.user_ID
+                                            WHERE A.vacataire_ID = :affect_ue");
+                                            $resp_query->execute([':affect_ue' => $note['vacataire_ID']]);
+                                            $resp_ue = $resp_query->fetch(PDO::FETCH_ASSOC);
                                             ?>
                                             <tr>
-                                                <td><?= $annonce['annonce_ID'] ?></td>
+                                                <td><?= $note['note_ID'] ?></td>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col">
                                                             <h6 class="mb-1">
-                                                                <?= htmlspecialchars($annonce['annonce_head'], ENT_QUOTES, 'UTF-8') ?>
+                                                                <?= htmlspecialchars($note['unite_name'], ENT_QUOTES, 'UTF-8') ?>
+                                                            </h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <h6 class="mb-1"><?= $note['session'] ?></h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <h6 class="mb-1"><?= $note['filiere_nom'] ?></h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <h6 class="mb-1">
+                                                                <?= htmlspecialchars($note["semestre"], ENT_QUOTES, 'UTF-8') ?>
                                                             </h6>
                                                         </div>
                                                     </div>
@@ -159,43 +190,19 @@ if (!isset($_SESSION['user'])) {
                                                     <div class="row">
                                                         <div class="col">
                                                             <h6 class="mb-1">
-                                                                <span><?= (strlen($annonce['annonce_body']) > 50) ? substr(htmlspecialchars($annonce['annonce_body'], ENT_QUOTES, 'UTF-8'), 0, 50) . ' . . .' : htmlspecialchars($annonce['annonce_body'], ENT_QUOTES, 'UTF-8') ?></span>
+                                                                <?= htmlspecialchars($note["annee"], ENT_QUOTES, 'UTF-8') ?>
                                                             </h6>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td>
-                                                    <div class="row">
-                                                        <div class="col">
-                                                            <h6 class="mb-1 text-muted">
-                                                                <span><?= $annonce['annonce_date'] ?></span>
-                                                            </h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-
                                                 <td class="text-center">
                                                     <ul class="list-inline me-auto mb-0">
-                                                    <li class="list-inline-item align-bottom" data-bs-toggle="tooltip"
-                                                            title="View">
-                                                            <a href="#" class="avtar avtar-xs btn-link-secondary view-btn"
-                                                                data-bs-toggle="modal" data-bs-target="#annonce-modal"
-                                                                data-annonce_Head="<?= $annonce['annonce_head']; ?>"
-                                                                data-desc="<?= $annonce['annonce_body']; ?>"
-                                                                data-date="<?= $annonce['annonce_date']; ?>">
-                                                                <i class="ti ti-eye f-18"></i>
+                                                        <li class="list-inline-item align-bottom" data-bs-toggle="tooltip"
+                                                            title="Download">
+                                                            <a href="<?php echo $note['file_path']; ?>" download="" class="avtar avtar-xs btn-link-danger remove-user">
+                                                                <i class="ti ti-download f-18"></i>
                                                             </a>
                                                         </li>
-                                                        <?php if ($_SESSION['user']['role'] == 'admin') { ?>
-                                                            <li class="list-inline-item align-bottom" data-bs-toggle="tooltip">
-                                                                <a href="#" class="avtar avtar-xs btn-link-danger affect-btn"
-                                                                    title="Supprimer l'annonce" data-bs-toggle="modal"
-                                                                    data-bs-target="#ue-affect-modal"
-                                                                    onclick="deleteAnnonce(<?= $annonce['annonce_ID']; ?>)">
-                                                                    <i class="ti ti-trash f-18"></i>
-                                                                </a>
-                                                            </li>
-                                                        <?php } ?>
                                                     </ul>
                                                 </td>
                                             </tr>
@@ -210,57 +217,84 @@ if (!isset($_SESSION['user'])) {
             </div>
             <!-- [ Main Content ] end -->
         </div>
-    </section>
-    <div class="modal fade" id="annonce-modal" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    </div>
+    <form action="/ENSAH-service/inc/functions/cord/affect_ue_vacat.php" method="post" class="modal fade"
+        id="ue-affect-modal" data-bs-keyboard="false" tabindex="-1" aria-hidden="true" enctype="multipart/form-data">
+        <input type="hidden" name="avatar_path" id="avatar-path">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content" style="">
-                <div class="modal-header border-0 pb-0">
-                    <h5 class="mb-0">Détails de l'annonce</h5>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="mb-0">Affecter unité a un vacataire</h5>
                     <a href="#" class="avtar avtar-s btn-link-danger" data-bs-dismiss="modal">
                         <i class="ti ti-x f-20"></i>
                     </a>
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-12">
-                            <div class="card mb-0">
-                                <div class="card-header">
-                                    <h5 class="mb-0">Détails de l'annonce</h5>
-                                </div>
-                                <div class="card-body">
-                                    <ul class="list-group list-group-flush">
-                                        <li class="list-group-item px-0 pt-0">
-                                            <p class="mb-1 text-muted">Titre de l'annonce</p>
-                                            <h6 class="mb-0" id="modal-titre" style="color:#000061;"></h6>
-                                        </li>
-                                        <li class="list-group-item px-0">
-                                            <p class="mb-1 text-muted">Description</p>
-                                            <h6 class="mb-0" id="modal-desc" style="color:#000061;"></h6>
-                                        </li>
-                                        <li class="list-group-item px-0">
-                                            <p class="mb-1 text-muted">Date de publication</p>
-                                            <h6 class="mb-0" id="modal-date" style="color:#000061;"></h6>
-                                        </li>
-                                    </ul>
+                        <div class="col-sm-9">
+                            <div class="form-group">
+                                <label class="form-label">Nom d'unité d'enseignement</label>
+                                <input required name="nom" type="text" class="form-control nameInput"
+                                    placeholder="Nom de l'unité" id="modal-nom" value="" readonly>
+                                <input type="hidden" name="unite_ID" id="modal-id" value="">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">volume horaire</label>
+                                <div class="volume-inp" style="display:flex;gap:30px;">
+                                    <input required name="volume_cours" type="number" class="form-control"
+                                        placeholder="cours(h)" id="modal-volumeC" value="" readonly>
+                                    <input required name="volume_td" type="number" class="form-control"
+                                        placeholder="TD (h)" value="" id="modal-volumeTd" readonly>
+                                    <input required name="volume_tp" type="number" class="form-control"
+                                        placeholder="TP (h)" value="" id="modal-volumeTp" readonly>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label class="form-label">Semestre de l'unité</label>
+                                <input required name="semestre" type="text" class="form-control nameInput"
+                                    placeholder="Semestre de l'unité" id="modal-semes" value="" readonly>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">choisir le vacataire</label>
+                                <select value="" name="vacataire" class="form-select" id="modal-vacats" required>
+                                    <option disabled selected>choisir le vacataire</option>
+                                </select>
+                            </div>
+
                         </div>
-                    </div> <!-- /row -->
-                </div> <!-- /modal-body -->
-            </div> <!-- /modal-content -->
-        </div> <!-- /modal-dialog -->
-    </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <ul class="list-inline me-auto mb-0">
+                        <li class="list-inline-item align-bottom">
+                            <a href="#" class="avtar avtar-s btn-link-danger w-sm-auto" data-bs-toggle="tooltip"
+                                title="Delete">
+                                <i class="ti ti-trash f-18 clearBtn"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="flex-grow-1 text-end">
+                        <button type="button" class="btn btn-link-danger" data-bs-dismiss="modal">Annuler</button>
+                        <input type="submit" name="submit" class="btn btn-primary" value="enregistrer">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
     <!-- [ Main Content ] end -->
     <footer class="pc-footer">
         <div class="footer-wrapper container-fluid">
             <div class="row">
                 <div class="col-sm my-1">
-                    <p class="m-0">ENSAH-services &copy; 2025-Tous droits réservés.</p>
+                    <p class="m-0">ENSAH-service &copy; 2025-All rights reserved </p>
                 </div>
-
                 <div class="col-auto my-1">
                     <ul class="list-inline footer-link mb-0">
                         <li class="list-inline-item"><a href="/ENSAH-service/">Home</a></li>
+
                     </ul>
                 </div>
             </div>
@@ -272,7 +306,13 @@ if (!isset($_SESSION['user'])) {
     <script src="/ENSAH-service/assets/js/fonts/custom-font.js"></script>
     <script src="/ENSAH-service/assets/js/pcoded.js"></script>
     <script src="/ENSAH-service/assets/js/plugins/feather.min.js"></script>
-    <script>layout_change('light');</script>
+    <script src="/ENSAH-service/assets/js/upload-image.js"></script>
+
+    <script>layout_change('dark');</script>
+
+
+
+
     <script>change_box_container('false');</script>
 
 
@@ -284,72 +324,134 @@ if (!isset($_SESSION['user'])) {
 
 
     <script>font_change("Public-Sans");</script>
+    <!------------ Supprimer le coordonnateur d'un filiere   ------------->
     <script>
-        function deleteAnnonce(annonceID) {
-            if (confirm("Êtes-vous sûr de vouloir supprimer cette annonce ?")) {
-                console.log(annonceID);
+        // affect unit to a vacataire :
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.affect-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    // Get the data from the clicked button
+                    const unit_ID = button.getAttribute('data-unit');
+                    const unit_nom = button.getAttribute('data-nom');
+                    const volume_cours = button.getAttribute('data-volumeC');
+                    const volume_td = button.getAttribute('data-volumeTd');
+                    const volume_tp = button.getAttribute('data-volumeTp');
+                    const semestre = button.getAttribute('data-semestre');
+                    // Get the vacats data from the button
+                    const vacatsData = button.getAttribute('data-vacats');
+                    console.log(vacatsData);
+                    const vacatsList = document.getElementById('modal-vacats');
+                    // Set the values in the modal
+                    document.getElementById('modal-nom').value = unit_nom;
+                    document.getElementById('modal-id').value = unit_ID;
+                    document.getElementById('modal-volumeC').value = volume_cours;
+                    document.getElementById('modal-volumeTd').value = volume_td;
+                    document.getElementById('modal-volumeTp').value = volume_tp;
+                    document.getElementById('modal-semes').value = semestre;
+                    try {
+                        // Clear existing options
+                        const firstOption = vacatsList.querySelector('option:first-child');
+                        vacatsList.innerHTML = '';
+                        if (firstOption) {
+                            vacatsList.appendChild(firstOption); // Keep the first option
+                            firstOption.selected = true;
+                        }
+                        const vacats = JSON.parse(vacatsData); // Parse JSON string
+                        vacats.forEach(vacat => {
+                            const option = document.createElement('option');
+                            option.textContent = vacat.nom + " " + vacat.prenom; // Set the text of the option to the professor's name
+                            option.value = vacat.vacat_ID; // Set the value of the option to the professor's ID
+                            vacatsList.appendChild(option);
+                        });
+                    } catch (error) {
+                        console.error('Invalid vacats data:', error);
+                    }
+
+                });
+            });
+        });
+    </script>
+    <script>
+        // Check password strength
+        let pass = document.querySelector(".passwordInput");
+        let error_msg = document.querySelector(".error_msg");
+        pass.addEventListener("input", (e) => {
+            if (e.target.value.length >= 8) {
+                if (/[A-Z]/.test(e.target.value)) {
+                    if (/[0-9]/.test(e.target.value)) {
+                        if (/[!@#$%^&*(),.?":{}|<>]/.test(e.target.value)) {
+                            e.target.style.borderColor = "#00db00";
+                            error_msg.innerHTML = "";
+                        } else {
+                            e.target.style.borderColor = "red";
+                            error_msg.innerHTML = "Password should have at least one special character";
+                        }
+                    } else {
+                        e.target.style.borderColor = "red";
+                        error_msg.innerHTML = "Password should have at least one digit";
+                    }
+                } else {
+                    e.target.style.borderColor = "red";
+                    error_msg.innerHTML = "Password should have at least one capital letter";
+                }
+            } else {
+                e.target.style.borderColor = "red";
+                error_msg.innerHTML = "Password should have at least 8 digits";
+            }
+        });
+    </script>
+    <!------------ Supprimer un filière   ------------->
+    <script>
+        function deleteFil(filiereID) {
+            if (confirm("Êtes-vous sûr de vouloir supprimer ce filière ?")) {
                 const form = document.createElement('form');
                 form.method = 'POST';
                 form.style.display = 'none';
 
                 const input = document.createElement('input');
-                input.name = 'delete_annonce';
-                input.value = annonceID;
+                input.name = 'delete_fil';
+                input.value = filiereID;
                 form.appendChild(input);
+
                 document.body.appendChild(form);
                 form.submit();
             }
         }
     </script>
     <?php
-    function deleteAnnonce($annonceID)
+    function deleteFil($filiereID)
     {
         global $pdo;
-        $stmt = $pdo->prepare("DELETE FROM annonces WHERE annonce_ID = :annonce_id");
-        $stmt->execute(['annonce_id' => $annonceID]);
+        $stmt = $pdo->prepare("DELETE FROM filiere WHERE filiere_ID = :filiere_id");
+        $stmt->execute(['filiere_id' => $filiereID]);
         return $stmt->rowCount() > 0;
     }
 
-    if (isset($_POST['delete_annonce'])) {
-        $annonce_id = $_POST['delete_annonce'];
-        if (deleteAnnonce($annonce_id)) {
+    if (isset($_POST['delete_fil'])) {
+        $filiere_id = $_POST['delete_fil'];
+        if (deleteFil($filiere_id)) {
             echo "<script>
               document.addEventListener('DOMContentLoaded', function() {
                 const successMsg = document.querySelector('.success-msg');
                 if (successMsg) {
-                  successMsg.innerHTML = '<div class=\"alert alert-success\">annonce supprimé avec succès.</div>';
+                  successMsg.innerHTML = '<div class=\"alert alert-success\">departement supprimé avec succès.</div>';
                 }
               });
-              setTimeout(function() {
-                const successMsg = document.querySelector('.success-msg');
-                if (successMsg) {
-                  successMsg.innerHTML = '';
-                  window.location.reload();
-                }
-              }, 1500);
             </script>";
         }
     }
     ?>
+    <!-- [Page Specific JS] start -->
+    <script src="/ENSAH-service/assets/js/plugins/simple-datatables.js"></script>
+    <script src="/ENSAH-service/assets/js/generatePass.js"></script>
+    <script src="/ENSAH-service/assets/js/clearForm.js"></script>
     <script>
-        // afficher les details d'une annonce
-        document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('.view-btn').forEach(button => {
-                button.addEventListener('click', () => {
-                    // Get the data from the clicked button
-                    const titre = button.getAttribute('data-annonce_Head');
-                    const desc = button.getAttribute('data-desc');
-                    const date = button.getAttribute('data-date');
-
-                    // Populate the modal with the data
-                    document.getElementById('modal-titre').textContent = `${titre}`;
-                    document.getElementById('modal-desc').textContent = `${desc}`;
-                    document.getElementById('modal-date').textContent = `${date}`;
-                });
-            });
+        const dataTable = new simpleDatatables.DataTable('#pc-dt-simple', {
+            sortable: false,
+            perPage: 5
         });
     </script>
-
+    <!-- [Page Specific JS] end -->
     <div class="offcanvas pct-offcanvas offcanvas-end" tabindex="-1" id="offcanvas_pc_layout">
         <div class="offcanvas-header bg-primary">
             <h5 class="offcanvas-title text-white">Mantis Customizer</h5>

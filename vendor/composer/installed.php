@@ -3,7 +3,11 @@
         'name' => '__root__',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
+<<<<<<< HEAD
         'reference' => 'a1e5bfc8c8b2bdf7b72210ae3bcbcf1e643fd89c',
+=======
+        'reference' => '0218e680cc0b3680b399c00f19740f42d5db6222',
+>>>>>>> 1c5b0b1a32218548ee01e39a6858b1614348ea7f
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +17,11 @@
         '__root__' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
+<<<<<<< HEAD
             'reference' => 'a1e5bfc8c8b2bdf7b72210ae3bcbcf1e643fd89c',
+=======
+            'reference' => '0218e680cc0b3680b399c00f19740f42d5db6222',
+>>>>>>> 1c5b0b1a32218548ee01e39a6858b1614348ea7f
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -82,6 +90,7 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+<<<<<<< HEAD
         'psr/http-client' => array(
             'pretty_version' => '1.0.3',
             'version' => '1.0.3.0',
@@ -115,6 +124,14 @@
             'reference' => '764e0b3939f5ca87cb904f570ef9be2d78a07865',
             'type' => 'library',
             'install_path' => __DIR__ . '/../psr/simple-cache',
+=======
+        'smalot/pdfparser' => array(
+            'pretty_version' => 'v2.12.0',
+            'version' => '2.12.0.0',
+            'reference' => '8440edbf58c8596074e78ada38dcb0bd041a5948',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../smalot/pdfparser',
+>>>>>>> 1c5b0b1a32218548ee01e39a6858b1614348ea7f
             'aliases' => array(),
             'dev_requirement' => false,
         ),

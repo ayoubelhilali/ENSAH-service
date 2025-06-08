@@ -1,16 +1,11 @@
 <?php
 if (session_status() === PHP_SESSION_NONE) {
-  session_start();
+    session_start();
 }
 if (!isset($_SESSION['user'])) {
-  // Redirect to login if not authenticated
-  header('Location: ../login.php');
-  exit();
-}
-if (!isset($_SESSION['user']['role']) || $_SESSION['user']['role'] != 'coordonnateur') {
-  // Redirect to an error page if role is not set
-  header('Location: /ENSAH-service/');
-  exit();
+    // Redirect to login if not authenticated
+    header('Location: ../login.php');
+    exit();
 }
 $role = $_SESSION['user']['role'];
 ?>
@@ -19,7 +14,7 @@ $role = $_SESSION['user']['role'];
 <!-- [Head] start -->
 
 <head>
-    <title>ENSAH services - Uploader le descriptif</title>
+    <title>ENSAH services - Uploader les notes</title>
     <!-- [Meta] -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
@@ -65,17 +60,17 @@ $role = $_SESSION['user']['role'];
     <!-- [ Sidebar Menu ] start -->
     <?php
     if ($role == "admin") {
-      require_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/sidebar/admin-sidebar.php");
+        require_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/sidebar/admin-sidebar.php");
     } else if ($role == "coordonnateur") {
-      require_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/sidebar/cord-sidebar.php");
+        require_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/sidebar/cord-sidebar.php");
     } else if ($role == "vacataire") {
-      require_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/sidebar/vacat-sidebar.php");
+        require_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/sidebar/vacat-sidebar.php");
     } else if ($role == "professeur") {
-      require_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/sidebar/prof-sidebar.php");
+        require_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/sidebar/prof-sidebar.php");
     } else {
-      // Handle unexpected roles or redirect to an error page
-      header('Location: /ENSAH-service/error.php');
-      exit();
+        // Handle unexpected roles or redirect to an error page
+        header('Location: /ENSAH-service/error.php');
+        exit();
     }
     ?>
     <!-- [ Sidebar Menu ] end --> <!-- [ Header Topbar ] start -->
@@ -91,12 +86,12 @@ $role = $_SESSION['user']['role'];
                         <div class="col-md-12">
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="../dashboard/index.html">Home</a></li>
-                                <li class="breadcrumb-item" aria-current="page">Le descriptif</li>
+                                <li class="breadcrumb-item" aria-current="page">Les notes</li>
                             </ul>
                         </div>
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h2 class="mb-0">Uploader le descriptif</h2>
+                                <h2 class="mb-0">Uploader les notes</h2>
                             </div>
                         </div>
                     </div>
@@ -105,6 +100,14 @@ $role = $_SESSION['user']['role'];
             <!-- [ breadcrumb ] end -->
 
             <!-- [ Main Content ] start -->
+            <?php
+            $units_query = "SELECT * FROM affect_ue_vac A join unite U on A.unite_ID=U.unite_ID  join filiere F on F.filiere_ID=U.filiere_ID  where A.vacataire_ID = :vacataire_ID";
+            $stmt = $pdo->prepare($units_query);
+            $stmt->execute([
+                ':vacataire_ID' => $_SESSION['user']['vacat_ID']
+            ]);
+            $all_units = $stmt;
+            ?>
             <form action="/ENSAH-service/inc/functions/vacataire/upload_note.php" method="post" class="row" enctype="multipart/form-data">
                 <!-- [ form-element ] start -->
                 <div class="col-sm-6" style="width: 100%;">
@@ -112,16 +115,16 @@ $role = $_SESSION['user']['role'];
                     <div class="col-sm-12">
                         <div class="card w-100">
                             <div class="card-header">
-                                <h5>Uploader le descriptif</h5>
+                                <h5>Uploader les notes</h5>
                             </div>
                             <?php
                             if (isset($_SESSION["success_message"])) { ?>
-                                  <div class="alert alert-success">
-                                      <?php
-                                      echo $_SESSION["success_message"];
+                                <div class="alert alert-success">
+                                    <?php
+                                    echo $_SESSION["success_message"];
 
-                                      ?>
-                                  </div><?php } ?>
+                                    ?>
+                                </div><?php } ?>
                             <script>
                                 setTimeout(() => {
                                     document.querySelector(".alert").style.display = "none";
@@ -129,15 +132,22 @@ $role = $_SESSION['user']['role'];
                             </script>
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label class="form-label">Saison</label>
+                                    <label class="form-label">Session</label>
                                     <select name="session" class="form-select selectInput" required>
-                                        <option disabled class="defaultOption" selected>Selectionner la saison
+                                        <option disabled class="defaultOption">Selectionner la session
                                         </option>
-                                        <option>2024/2025</option>
-                                        <option>2023/2024</option>
-                                        <option>2022/2023</option>
-                                        <option>2021/2022</option>
-                                        <option>2020/2021</option>
+                                        <option>Normale</option>
+                                        <option>Rattrapage</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Unité</label>
+                                    <select name="unite" class="form-select selectInput" required>
+                                        <option disabled class="defaultOption" selected>Selectionner la session
+                                        </option>
+                                        <?php foreach ($all_units as $unit) { ?>
+                                            <option value="<?= $unit['unite_ID'] ?>"><?= $unit['unite_name'] ?></option>
+                                        <?php } ?>
                                     </select>
                                 </div>
                                 <div class="form-group mb-0">

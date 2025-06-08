@@ -337,7 +337,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
   <?php
   // Initialize variables and error messages
   $nom = $prenom = $cin = $birthday_day = $birthday_month = $birthday_year = "";
-  $genre = $email = $password = $md5_pass = $specialite = "";
+  $genre = $email = $password = $original_password = $specialite = "";
   $errors = 0;
 
   $CIN_error = $nom_error = $prenom_error = $birthday_error = "";
@@ -418,8 +418,8 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
 
     // Validate Password
     if (isStrongPassword($_POST["password"])) {
-      $password = htmlspecialchars($_POST["password"], ENT_QUOTES, 'UTF-8');
-      $password = password_hash($password, PASSWORD_DEFAULT); // Hash the password
+      $original_password = htmlspecialchars($_POST["password"], ENT_QUOTES, 'UTF-8');
+      $password = password_hash($original_password, PASSWORD_DEFAULT); // Hash the password
     } else {
       $password_error = "Password should include at least: 1 uppercase, 1 lowercase, 1 digit, 1 special character, and be at least 8 characters long.";
       $errors++;
@@ -453,7 +453,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
             
             // Send email
             $email_handler = new PrepareEmail();
-            if ($email_handler->sendEmailnewProf($email, $password, "$nom $prenom")) {
+            if ($email_handler->sendEmailnewProf($email, $original_password, "$nom $prenom")) {
               $_SESSION['success'] = "le professeur a ajouté et l'email a été envoyé!";
               header("Location: /ENSAH-service/pages/admin/prof-list.php?success=1");
             } else {
@@ -845,10 +845,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
         </div>
         <div class="col-auto my-1">
           <ul class="list-inline footer-link mb-0">
-            <li class="list-inline-item"><a href="/ENSAH-service/index.html">Home</a></li>
-            <li class="list-inline-item"><a href="https://codedthemes.gitbook.io/mantis-bootstrap"
-                target="_blank">Documentation</a></li>
-            <li class="list-inline-item"><a href="https://codedthemes.authordesk.app/" target="_blank">Support</a></li>
+            <li class="list-inline-item"><a href="/ENSAH-service/">Home</a></li>
           </ul>
         </div>
       </div>

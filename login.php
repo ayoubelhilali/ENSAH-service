@@ -10,8 +10,6 @@
   <meta name="description" content="Accédez facilement aux services de l'Ecole nationale des sciences appliquées d'Al Hoceima ">
   <meta name="keywords" content="ENSAH, Al Hoceima , E Service , Université Abdelmalek essaadi, Ecole nationale">
 
-
-
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 
 <link rel="icon" href="assets/images/logo-small_noBG.png" type="image/png">     <!-- icone dans l'onglet de site-->
@@ -40,10 +38,9 @@
     </div>
   </div>
   <!-- [ Pre-loader ] End -->
-
   <div class="auth-main">
     <div class="auth-wrapper v3">
-      <div class="auth-form">
+      <div class="auth-form" >
         <div class="auth-header">
           <a href="#" ><img id="imag_header" src="assets/images/logo-withoutBG.png" alt="img"></a>
         </div>

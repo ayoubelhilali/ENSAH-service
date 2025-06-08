@@ -1,6 +1,10 @@
 {
     "require": {
         "vlucas/phpdotenv": "^5.6",
+<<<<<<< HEAD
         "phpoffice/phpspreadsheet": "^4.3"
+=======
+        "smalot/pdfparser": "^2.12"
+>>>>>>> 1c5b0b1a32218548ee01e39a6858b1614348ea7f
     }
 }
