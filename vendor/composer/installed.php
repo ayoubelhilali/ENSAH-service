@@ -3,11 +3,7 @@
         'name' => '__root__',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-<<<<<<< HEAD
-        'reference' => 'a1e5bfc8c8b2bdf7b72210ae3bcbcf1e643fd89c',
-=======
         'reference' => '0218e680cc0b3680b399c00f19740f42d5db6222',
->>>>>>> 1c5b0b1a32218548ee01e39a6858b1614348ea7f
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -17,11 +13,7 @@
         '__root__' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-<<<<<<< HEAD
-            'reference' => 'a1e5bfc8c8b2bdf7b72210ae3bcbcf1e643fd89c',
-=======
             'reference' => '0218e680cc0b3680b399c00f19740f42d5db6222',
->>>>>>> 1c5b0b1a32218548ee01e39a6858b1614348ea7f
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -90,48 +82,12 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
-<<<<<<< HEAD
-        'psr/http-client' => array(
-            'pretty_version' => '1.0.3',
-            'version' => '1.0.3.0',
-            'reference' => 'bb5906edc1c324c9a05aa0873d40117941e5fa90',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../psr/http-client',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'psr/http-factory' => array(
-            'pretty_version' => '1.1.0',
-            'version' => '1.1.0.0',
-            'reference' => '2b4765fddfe3b508ac62f829e852b1501d3f6e8a',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../psr/http-factory',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'psr/http-message' => array(
-            'pretty_version' => '2.0',
-            'version' => '2.0.0.0',
-            'reference' => '402d35bcb92c70c026d1a6a9883f06b2ead23d71',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../psr/http-message',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'psr/simple-cache' => array(
-            'pretty_version' => '3.0.0',
-            'version' => '3.0.0.0',
-            'reference' => '764e0b3939f5ca87cb904f570ef9be2d78a07865',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../psr/simple-cache',
-=======
         'smalot/pdfparser' => array(
             'pretty_version' => 'v2.12.0',
             'version' => '2.12.0.0',
             'reference' => '8440edbf58c8596074e78ada38dcb0bd041a5948',
             'type' => 'library',
             'install_path' => __DIR__ . '/../smalot/pdfparser',
->>>>>>> 1c5b0b1a32218548ee01e39a6858b1614348ea7f
             'aliases' => array(),
             'dev_requirement' => false,
         ),

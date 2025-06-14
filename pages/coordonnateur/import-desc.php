@@ -105,7 +105,7 @@ $role = $_SESSION['user']['role'];
             <!-- [ breadcrumb ] end -->
 
             <!-- [ Main Content ] start -->
-            <form action="/ENSAH-service/inc/functions/vacataire/upload_note.php" method="post" class="row" enctype="multipart/form-data">
+            <form action="/ENSAH-service/inc/functions/cord/upload_desc.php" method="post" class="row" enctype="multipart/form-data">
                 <!-- [ form-element ] start -->
                 <div class="col-sm-6" style="width: 100%;">
                     <!-- Basic Inputs -->
@@ -134,16 +134,15 @@ $role = $_SESSION['user']['role'];
                                         <option disabled class="defaultOption" selected>Selectionner la saison
                                         </option>
                                         <option>2024/2025</option>
-                                        <option>2023/2024</option>
-                                        <option>2022/2023</option>
-                                        <option>2021/2022</option>
-                                        <option>2020/2021</option>
+                                        <option>2025/2026</option>
+                                        <option>2026/2027</option>
+                                        <option>2027/2028</option>
                                     </select>
                                 </div>
                                 <div class="form-group mb-0">
-                                    <label class="form-label" for="exampleTextarea">Uploader le document (.pdf / .doc /.docx)</label>
+                                    <label class="form-label" for="exampleTextarea">Uploader le document (.xlsx / .xls /.xml)</label>
                                     <div class="mb-3">
-                                        <input class="form-control" name="document" type="file" id="formFile" accept=".pdf, .doc, .docx">
+                                        <input class="form-control" name="document" type="file" id="formFile" accept=".xlsx, .xls, .xml">
                                     </div>
                                 </div>
                             </div>

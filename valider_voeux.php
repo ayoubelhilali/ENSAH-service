@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'C:\xampp\htdocs\ENSAH-service\inc\functions\connections.php';
+require_once $_SERVER['DOCUMENT_ROOT']. '/ENSAH-service/inc/functions/connections.php';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $id_voeux = $_POST["id_voeux"];

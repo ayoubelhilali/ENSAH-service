@@ -27,7 +27,7 @@
                                     </thead>
                                     <tbody>
                                        <?php 
-                                         require_once 'C:\xampp\htdocs\ENSAH-service\inc\functions\connections.php' ;
+                                         require_once $_SERVER['DOCUMENT_ROOT'] . '/ENSAH-service/inc/functions/connections.php' ;
                                          $sql = "SELECT * FROM unite" ;
                                          $stmt = $pdo->query($sql);
                         

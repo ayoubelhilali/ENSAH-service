@@ -97,7 +97,16 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/isStrongP
             <div class="row">
                 <!-- [ sample-page ] start -->
                 <div class="col-sm-12">
+
                     <div class="card table-card">
+                        <div class="text-end p-4 pb-0">
+                            <form method="post" action="/ENSAH-service/inc/functions/cord/export_excel.php" style="display:inline;">
+                                <button type="submit" name="export_excel"
+                                    class="btn btn-primary d-inline-flex align-items-center">
+                                    <i class="ti ti-upload"></i> Exporter Excel
+                                </button>
+                            </form>
+                        </div>
                         <div class="card-body">
                             <!-------------------------------------->
                             <!-- get vacataires data -->
@@ -124,15 +133,15 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/isStrongP
 
                                 <div id="success-msg" class="success-msg" style="color: green; margin-top: 10px;">
                                     <?php if (isset($_GET['success']) && isset($_SESSION["success_message"])): ?>
-                                            <?= "✅" . htmlspecialchars($_SESSION["success_message"], ENT_QUOTES, 'UTF-8'); ?>
-                                            <?php unset($_SESSION["success_message"]); ?>
+                                        <?= "✅" . htmlspecialchars($_SESSION["success_message"], ENT_QUOTES, 'UTF-8'); ?>
+                                        <?php unset($_SESSION["success_message"]); ?>
                                     <?php endif; ?>
                                 </div>
 
                                 <div id="error-msg" class="error-msg" style="color: red; margin-top: 10px;">
                                     <?php if (isset($_GET['error']) && isset($_SESSION["error_message"])): ?>
-                                            <?= htmlspecialchars($_SESSION["error_message"], ENT_QUOTES, 'UTF-8'); ?>
-                                            <?php unset($_SESSION["error_message"]); ?>
+                                        <?= htmlspecialchars($_SESSION["error_message"], ENT_QUOTES, 'UTF-8'); ?>
+                                        <?php unset($_SESSION["error_message"]); ?>
                                     <?php endif; ?>
                                 </div>
 
@@ -171,96 +180,95 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/isStrongP
                                             $resp_query->execute([':affect_ue' => $unit['vacataire_ID']]);
                                             $resp_ue = $resp_query->fetch(PDO::FETCH_ASSOC);
                                             ?>
-                                                <tr>
-                                                    <td><?= $unit['unite_ID'] ?></td>
-                                                    <td>
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <h6 class="mb-1">
-                                                                    <?= htmlspecialchars($unit['unite_name'], ENT_QUOTES, 'UTF-8') ?>
-                                                                </h6>
-                                                            </div>
+                                            <tr>
+                                                <td><?= $unit['unite_ID'] ?></td>
+                                                <td>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <h6 class="mb-1">
+                                                                <?= htmlspecialchars($unit['unite_name'], ENT_QUOTES, 'UTF-8') ?>
+                                                            </h6>
                                                         </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <h6 class="mb-1"><span
-                                                                        style="color: brown;"><?= $unit['volume_cours'] . "h" ?></span>
-                                                                    cours</h6>
-                                                            </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <h6 class="mb-1"><span
+                                                                    style="color: brown;"><?= $unit['volume_cours'] . "h" ?></span>
+                                                                cours</h6>
                                                         </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <h6 class="mb-1"><span
-                                                                        style="color: brown;"><?= $unit['volume_td'] . "h" ?></span>
-                                                                    TD</h6>
-                                                            </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <h6 class="mb-1"><span
+                                                                    style="color: brown;"><?= $unit['volume_td'] . "h" ?></span>
+                                                                TD</h6>
                                                         </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <h6 class="mb-1"><span
-                                                                        style="color: brown;"><?= $unit['volume_tp'] . "h" ?></span>
-                                                                    TP</h6>
-                                                            </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <h6 class="mb-1"><span
+                                                                    style="color: brown;"><?= $unit['volume_tp'] . "h" ?></span>
+                                                                TP</h6>
                                                         </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <h6 class="mb-1">
-                                                                    <?= htmlspecialchars($unit['unite_specialite'], ENT_QUOTES, 'UTF-8') ?>
-                                                                </h6>
-                                                            </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <h6 class="mb-1">
+                                                                <?= htmlspecialchars($unit['unite_specialite'], ENT_QUOTES, 'UTF-8') ?>
+                                                            </h6>
                                                         </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <h6 class="mb-1">
-                                                                    <?php if ($resp_ue) {
-                                                                        echo "Dr. " . htmlspecialchars($resp_ue['nom'], ENT_QUOTES, 'UTF-8') . " " . htmlspecialchars($resp_ue['prenom'], ENT_QUOTES, 'UTF-8');
-                                                                    } else {
-                                                                        echo "Aucun responsable";
-                                                                    } ?>
-                                                                </h6>
-                                                            </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <h6 class="mb-1">
+                                                                <?php if ($resp_ue) {
+                                                                    echo "Dr. " . htmlspecialchars($resp_ue['nom'], ENT_QUOTES, 'UTF-8') . " " . htmlspecialchars($resp_ue['prenom'], ENT_QUOTES, 'UTF-8');
+                                                                } else {
+                                                                    echo "Aucun responsable";
+                                                                } ?>
+                                                            </h6>
                                                         </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <h6 class="mb-1">
-                                                                    <?= htmlspecialchars($unit["semestre"], ENT_QUOTES, 'UTF-8') ?>
-                                                                </h6>
-                                                            </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <h6 class="mb-1">
+                                                                <?= htmlspecialchars($unit["semestre"], ENT_QUOTES, 'UTF-8') ?>
+                                                            </h6>
                                                         </div>
-                                                    </td>
+                                                    </div>
+                                                </td>
 
-                                                    <td class="text-center">
-                                                        <ul class="list-inline me-auto mb-0">
-                                                            <li class="list-inline-item align-bottom" data-bs-toggle="tooltip"
-                                                                title="Affecter">
-                                                                <a href="#" class="avtar avtar-xs btn-link-primary affect-btn"
-                                                                    data-bs-toggle="modal" data-bs-target="#ue-affect-modal"
-                                                                    data-unit="<?= $unit['unite_ID']; ?>"
-                                                                    data-nom="<?= $unit['unite_name']; ?>"
-                                                                    data-volumeC="<?= $unit['volume_cours']; ?>"
-                                                                    data-volumeTd="<?= $unit['volume_td']; ?>"
-                                                                    data-volumeTp="<?= $unit['volume_tp']; ?>"
-                                                                    data-semestre="<?= $unit['semestre']; ?>"
-                                                                    data-vacats='<?= $vacats_json; ?>'
-                                                                    >
-                                                                    <i class="ti ti-user-plus f-18"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
+                                                <td class="text-center">
+                                                    <ul class="list-inline me-auto mb-0">
+                                                        <li class="list-inline-item align-bottom" data-bs-toggle="tooltip"
+                                                            title="Affecter">
+                                                            <a href="#" class="avtar avtar-xs btn-link-primary affect-btn"
+                                                                data-bs-toggle="modal" data-bs-target="#ue-affect-modal"
+                                                                data-unit="<?= $unit['unite_ID']; ?>"
+                                                                data-nom="<?= $unit['unite_name']; ?>"
+                                                                data-volumeC="<?= $unit['volume_cours']; ?>"
+                                                                data-volumeTd="<?= $unit['volume_td']; ?>"
+                                                                data-volumeTp="<?= $unit['volume_tp']; ?>"
+                                                                data-semestre="<?= $unit['semestre']; ?>"
+                                                                data-vacats='<?= $vacats_json; ?>'>
+                                                                <i class="ti ti-user-plus f-18"></i>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                            </tr>
                                         <?php } ?>
                                     </tbody>
                                 </table>
@@ -403,23 +411,23 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/isStrongP
                     document.getElementById('modal-volumeTp').value = volume_tp;
                     document.getElementById('modal-semes').value = semestre;
                     try {
-                    // Clear existing options
-                    const firstOption = vacatsList.querySelector('option:first-child');
-                    vacatsList.innerHTML = '';
-                    if (firstOption) {
-                        vacatsList.appendChild(firstOption); // Keep the first option
-                        firstOption.selected = true;
+                        // Clear existing options
+                        const firstOption = vacatsList.querySelector('option:first-child');
+                        vacatsList.innerHTML = '';
+                        if (firstOption) {
+                            vacatsList.appendChild(firstOption); // Keep the first option
+                            firstOption.selected = true;
+                        }
+                        const vacats = JSON.parse(vacatsData); // Parse JSON string
+                        vacats.forEach(vacat => {
+                            const option = document.createElement('option');
+                            option.textContent = vacat.nom + " " + vacat.prenom; // Set the text of the option to the professor's name
+                            option.value = vacat.vacat_ID; // Set the value of the option to the professor's ID
+                            vacatsList.appendChild(option);
+                        });
+                    } catch (error) {
+                        console.error('Invalid vacats data:', error);
                     }
-                    const vacats = JSON.parse(vacatsData); // Parse JSON string
-                    vacats.forEach(vacat => {
-                        const option = document.createElement('option');
-                        option.textContent = vacat.nom + " " + vacat.prenom; // Set the text of the option to the professor's name
-                        option.value = vacat.vacat_ID; // Set the value of the option to the professor's ID
-                        vacatsList.appendChild(option);
-                    });
-                } catch (error) {
-                    console.error('Invalid vacats data:', error);
-                }
 
                 });
             });

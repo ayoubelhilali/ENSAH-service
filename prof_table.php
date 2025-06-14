@@ -2,7 +2,7 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-require_once 'C:\xampp\htdocs\ENSAH-service\inc\functions\connections.php';
+require_once $_SERVER['DOCUMENT_ROOT']. '/ENSAH-service/inc/functions/connections.php';
 ?>
 
 <!DOCTYPE html>
@@ -38,7 +38,7 @@ require_once 'C:\xampp\htdocs\ENSAH-service\inc\functions\connections.php';
 
   <!-- Sidebar -->
   <?php 
-    include_once 'C:\xampp\htdocs\ENSAH-service\inc\sidebar\chef-sidebar.php';
+    include_once $_SERVER['DOCUMENT_ROOT']. '/ENSAH-service/inc/sidebar/chef-sidebar.php';
     include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/header/header.php");
   ?>
 

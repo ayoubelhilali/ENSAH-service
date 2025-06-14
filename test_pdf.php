@@ -2,32 +2,63 @@
 require 'vendor/autoload.php';
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
-use Smalot\PdfParser\Parser;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
-    $file = $_FILES['file'];
-    $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-    $tmp = $file['tmp_name'];
+$inputFileName = 'uploads/Copy of GI-ID-TDIA-AP(1).xlsx'; // Remplace par le chemin de ton fichier
 
-    if (in_array($ext, ['xls', 'xlsx'])) {
-        $spreadsheet = IOFactory::load($tmp);
-        $sheet = $spreadsheet->getActiveSheet();
-        $data = $sheet->toArray();
+// Charger le fichier Excel
+$spreadsheet = IOFactory::load($inputFileName);
 
-        echo "<h3>Données Excel :</h3><pre>";
-        print_r($data);
-        echo "</pre>";
+// Sélectionner la première feuille
+$sheet = $spreadsheet->getActiveSheet();
 
-    } elseif ($ext === 'pdf') {
-        $parser = new Parser();
-        $pdf = $parser->parseFile($tmp);
-        $text = $pdf->getText();
+// Lire toutes les lignes et colonnes avec les données
+$data = $sheet->toArray();
 
-        echo "<h3>Contenu PDF :</h3><pre>";
-        echo htmlspecialchars($text);
-        echo "</pre>";
+$modules = []; // This will store the extracted module data
 
-    } else {
-        echo "❌ Format non supporté.";
+// Iterate through the rows, skipping the header row
+foreach ($data as $rowIndex => $row) {
+    // Skip the header row (assuming header is at index 0)
+    if ($rowIndex === 0 || $rowIndex ===1) {
+        continue;
+    }
+
+    // Ensure the row has enough columns to avoid errors
+    if (count($row) > 5) { // Check if there are at least 6 columns (0 to 5)
+        $moduleName = $row[0]; // Column A: Intitulé
+        $volumeCours = $row[2]; // Column C: Cours
+        $volumeTD = $row[3];    // Column D: TD
+        $volumeTP = $row[4];    // Column E: TP
+        $responsableId = $row[5]; // Column F: responsable_ID
+
+        // Create an associative array for the current module
+        $moduleData = [
+            'name' => $moduleName,
+            'volume' => [
+                'cours' => $volumeCours,
+                'td' => $volumeTD,
+                'tp' => $volumeTP
+            ],
+            'responsable_id' => $responsableId
+        ];
+
+        // Add the module data to the modules array
+        $modules[] = $moduleData;
     }
 }
+
+// Print the extracted modules array to see the structure
+echo "<pre>";
+print_r($modules);
+echo "</pre>";
+
+// You can now loop through the $modules array to access each module's data
+// foreach ($modules as $module) {
+//     echo "Module Name: " . $module['name'] . "<br>";
+//     echo "Volume Cours: " . $module['volume']['cours'] . "<br>";
+//     echo "Volume TD: " . $module['volume']['td'] . "<br>";
+//     echo "Volume TP: " . $module['volume']['tp'] . "<br>";
+//     echo "Responsable ID: " . $module['responsable_id'] . "<br><br>";
+// }
+
+?>

@@ -154,9 +154,10 @@ $filiere_ID = $_SESSION['filiere']['filiereID'];
                 </span>
               </div>
               <div>
-                <h6 class="mb-1 f-w-400 text-muted">Total des unités</h6>
+                <h6 class="mb-1 f-w-400 text-muted">Total des unités affectés</h6>
                 <h4 class="mb-0"><?php
-                $sql = "SELECT COUNT(*) FROM `unite` where filiere_ID=:filiereID";
+                $sql = "SELECT COUNT(*) FROM `affect_ue_vac` A join unite U on A.unite_ID=U.unite_ID 
+                where U.filiere_ID=:filiereID";
                 $stmt = $pdo->prepare($sql);
                 $stmt->bindParam(':filiereID', $filiere_ID, PDO::PARAM_INT);
                 $stmt->execute();
@@ -196,10 +197,10 @@ $filiere_ID = $_SESSION['filiere']['filiereID'];
           <div class="d-flex align-items-center justify-content-between mb-3">
             <div class="card" style="width:100%">
               <div class="card-header">
-                <h5>Les personnels</h5>
+                <h5>Les unitées</h5>
               </div>
               <div class="card-body">
-                <div id="bar-chart-1"></div>
+                <div id="bar-chart-3"></div>
               </div>
             </div>
           </div>

@@ -450,10 +450,13 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/email/sendEmail.php
           $add_prof = "INSERT INTO professeur(user_ID, email, password, specialite) 
                              VALUES('$user_id', '$email', '$password',  '$specialite')";
           if ($pdo->query($add_prof)) {
-            
             // Send email
             $email_handler = new PrepareEmail();
-            if ($email_handler->sendEmailnewProf($email, $original_password, "$nom $prenom")) {
+            if ($email_handler->sendEmailnewProf($email, $original_password, "$nom $prenom",$genre)) {
+              // add notification
+              $add_notification = "INSERT INTO notifications(id_user, date_time, title, content,status,type) 
+                VALUES('$user_id', NOW(), 'Compte cree avec succee', 'Felicitations, votre compte en tant que professeur a ete cree, veuilez changer votre password dans profil->changerpassword.', 'unread','personel')";
+              $pdo->query($add_notification);
               $_SESSION['success'] = "le professeur a ajouté et l'email a été envoyé!";
               header("Location: /ENSAH-service/pages/admin/prof-list.php?success=1");
             } else {

@@ -447,10 +447,10 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/email/sendEmail.php
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
             // Send email
             $email_handler = new PrepareEmail();
-            if ($email_handler->sendEmailnewProf($email, $original_password, "{$user['nom']} {$user['prenom']}")) {
+            if ($email_handler->sendEmailnewProf($email, $original_password, "{$user['nom']} {$user['prenom']}",$genre)) {
               // add notification
-              $add_notification = "INSERT INTO notifications(id_user, date_time, title, content,status) 
-                                   VALUES('$user_id', NOW(), 'Nouvelle notification', 'Vous avez été ajouté en tant que vacataire.', 'unread')";
+              $add_notification = "INSERT INTO notifications(id_user, date_time, title, content,type) 
+                                   VALUES('$user_id', NOW(), 'Nouvelle notification', 'Vous avez été ajouté en tant que vacataire.', 'personel')";
               $pdo->query($add_notification);
               $_SESSION['success_message'] = "Le vacataire a été ajouté avec succès! et l'email a été envoyé.";
               header("Location: /ENSAH-service/pages/coordonnateur/vacat-list.php?success=1");
