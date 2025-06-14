@@ -134,10 +134,9 @@ $role = $_SESSION['user']['role'];
                                         <option disabled class="defaultOption" selected>Selectionner la saison
                                         </option>
                                         <option>2024/2025</option>
-                                        <option>2023/2024</option>
-                                        <option>2022/2023</option>
-                                        <option>2021/2022</option>
-                                        <option>2020/2021</option>
+                                        <option>2025/2026</option>
+                                        <option>2026/2027</option>
+                                        <option>2027/2028</option>
                                     </select>
                                 </div>
                                 <div class="form-group mb-0">

@@ -95,7 +95,7 @@ if (file_exists($headerPath)) {
               <h5 class="mb-2 f-w-400 text-muted">Total des unités d'enseignememt</h5>
               <h4 class="mb-0 mt-3">
                 <?php
-                   require_once 'C:\xampp\htdocs\ENSAH-service\inc\functions\connections.php' ;      
+                   require_once  $_SERVER['DOCUMENT_ROOT']. '/ENSAH-service/inc/functions/connections.php' ;      
                     $sql = "SELECT COUNT(*) FROM unite" ;
                     $stmt = $pdo->query($sql); 
                     $nombre_unite = $stmt->fetchColumn();
@@ -111,7 +111,7 @@ if (file_exists($headerPath)) {
               <h5 class="mb-2 f-w-400 text-muted">Total des unités d'enseignement réservées</h5>
               <h4 class="mb-0 mt-3">
                 <?php 
-                    require_once 'C:\xampp\htdocs\ENSAH-service\inc\functions\connections.php' ;
+                    require_once $_SERVER['DOCUMENT_ROOT'] . '/ENSAH-service/inc/functions/connections.php' ;
                     $sql = "SELECT COUNT(*) FROM voeux WHERE status=1 " ;
                     $stmt = $pdo->query($sql); 
                     $nombre_unite_reserve = $stmt->fetchColumn();

@@ -153,7 +153,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/ENSAH-service/inc/functions/connections.ph
                                             $resp_ue = $resp_query->fetch(PDO::FETCH_ASSOC);
                                             ?>
                                             <tr>
-                                                <td><?= $note['note_ID'] ?></td>
+                                                <td><?= $note['Note_ID'] ?></td>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col">

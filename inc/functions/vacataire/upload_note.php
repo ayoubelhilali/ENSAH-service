@@ -40,12 +40,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (in_array($fileType, $allowedTypes)) {
         if (move_uploaded_file($file["tmp_name"], $targetFile)) {
             // Préparer l’insertion
-            $stmt = $pdo->prepare("INSERT INTO vacataire_note (unite_ID, session,vacataire_ID, annee, file_path) VALUES (:unite_ID, :session, :vacataire_ID, :annee, :file_path)");
+            $stmt = $pdo->prepare("INSERT INTO vacataire_note (unite_ID, session,vacataire_ID, annee, file_path,date_publication) VALUES (:unite_ID, :session, :vacataire_ID, :annee, :file_path,:date_publication)");
             $stmt->execute([
                 ':unite_ID' => $unite_ID,
                 ':session' => $session,
                 ':vacataire_ID' => $_SESSION['user']['vacat_ID'], // Assurez-vous que l'ID du vacataire est dans la session
                 ':annee' => $saison, // Année actuelle
+                ':date_publication' => date("Y-m-d H:i:s"), // Année actuelle
                 ':file_path' => "/ENSAH-service/uploads/notes/" . $fileName,
             ]);
             // Vérifier si l'insertion a réussi

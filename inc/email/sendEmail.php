@@ -13,11 +13,11 @@ class PrepareEmail
         $this->email_handler = new MailService();
     }
 
-    public function sendEmailnewProf(string $target_mail, string $target_password, string $target_name): bool
+    public function sendEmailnewProf(string $target_mail, string $target_password, string $target_name,string $target_genre): bool
     {
         // Email content
         $subject = "Creation de votre compte sur la plateforme ENSAH Service";
-        $body = "Bonjour Monsieur/Madame " . $target_name . ",\n\n" .
+        $body = "Bonjour". $target_genre=='masculin'? "Monsieur ":"Madame " . $target_name . ",\n\n" .
             "Votre compte a ete cree avec succes sur la plateforme ENSAH Service.\n\n" .
             " Informations de connexion :\n" .
             " Email : " . $target_mail . "\n" .

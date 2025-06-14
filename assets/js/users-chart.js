@@ -107,4 +107,37 @@ fetch("/ENSAH-service/inc/functions/general/get_volume.php")
   })
   .catch((error) =>
     console.error("Erreur lors du chargement des données :", error)
+);
+
+fetch("/ENSAH-service/inc/functions/general/get_units.php")
+  .then((response) => response.json())
+  .then((data) => {
+    const totalUnits = data.unite[0].total;
+    const affectedUnits = data.unite_affecte[0].total;
+    const nonAffectedUnits = data.unite_non_affecte[0].total;
+
+    const series = [affectedUnits, nonAffectedUnits];
+    const labels = ["Unités affectées", "Unités non affectées"];
+
+    const options = {
+      chart: {
+        type: "pie",
+        height: 300,
+      },
+      labels: labels,
+      series: series,
+      colors: ["#28a745", "#dc3545"],
+    };
+
+    const chart = new ApexCharts(
+      document.querySelector("#bar-chart-3"),
+      options
+    );
+    chart.render();
+  })
+  .catch((error) =>
+    console.error("Erreur lors du chargement des données :", error)
   );
+
+  
+

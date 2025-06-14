@@ -88,7 +88,6 @@
             'reference' => '8440edbf58c8596074e78ada38dcb0bd041a5948',
             'type' => 'library',
             'install_path' => __DIR__ . '/../smalot/pdfparser',
->>>>>>> 1c5b0b1a32218548ee01e39a6858b1614348ea7f
             'aliases' => array(),
             'dev_requirement' => false,
         ),

@@ -88,16 +88,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     }
                 }
             }
-            header("Location: /ENSAH-service/pages/coordonnateur/uploader-desc.php");
+            header("Location: /ENSAH-service/pages/coordonnateur/import-desc.php");
             exit();
         } else {
             $_SESSION["error_message"] = "Une erreur est survenue lors du téléchargement.";
-            header("Location: /ENSAH-service/pages/coordonnateur/uploader-desc.php");
+            header("Location: /ENSAH-service/pages/coordonnateur/import-desc.php");
             exit();
         }
     } else {
         $_SESSION["error_message"] = "Type de fichier non autorisé. Veuillez uploader un PDF ou un document Word.";
-        header("Location: /ENSAH-service/pages/coordonnateur/uploader-emploi.php");
+        header("Location: /ENSAH-service/pages/coordonnateur/import-desc.php");
         exit();
     }
 }

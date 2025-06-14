@@ -7,7 +7,7 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 $_SESSION['charge_min'] = $charge_min;
 
-require_once 'C:\xampp\htdocs\ENSAH-service\inc\functions\connections.php';
+require_once $_SERVER['DOCUMENT_ROOT'] .'/ENSAH-service/inc/functions/connections.php';
 
 $prof_id = $_SESSION['user']['prof_id'] ?? null;
 
