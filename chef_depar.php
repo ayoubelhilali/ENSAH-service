@@ -45,6 +45,7 @@ if (session_status() == PHP_SESSION_NONE) {
 </div>
 <!-- [ Pre-loader ] End -->
 <?php
+
 include_once $_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/sidebar/chef-sidebar.php";
 include_once $_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/header/header.php";
 
@@ -84,7 +85,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/header/header.php";
               <h5 class="mb-2 f-w-400 text-muted">Total des unités d'enseignememt</h5>
               <h4 class="mb-0 mt-3">
                 <?php
-                   require_once 'C:\xampp\htdocs\ENSAH-service\inc\functions\connections.php' ;      
+                   require_once $_SERVER['DOCUMENT_ROOT'] .'/ENSAH-service/inc/functions/connections.php' ;      
                     $sql = "SELECT COUNT(*) FROM unite" ;
                     $stmt = $pdo->query($sql); 
                     $nombre_unite = $stmt->fetchColumn();
@@ -331,7 +332,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php else: ?>
       <div class="col-12">
         <div class="alert alert-success text-center shadow-sm" role="alert">
-          ✅ Toutes les unités d’enseignement du département sont déjà affectées.
+           Toutes les unités d’enseignement du département sont déjà affectées.
         </div>
       </div>
     <?php endif; ?>
