@@ -45,20 +45,9 @@ if (session_status() == PHP_SESSION_NONE) {
 </div>
 <!-- [ Pre-loader ] End -->
 <?php
-$sidebarPath = $_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/sidebar/chef-sidebar.php";
-$headerPath = $_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/header/header.php";
+include_once $_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/sidebar/chef-sidebar.php";
+include_once $_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/header/header.php";
 
-if (file_exists($sidebarPath)) {
-    include_once($sidebarPath);
-} else {
-    error_log("Sidebar file missing: $sidebarPath");
-}
-
-if (file_exists($headerPath)) {
-    include_once($headerPath);
-} else {
-    error_log("Header file missing: $headerPath");
-}
 ?>
 
 <!-- [ Header ] end -->
@@ -255,7 +244,7 @@ if (file_exists($headerPath)) {
 
                                 }                    
                                 ?>
-                                </php>
+                               
                                     </tbody>
                                 </table>
                             </div>

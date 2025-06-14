@@ -45,8 +45,8 @@ if (session_status() == PHP_SESSION_NONE) {
 </div>
 <!-- [ Pre-loader ] End -->
 <?php
-$sidebarPath = $_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/sidebar/prof-sidebar.php";
-$headerPath = $_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/header/header.php";
+$sidebarPath = $_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/sidebar/prof-sidebar.php";
+$headerPath = $_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/header/header.php";
 
 if (file_exists($sidebarPath)) {
     include_once($sidebarPath);
@@ -66,6 +66,7 @@ if (file_exists($headerPath)) {
 
 
   <!-- [ Main Content ] start -->
+   
   <div class="pc-container">
     <div class="pc-content">
       <!-- [ breadcrumb ] start -->
