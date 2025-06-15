@@ -18,7 +18,6 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/isStrongP
 <!DOCTYPE html>
 <html lang="en">
 <!-- [Head] start -->
-
 <head>
     <title>ENSAH-service | les filières</title>
     <!-- [Meta] -->

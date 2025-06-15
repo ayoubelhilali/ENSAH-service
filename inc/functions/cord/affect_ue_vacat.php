@@ -23,13 +23,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
 
     // 🔹 Insertion si pas d'erreur
     if ($errors == 0) {
-        $sql = "INSERT INTO affect_ue_vac(unite_ID, vacataire_ID)
-        VALUES(:unite, :vacataire)";
+        $sql = "INSERT INTO affect_ue_vac(unite_ID, vacataire_ID, date)
+        VALUES(:unite, :vacataire, :date)";
         $stmt = $pdo->prepare($sql);
 
         $success = $stmt->execute([
             ':unite' => $ue_id,
-            ':vacataire' => $vacataire
+            ':vacataire' => $vacataire,
+            ':date' => date("Y-m-d H:i:s")
         ]);
 
         if ($success) {
