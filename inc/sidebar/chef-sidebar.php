@@ -54,7 +54,7 @@
           </a>
         </li>
         <li class="pc-item">
-          <a href="/ENSAH-service/pages/historique.php" class="pc-link">
+          <a href="/ENSAH-service/historique_chef.php" class="pc-link">
             <span class="pc-micon"><i class="ti ti-history"></i></span>
             <span class="pc-mtext">Historique</span>
           </a>

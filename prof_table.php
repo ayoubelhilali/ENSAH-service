@@ -37,10 +37,22 @@ require_once $_SERVER['DOCUMENT_ROOT']. '/ENSAH-service/inc/functions/connection
   </div>
 
   <!-- Sidebar -->
-  <?php 
-    include_once $_SERVER['DOCUMENT_ROOT']. '/ENSAH-service/inc/sidebar/chef-sidebar.php';
-    include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/header/header.php");
-  ?>
+  <?php
+$sidebarPath = $_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/sidebar/prof-sidebar.php";
+$headerPath = $_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/header/header.php";
+
+if (file_exists($sidebarPath)) {
+    include_once($sidebarPath);
+} else {
+    error_log("Sidebar file missing: $sidebarPath");
+}
+
+if (file_exists($headerPath)) {
+    include_once($headerPath);
+} else {
+    error_log("Header file missing: $headerPath");
+}
+?>
 
   <!-- Contenu principal -->
   <div class="pc-container">
@@ -67,9 +79,8 @@ require_once $_SERVER['DOCUMENT_ROOT']. '/ENSAH-service/inc/functions/connection
               <tbody>
                 <?php 
                 $sql = "SELECT * FROM professeur p 
-                        JOIN filiere f ON f.filiere_ID=p.filiere_id 
-                        JOIN user u ON u.user_ID=p.user_ID 
-                        WHERE depart_ID=?";
+                        JOIN departement d ON d.depart_ID=p.departement  
+                        WHERE d.depart_ID=? ";
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute([$_SESSION['user']['depart_id']]);
                 while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
@@ -110,7 +121,7 @@ require_once $_SERVER['DOCUMENT_ROOT']. '/ENSAH-service/inc/functions/connection
                   <th>Vœux</th>
                   <th>Date soumission</th>
                   <th>Charge totale </th>
-                  <th>Valider</th>
+                  <th>Validation</th>
                 </tr>
               </thead>
               <tbody>
@@ -151,33 +162,62 @@ require_once $_SERVER['DOCUMENT_ROOT']. '/ENSAH-service/inc/functions/connection
                   echo '<div class="alert alert-warning text-center mt-3" role="alert">';
                   echo "Aucun voeu n'a été soumis pour le moment.";
                   echo '</div>';
-                } else {
-                 $seuil_min = 180 ;
-
-foreach ($voeux as $row) {
-    $classe = ($row['charge_totale'] < 4) ? 'table-danger fw-bold' : '';
-    echo "<form method='POST' action='valider_voeux.php'>";
-    echo "<input type='hidden' name='id_voeux' value='". $row['id_voeux'] ."'>";
-    echo "<input type='hidden' name='id_unite' value='". $row['id_unite'] ."'>";
-    echo "<input type='hidden' name='id_prof' value='". $row['id_prof'] ."'>";
-    echo "<input type='hidden' name='charge_totale' value='".$row['charge_totale']."' >" ;
-
-    echo "<tr class='$classe'>";
-    echo "<td>" . htmlspecialchars($row["nom"]) . "</td>";
-    echo "<td>" . htmlspecialchars($row["prenom"]) . "</td>";
-    echo "<td>" . htmlspecialchars($row["CIN"]) . "</td>";
-    echo "<td>" . htmlspecialchars($row["unite_name"])."(".htmlspecialchars($row["charge_voeu"])." h)" . "</td>";
-    echo "<td>" . htmlspecialchars($row["date_soumission"]) . "</td>";
-    echo "<td>" . htmlspecialchars($row["charge_totale"]) . " h</td>";
-
-    echo "<td><button type='submit' class='btn btn-sm btn-primary ms-2'>Valider</button></td>";
-    echo "</tr>";
-    echo "</form>";
-}
-
-
-                  echo '</tbody></table></div>';
                 }
+      else {
+    $seuil_min = 180;
+    $grouped_voeux = [];
+
+    foreach ($voeux as $row) {
+        $id_prof = $row['id_prof'];
+        if (!isset($grouped_voeux[$id_prof])) {
+            $grouped_voeux[$id_prof] = [
+                'nom' => $row['nom'],
+                'prenom' => $row['prenom'],
+                'CIN' => $row['CIN'],
+                'charge_totale' => $row['charge_totale'],
+                'date_soumission' => $row['date_soumission'],
+                'voeux' => [],
+                'id_voeux' => [],
+            ];
+        }
+
+        $grouped_voeux[$id_prof]['voeux'][] = $row['unite_name'] . " (" . $row['charge_voeu'] . " h)";
+        $grouped_voeux[$id_prof]['id_voeux'][] = $row['id_voeux'];
+    }
+
+    foreach ($grouped_voeux as $id_prof => $prof) {
+        $classe = ($prof['charge_totale'] < 180) ? 'table-danger fw-bold' : '';
+
+        echo "<form method='POST' action='valider_voeux.php'>";
+        foreach ($prof['id_voeux'] as $id_voeu) {
+            echo "<input type='hidden' name='id_voeux[]' value='" . $id_voeu . "'>";
+        }
+        echo "<input type='hidden' name='id_prof' value='" . $id_prof . "'>";
+        echo "<input type='hidden' name='charge_totale' value='" . $prof['charge_totale'] . "'>";
+
+        echo "<tr class='$classe'>";
+        echo "<td>" . htmlspecialchars($prof["nom"]) . "</td>";
+        echo "<td>" . htmlspecialchars($prof["prenom"]) . "</td>";
+        echo "<td>" . htmlspecialchars($prof["CIN"]) . "</td>";
+        echo "<td>";
+        foreach ($prof['voeux'] as $voeu) {
+            echo htmlspecialchars($voeu) . "<br>";
+        }
+        echo "</td>";
+        echo "<td>" . htmlspecialchars($prof["date_soumission"]) . "</td>";
+        echo "<td>" . htmlspecialchars($prof["charge_totale"]) . " h</td>";
+        echo "<td>";
+        echo "<button type='submit' name='action' value='valider' class='btn btn-sm btn-primary ms-2'>Valider</button>";
+        echo "<button type='submit' name='action' value='decliner' class='btn btn-sm btn-danger ms-2'>Décliner</button>";
+        echo "</td>";
+        echo "</tr>";
+        echo "</form>";
+    }
+}
+?>
+              </tbody>
+            </table>
+          </div>
                 ?>
           </div>
         </div>
@@ -186,5 +226,5 @@ foreach ($voeux as $row) {
 
     </div>
   </div>
-</body>
+ </body>
 </html>

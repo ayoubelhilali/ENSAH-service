@@ -44,11 +44,22 @@ if (session_status() == PHP_SESSION_NONE) {
   </div>
 </div>
 <!-- [ Pre-loader ] End -->
-<?php
+ 
+ <?php
+$sidebar_path = __DIR__ . "/../inc/sidebar/chef-sidebar.php";
+$header_path  = __DIR__ . "/../inc/header/header.php";
 
-include_once $_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/sidebar/chef-sidebar.php";
-include_once $_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/header/header.php";
+if (file_exists($sidebar_path)) {
+    include_once $sidebar_path;
+} else {
+    echo "<!-- Sidebar file not found -->";
+}
 
+if (file_exists($header_path)) {
+    include_once $header_path;
+} else {
+    echo "<!-- Header file not found -->";
+}
 ?>
 
 <!-- [ Header ] end -->
@@ -82,12 +93,16 @@ include_once $_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/header/header.php";
         <div class="col-md-6 col-xl-3">
           <div class="card">
             <div class="card-body">
-              <h5 class="mb-2 f-w-400 text-muted">Total des unités d'enseignememt</h5>
+              <h5 class="mb-2 f-w-400 text-muted">Total des unités d'enseignememt </h5>
               <h4 class="mb-0 mt-3">
                 <?php
                    require_once $_SERVER['DOCUMENT_ROOT'] .'/ENSAH-service/inc/functions/connections.php' ;      
-                    $sql = "SELECT COUNT(*) FROM unite" ;
-                    $stmt = $pdo->query($sql); 
+                    $sql = "SELECT COUNT(*) FROM unite u 
+                    JOIN filiere f ON f.filiere_ID=u.filiere_ID 
+                     JOIN departement d ON d.depart_ID=f.depart_ID 
+                     WHERE d.depart_ID=?" ;
+                    $stmt = $pdo->prepare($sql); 
+                    $stmt->execute([$_SESSION['user']['depart_id']]) ;
                     $nombre_unite = $stmt->fetchColumn();
                     echo htmlspecialchars($nombre_unite) ;     
                 ?>
@@ -98,14 +113,37 @@ include_once $_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/header/header.php";
         <div class="col-md-6 col-xl-3">
           <div class="card">
             <div class="card-body">
-              <h5 class="mb-2 f-w-400 text-muted">Total des unités d'enseignement réservées</h5>
+              <h5 class="mb-2 f-w-400 text-muted">Total des unités d'enseignement affectées</h5>
               <h4 class="mb-0 mt-3">
                 <?php 
-                    $sql = "SELECT COUNT(*) FROM voeux WHERE status=1 " ;
-                    $stmt = $pdo->query($sql); 
-                    $nombre_unite_reserve = $stmt->fetchColumn();
-                    echo htmlspecialchars($nombre_unite_reserve) ;     
-                  ?>
+            $sql = "
+    SELECT COUNT(*) FROM (
+        SELECT p.id_unite
+        FROM affect_ue_prof p
+        JOIN unite u ON u.unite_ID = p.id_unite
+        JOIN filiere f ON f.filiere_ID = u.filiere_ID 
+        JOIN departement d ON d.depart_ID = f.depart_ID 
+        WHERE d.depart_ID = ?
+
+        UNION ALL
+
+        SELECT v.unite_ID
+        FROM affect_ue_vac v
+        JOIN unite u ON u.unite_ID = v.unite_ID
+        JOIN filiere f ON f.filiere_ID = u.filiere_ID 
+        JOIN departement d ON d.depart_ID = f.depart_ID 
+        WHERE d.depart_ID = ?
+    ) AS all_affectations
+";
+
+
+          $stmt = $pdo->prepare($sql); 
+           $stmt->execute([$_SESSION['user']['depart_id'],$_SESSION['user']['depart_id']]);
+          $nombre_unite_reserve = $stmt->fetchColumn();
+
+          echo htmlspecialchars($nombre_unite_reserve);     
+            ?>
+
               </h4>        
             </div>
           </div>
@@ -171,9 +209,8 @@ include_once $_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/header/header.php";
                                          $stmt1 = $pdo->prepare($sql);
                                if($stmt1->execute([$_SESSION['user']['depart_id']])){
                                       $sql = "SELECT * FROM professeur p 
-                                            JOIN filiere f ON f.filiere_ID=p.filiere_id 
                                             JOIN user u ON u.user_ID=p.user_ID 
-                                            WHERE depart_ID=? " ;
+                                            WHERE p.departement=? " ;
 
                                             $stmt2 = $pdo->prepare($sql) ;
                                             $stmt2->execute([$_SESSION['user']['depart_id']]) ;
@@ -198,7 +235,6 @@ include_once $_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/header/header.php";
     echo "<td>" . htmlspecialchars($row["volume_td"]) . "</td>";
     echo "<td>" . htmlspecialchars($row["volume_tp"]) . "</td>";
     echo "<td>" . htmlspecialchars($row["semestre"]) . "</td>";
-
     echo "<td>";
     if ($prof_affecte) {
     // Affichage du label + bouton modifier
@@ -208,7 +244,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/header/header.php";
     echo "<input type='hidden' name='id_unite' value='" . $row["unite_ID"] . "'>";
     echo "<select name='choix' class='form-select form-select-sm me-2' style='width:auto; display:none;' onchange='this.form.submit()'>";
     
-    echo "<option value=''>--choisir--</option>";
+    echo "<option value='0'>--choisir--</option>";
     $stmt2->execute([$_SESSION['user']['depart_id']]);
     while ($row_prof = $stmt2->fetch(PDO::FETCH_ASSOC)) {
         $selected = $row_prof['prof_ID'] == $prof_affecte['prof_ID'] ? 'selected' : '';

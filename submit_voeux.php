@@ -28,8 +28,25 @@ if (!empty($_POST['voeux'])) {
     }
 
     if ($charge_horaire_selectionne < $charge_min) {
-        $message = "Vous n’avez pas atteint la charge minimale de $charge_min h.";
-        $succes = -1;
+        $date_time = date("Y-m-d H:i:s") ;
+       $title=" Charge horaire minimum n'est pas atteint" ;
+       $content = $content = "Nous vous informons Mr " . $row2['nom'] . " " . $row2['prenom'] .
+           " que la minimum de charge horaire n'est pas atteint , essayez d'ajouter des nouvelles unités d'enseignement à vos voeux ";
+       $type="personel" ;
+
+        $requete4=$pdo->prepare("INSERT INTO notifications(id_user,date_time,title,content,type) 
+                            VALUES (?,?,?,?,?) ") ;
+        $requete4->execute([$id_prof,$date_time,$title,$content,$type]) ;
+
+         $del = $pdo->prepare("DELETE FROM voeux WHERE id_prof=?");
+        $del->execute([$prof_id]);
+
+        $ins = $pdo->prepare("INSERT INTO voeux(id_unite, id_prof) VALUES (?, ?)");
+        foreach ($_POST['voeux'] as $id_unite) {
+            $ins->execute([$id_unite, $prof_id]);
+        }
+
+
     } else {
         // Supprimer les anciens vœux
         $del = $pdo->prepare("DELETE FROM voeux WHERE id_prof=?");

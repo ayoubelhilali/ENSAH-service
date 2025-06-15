@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Hôte : 127.0.0.1
--- Généré le : dim. 08 juin 2025 à 22:46
--- Version du serveur : 10.4.32-MariaDB
--- Version de PHP : 8.2.12
+-- Host: 127.0.0.1
+-- Generation Time: Jun 15, 2025 at 03:55 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `ensah_service`
+-- Database: `ensah_service`
 --
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `admin`
+-- Table structure for table `admin`
 --
 
 CREATE TABLE `admin` (
@@ -35,7 +35,7 @@ CREATE TABLE `admin` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `admin`
+-- Dumping data for table `admin`
 --
 
 INSERT INTO `admin` (`admin_ID`, `email`, `password`, `user_ID`) VALUES
@@ -44,7 +44,7 @@ INSERT INTO `admin` (`admin_ID`, `email`, `password`, `user_ID`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `affect_ue_prof`
+-- Table structure for table `affect_ue_prof`
 --
 
 CREATE TABLE `affect_ue_prof` (
@@ -54,7 +54,7 @@ CREATE TABLE `affect_ue_prof` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `affect_ue_prof`
+-- Dumping data for table `affect_ue_prof`
 --
 
 INSERT INTO `affect_ue_prof` (`affect_id`, `id_unite`, `id_prof`) VALUES
@@ -64,27 +64,35 @@ INSERT INTO `affect_ue_prof` (`affect_id`, `id_unite`, `id_prof`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `affect_ue_vac`
+-- Table structure for table `affect_ue_vac`
 --
 
 CREATE TABLE `affect_ue_vac` (
   `affect_ID` int(11) NOT NULL COMMENT 'Primary Key',
   `unite_ID` int(11) DEFAULT NULL COMMENT 'Unité ID',
-  `vacataire_ID` int(11) DEFAULT NULL COMMENT 'Vacataire ID'
+  `vacataire_ID` int(11) DEFAULT NULL COMMENT 'Vacataire ID',
+  `date` char(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `affect_ue_vac`
+-- Dumping data for table `affect_ue_vac`
 --
 
-INSERT INTO `affect_ue_vac` (`affect_ID`, `unite_ID`, `vacataire_ID`) VALUES
-(1, 16, 6),
-(2, 6, 5);
+INSERT INTO `affect_ue_vac` (`affect_ID`, `unite_ID`, `vacataire_ID`, `date`) VALUES
+(1, 16, 6, NULL),
+(2, 6, 5, NULL),
+(3, 134, 7, NULL),
+(4, 133, 7, NULL),
+(5, 139, 7, NULL),
+(6, 140, 7, NULL),
+(7, 153, 7, NULL),
+(8, 152, 7, NULL),
+(9, 151, 8, '2025-06-15 01:44:19');
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `annonces`
+-- Table structure for table `annonces`
 --
 
 CREATE TABLE `annonces` (
@@ -95,7 +103,7 @@ CREATE TABLE `annonces` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `annonces`
+-- Dumping data for table `annonces`
 --
 
 INSERT INTO `annonces` (`annonce_ID`, `annonce_head`, `annonce_body`, `annonce_date`) VALUES
@@ -108,7 +116,7 @@ INSERT INTO `annonces` (`annonce_ID`, `annonce_head`, `annonce_body`, `annonce_d
 -- --------------------------------------------------------
 
 --
--- Structure de la table `chef_depart`
+-- Table structure for table `chef_depart`
 --
 
 CREATE TABLE `chef_depart` (
@@ -119,19 +127,10 @@ CREATE TABLE `chef_depart` (
   `prof_ID` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Déchargement des données de la table `chef_depart`
---
-
-INSERT INTO `chef_depart` (`chef_ID`, `chef_email`, `chef_password`, `depart_ID`, `prof_ID`) VALUES
-(1, 'brahim@gmail.com', 'Aa12345', 1, 77),
-(2, 'moi@gmail.com', 'Aa12345', 2, 79),
-(5, 'test@a.b', 'Aa12345', 1, 76);
-
 -- --------------------------------------------------------
 
 --
--- Structure de la table `coordonnateur`
+-- Table structure for table `coordonnateur`
 --
 
 CREATE TABLE `coordonnateur` (
@@ -142,18 +141,10 @@ CREATE TABLE `coordonnateur` (
   `prof_ID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Déchargement des données de la table `coordonnateur`
---
-
-INSERT INTO `coordonnateur` (`cord_ID`, `cord_email`, `cord_password`, `filiere_ID`, `prof_ID`) VALUES
-(22, 'cordtdia@gmail.com', '$2y$10$4JqmAUaX.dXufCQbfIHEY.jLrOPBDGO2A/8mVE9BSCduud/cg8/6u', 1, 78),
-(23, 'cordcivil@gmail.com', '$2y$10$R9rNVanGC.YGRgFrSdKEIuevFmfgXLPxNy4JtjOE99ZWwjpRuCHRm', 3, 79);
-
 -- --------------------------------------------------------
 
 --
--- Structure de la table `departement`
+-- Table structure for table `departement`
 --
 
 CREATE TABLE `departement` (
@@ -164,7 +155,7 @@ CREATE TABLE `departement` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `departement`
+-- Dumping data for table `departement`
 --
 
 INSERT INTO `departement` (`depart_ID`, `create_time`, `depart_nom`, `depart_details`) VALUES
@@ -174,7 +165,30 @@ INSERT INTO `departement` (`depart_ID`, `create_time`, `depart_nom`, `depart_det
 -- --------------------------------------------------------
 
 --
--- Structure de la table `filiere`
+-- Table structure for table `emploi`
+--
+
+CREATE TABLE `emploi` (
+  `emploi_ID` int(11) NOT NULL,
+  `semestre` varchar(3) NOT NULL,
+  `annee` varchar(10) NOT NULL,
+  `filiereID` int(11) NOT NULL,
+  `file_path` char(50) NOT NULL,
+  `date_publication` varchar(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `emploi`
+--
+
+INSERT INTO `emploi` (`emploi_ID`, `semestre`, `annee`, `filiereID`, `file_path`, `date_publication`) VALUES
+(1, 'S3', '2024/2025', 1, '/ENSAH-service/uploads/emploi/cahier_charge_projet', '2025-06-08 23:11:18'),
+(2, 'S3', '2024/2025', 3, '/ENSAH-service/uploads/emploi/cahier_charge_projet', '2025-06-08 23:41:17');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `filiere`
 --
 
 CREATE TABLE `filiere` (
@@ -186,7 +200,7 @@ CREATE TABLE `filiere` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `filiere`
+-- Dumping data for table `filiere`
 --
 
 INSERT INTO `filiere` (`filiere_ID`, `create_time`, `filiere_nom`, `filiere_details`, `depart_ID`) VALUES
@@ -200,7 +214,7 @@ INSERT INTO `filiere` (`filiere_ID`, `create_time`, `filiere_nom`, `filiere_deta
 -- --------------------------------------------------------
 
 --
--- Structure de la table `notes`
+-- Table structure for table `notes`
 --
 
 CREATE TABLE `notes` (
@@ -211,7 +225,7 @@ CREATE TABLE `notes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `notes`
+-- Dumping data for table `notes`
 --
 
 INSERT INTO `notes` (`id_etudiant`, `id_unite`, `session`, `note`) VALUES
@@ -225,32 +239,60 @@ INSERT INTO `notes` (`id_etudiant`, `id_unite`, `session`, `note`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `professeur`
+-- Table structure for table `notifications`
+--
+
+CREATE TABLE `notifications` (
+  `id_notification` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `date_time` datetime NOT NULL,
+  `title` char(30) NOT NULL,
+  `status` enum('read','unread') DEFAULT 'unread',
+  `content` varchar(400) NOT NULL,
+  `type` enum('general','personel','coordonnateur','professeur','chef','vacataire') DEFAULT 'general'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `notifications`
+--
+
+INSERT INTO `notifications` (`id_notification`, `id_user`, `date_time`, `title`, `status`, `content`, `type`) VALUES
+(1, 96, '2025-06-08 22:18:14', 'Compte cree avec succee', 'unread', 'Felicitations, votre compte en tant que professeur a ete cree, veuilez changer votre password dans profil->changerpassword.', 'personel'),
+(2, 97, '2025-06-08 22:19:30', 'Compte cree avec succee', 'unread', 'Felicitations, votre compte en tant que professeur a ete cree, veuilez changer votre password dans profil->changerpassword.', 'personel'),
+(3, 98, '2025-06-09 20:19:18', 'Compte cree avec succee', 'unread', 'Felicitations, votre compte en tant que professeur a ete cree, veuilez changer votre password dans profil->changerpassword.', 'personel'),
+(4, 99, '2025-06-14 23:11:30', 'Nouvelle notification', 'read', 'Vous avez été ajouté en tant que vacataire.', 'general'),
+(7, 104, '2025-06-15 13:25:38', 'Compte cree avec succee', 'unread', 'Felicitations, votre compte en tant que professeur a ete cree, veuilez changer votre password dans profil->changerpassword.', 'personel'),
+(8, 105, '2025-06-15 14:05:27', 'Compte cree avec succee', 'unread', 'Felicitations, votre compte en tant que professeur a ete cree, veuilez changer votre password dans profil->changerpassword.', 'personel'),
+(9, 106, '2025-06-15 14:36:11', 'Compte cree avec succee', 'unread', 'Felicitations, votre compte en tant que professeur a ete cree, veuilez changer votre password dans profil->changerpassword.', 'personel');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `professeur`
 --
 
 CREATE TABLE `professeur` (
   `prof_ID` int(10) NOT NULL,
   `email` varchar(30) NOT NULL,
   `password` varchar(80) NOT NULL,
-  `specialite` enum('Computer science','Data analyst','cybersecurity','Mathematics') NOT NULL,
-  `filiere_id` int(11) NOT NULL,
-  `user_ID` int(11) NOT NULL
+  `specialite` varchar(255) NOT NULL,
+  `user_ID` int(11) NOT NULL,
+  `departement` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `professeur`
+-- Dumping data for table `professeur`
 --
 
-INSERT INTO `professeur` (`prof_ID`, `email`, `password`, `specialite`, `filiere_id`, `user_ID`) VALUES
-(76, 'brahim@etu.com', 'Aa12345', 'Mathematics', 3, 76),
-(77, 'prof@gmail.com', '$2y$10$C9sIlrQURh2gLYMvqdiiVeQ5xh3cPf3iVF2y4QRMXOjfugYmBK9c2', 'Computer science', 4, 70),
-(78, 'prof2@gmail.com', 'Prof@1234', 'Data analyst', 0, 94),
-(79, 'test@gmail.com', '$2y$10$klzmWOLV3eEGsqam65yfJ.RTA8/L3Y4KXnxhBxlAy2TPobyFh2hCe', 'Data analyst', 4, 95);
+INSERT INTO `professeur` (`prof_ID`, `email`, `password`, `specialite`, `user_ID`, `departement`) VALUES
+(84, 'xawat26116@ethsms.com', '$2y$10$V1s.NBUeNedhpkLy2E5VTeiSnvYrWVxVSNm8d3RWawD.yj2ew1Rp6', 'cybersecurity', 104, 1),
+(85, 'xawat263116@ethsms.com', '$2y$10$h6vhMp0OcFCct5.GfqXAI.TKIBUUPstt1cjU9zrRZgBVyVEvllB/G', 'cybersecurity', 105, 1),
+(86, 'haxem45498@ethsms.com', '$2y$10$a.oX1F3yfSJDC1ccxyLFEe.6DAc84TDxoAGcx.I.DzKeqdy/S2MvO', 'Cloud Computing', 106, 1);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `unite`
+-- Table structure for table `unite`
 --
 
 CREATE TABLE `unite` (
@@ -258,28 +300,17 @@ CREATE TABLE `unite` (
   `unite_name` varchar(50) NOT NULL COMMENT 'Unité Name',
   `unite_specialite` varchar(50) NOT NULL COMMENT 'Unité spécialité',
   `unite_resp` int(11) DEFAULT NULL,
-  `volume_cours` int(11) DEFAULT NULL COMMENT 'Volume horaire',
-  `volume_td` int(11) DEFAULT NULL,
-  `volume_tp` int(11) DEFAULT NULL COMMENT 'volume tp',
+  `volume_cours` int(11) DEFAULT 0 COMMENT 'Volume horaire',
+  `volume_td` int(11) DEFAULT 0,
+  `volume_tp` int(11) DEFAULT 0 COMMENT 'volume tp',
   `semestre` enum('S1','S2','S3','S4','S5') DEFAULT NULL COMMENT 'semestre du module',
   `filiere_ID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Déchargement des données de la table `unite`
---
-
-INSERT INTO `unite` (`unite_ID`, `unite_name`, `unite_specialite`, `unite_resp`, `volume_cours`, `volume_td`, `volume_tp`, `semestre`, `filiere_ID`) VALUES
-(15, 'test sans resp', 'spécialité 1', NULL, 30, 20, 20, 'S2', 4),
-(21, 'UML', 'spécialité 2', 78, 30, 30, 24, 'S3', 1),
-(22, 'LINUX', 'spécialité 2', 79, 27, 24, 12, 'S1', 1),
-(23, 'Web developement', 'spécialité 3', 78, 30, 24, 16, 'S2', 1),
-(24, 'cpp', 'specialite 2', 76, 30, 30, 30, 'S2', 5);
-
 -- --------------------------------------------------------
 
 --
--- Structure de la table `user`
+-- Table structure for table `user`
 --
 
 CREATE TABLE `user` (
@@ -297,7 +328,7 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `user`
+-- Dumping data for table `user`
 --
 
 INSERT INTO `user` (`user_ID`, `nom`, `prenom`, `CIN`, `image`, `date_naissance`, `genre`, `address`, `Phone`, `linkedin`, `bio`) VALUES
@@ -316,12 +347,23 @@ INSERT INTO `user` (`user_ID`, `nom`, `prenom`, `CIN`, `image`, `date_naissance`
 (92, 'vacataire1', 'prenom', 'V1234', '/ENSAH-service/assets/images/avatar-M.jpg', '1983-10-14', 'masculin', 'address fjhhfh ffhqkhfkq ffffffffff', 0, '', ''),
 (93, 'prof', 'prof2', 'A12345', '', '2017-9-11', 'masculin', NULL, 0, NULL, NULL),
 (94, 'prof', 'prof2', 'A12345', '', '2017-9-11', 'masculin', NULL, 0, NULL, NULL),
-(95, 'teest', 'tst', 'A567', '', '2015-6-11', 'feminin', NULL, 0, NULL, NULL);
+(95, 'teest', 'tst', 'A567', '', '2015-6-11', 'feminin', NULL, 0, NULL, NULL),
+(96, 'temp', 'prof2', 'P12345', '', '2015-7-13', 'masculin', NULL, 0, NULL, NULL),
+(97, 'test2', 'prof', 'P12345', '', '2002-8-15', 'masculin', NULL, 0, NULL, NULL),
+(98, 'test', 'test', 'T12345', '', '2000-9-12', 'masculin', NULL, 0, NULL, NULL),
+(99, 'vaca', 'vZEFH', 'FGHH46', '', '2000-8-12', 'masculin', NULL, 0, NULL, NULL),
+(100, 'test', 'test', 'F345', '', '1997-10-7', 'feminin', NULL, 0, NULL, NULL),
+(101, 'vacataife', 'preo,of', 'G56352', '', '1998-7-23', 'masculin', NULL, 0, NULL, NULL),
+(102, 'prof', 'prfoZ', 'A123454', '', '2004-11-15', 'masculin', NULL, 0, NULL, NULL),
+(103, 'prof', 'prfoZ', 'A123454', '', '2004-11-15', 'masculin', NULL, 0, NULL, NULL),
+(104, 'prof', 'prf', 'P123455', '', '1990-10-13', 'masculin', NULL, 0, NULL, NULL),
+(105, 'prof', 'prf', 'P123455', '', '1990-10-13', 'masculin', NULL, 0, NULL, NULL),
+(106, 'testprof', 'test', 'T13456', '', '1999-10-13', 'masculin', NULL, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `vacataire`
+-- Table structure for table `vacataire`
 --
 
 CREATE TABLE `vacataire` (
@@ -333,16 +375,42 @@ CREATE TABLE `vacataire` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `vacataire`
+-- Dumping data for table `vacataire`
 --
 
 INSERT INTO `vacataire` (`vacat_ID`, `email`, `password`, `specialite`, `user_ID`) VALUES
-(7, 'vacat@gmail.com', '$2y$10$C9sIlrQURh2gLYMvqdiiVeQ5xh3cPf3iVF2y4QRMXOjfugYmBK9c2', 'cybersecurity', 92);
+(7, 'vacat@gmail.com', '$2y$10$C9sIlrQURh2gLYMvqdiiVeQ5xh3cPf3iVF2y4QRMXOjfugYmBK9c2', 'cybersecurity', 92),
+(8, 'nijenab727@finfave.com', '$2y$10$9GanjUQm4hlCfL6octo/Fu5ne7ReOztXQcKT8Ot2nM4LT9ZrUS.Bq', 'Computer science', 99),
+(9, 'nihati1034@ethsms.com', '$2y$10$uMrO.HDduEDWcJwyQweyLuGu6JCHnIi1icBMTHYYcu7gIMcNKSP0G', 'cybersecurity', 100),
+(10, 'xawat26116@ethsms.com', '$2y$10$DAMUyBuUWLMoXU.hBO8f5eBi892Dwyk1CZ6W2.tooGohsAYy.rYde', 'Data analyst', 101);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `voeux`
+-- Table structure for table `vacataire_note`
+--
+
+CREATE TABLE `vacataire_note` (
+  `Note_ID` int(11) NOT NULL,
+  `unite_ID` int(11) NOT NULL,
+  `session` varchar(10) NOT NULL,
+  `vacataire_ID` int(11) NOT NULL,
+  `annee` char(10) NOT NULL,
+  `file_path` char(50) NOT NULL,
+  `date_publication` char(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `vacataire_note`
+--
+
+INSERT INTO `vacataire_note` (`Note_ID`, `unite_ID`, `session`, `vacataire_ID`, `annee`, `file_path`, `date_publication`) VALUES
+(1, 133, 'Rattrapage', 7, '2024/2025', '/ENSAH-service/uploads/notes/Cours-Complet-PHP-et-', '2025-06-12 00:23:37');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `voeux`
 --
 
 CREATE TABLE `voeux` (
@@ -354,7 +422,7 @@ CREATE TABLE `voeux` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `voeux`
+-- Dumping data for table `voeux`
 --
 
 INSERT INTO `voeux` (`id_voeux`, `id_unite`, `id_prof`, `status`, `date_soumission`) VALUES
@@ -362,39 +430,44 @@ INSERT INTO `voeux` (`id_voeux`, `id_unite`, `id_prof`, `status`, `date_soumissi
 (15, 18, 76, 0, '2025-05-22'),
 (19, 15, 79, 1, '2025-05-28'),
 (20, 21, 79, 0, '2025-05-28'),
-(21, 22, 79, 1, '2025-05-28');
+(21, 22, 79, 1, '2025-05-28'),
+(33, 132, 78, 0, '2025-06-11'),
+(34, 133, 78, 1, '2025-06-11'),
+(35, 134, 78, 0, '2025-06-11'),
+(36, 135, 78, 1, '2025-06-11'),
+(37, 136, 78, 1, '2025-06-11');
 
 --
--- Index pour les tables déchargées
+-- Indexes for dumped tables
 --
 
 --
--- Index pour la table `admin`
+-- Indexes for table `admin`
 --
 ALTER TABLE `admin`
   ADD PRIMARY KEY (`admin_ID`),
   ADD KEY `user_ID` (`user_ID`);
 
 --
--- Index pour la table `affect_ue_prof`
+-- Indexes for table `affect_ue_prof`
 --
 ALTER TABLE `affect_ue_prof`
   ADD PRIMARY KEY (`affect_id`);
 
 --
--- Index pour la table `affect_ue_vac`
+-- Indexes for table `affect_ue_vac`
 --
 ALTER TABLE `affect_ue_vac`
   ADD PRIMARY KEY (`affect_ID`);
 
 --
--- Index pour la table `annonces`
+-- Indexes for table `annonces`
 --
 ALTER TABLE `annonces`
   ADD PRIMARY KEY (`annonce_ID`);
 
 --
--- Index pour la table `chef_depart`
+-- Indexes for table `chef_depart`
 --
 ALTER TABLE `chef_depart`
   ADD PRIMARY KEY (`chef_ID`),
@@ -402,7 +475,7 @@ ALTER TABLE `chef_depart`
   ADD KEY `prof_ID` (`prof_ID`);
 
 --
--- Index pour la table `coordonnateur`
+-- Indexes for table `coordonnateur`
 --
 ALTER TABLE `coordonnateur`
   ADD PRIMARY KEY (`cord_ID`),
@@ -410,33 +483,48 @@ ALTER TABLE `coordonnateur`
   ADD KEY `prof_ID` (`prof_ID`);
 
 --
--- Index pour la table `departement`
+-- Indexes for table `departement`
 --
 ALTER TABLE `departement`
   ADD PRIMARY KEY (`depart_ID`);
 
 --
--- Index pour la table `filiere`
+-- Indexes for table `emploi`
+--
+ALTER TABLE `emploi`
+  ADD PRIMARY KEY (`emploi_ID`),
+  ADD KEY `filiere_ID` (`filiereID`);
+
+--
+-- Indexes for table `filiere`
 --
 ALTER TABLE `filiere`
   ADD PRIMARY KEY (`filiere_ID`),
   ADD KEY `depart_ID` (`depart_ID`);
 
 --
--- Index pour la table `notes`
+-- Indexes for table `notes`
 --
 ALTER TABLE `notes`
   ADD PRIMARY KEY (`id_etudiant`,`id_unite`,`session`);
 
 --
--- Index pour la table `professeur`
+-- Indexes for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD PRIMARY KEY (`id_notification`),
+  ADD KEY `id_user` (`id_user`);
+
+--
+-- Indexes for table `professeur`
 --
 ALTER TABLE `professeur`
   ADD PRIMARY KEY (`prof_ID`),
-  ADD KEY `prof_C1` (`user_ID`);
+  ADD KEY `prof_C1` (`user_ID`),
+  ADD KEY `departement_ID` (`departement`);
 
 --
--- Index pour la table `unite`
+-- Indexes for table `unite`
 --
 ALTER TABLE `unite`
   ADD PRIMARY KEY (`unite_ID`),
@@ -444,143 +532,180 @@ ALTER TABLE `unite`
   ADD KEY `filiere_ID` (`filiere_ID`);
 
 --
--- Index pour la table `user`
+-- Indexes for table `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`user_ID`);
 
 --
--- Index pour la table `vacataire`
+-- Indexes for table `vacataire`
 --
 ALTER TABLE `vacataire`
   ADD PRIMARY KEY (`vacat_ID`);
 
 --
--- Index pour la table `voeux`
+-- Indexes for table `vacataire_note`
+--
+ALTER TABLE `vacataire_note`
+  ADD PRIMARY KEY (`Note_ID`);
+
+--
+-- Indexes for table `voeux`
 --
 ALTER TABLE `voeux`
   ADD PRIMARY KEY (`id_voeux`);
 
 --
--- AUTO_INCREMENT pour les tables déchargées
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT pour la table `admin`
+-- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
   MODIFY `admin_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT pour la table `affect_ue_prof`
+-- AUTO_INCREMENT for table `affect_ue_prof`
 --
 ALTER TABLE `affect_ue_prof`
   MODIFY `affect_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
--- AUTO_INCREMENT pour la table `affect_ue_vac`
+-- AUTO_INCREMENT for table `affect_ue_vac`
 --
 ALTER TABLE `affect_ue_vac`
-  MODIFY `affect_ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary Key', AUTO_INCREMENT=3;
+  MODIFY `affect_ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary Key', AUTO_INCREMENT=10;
 
 --
--- AUTO_INCREMENT pour la table `annonces`
+-- AUTO_INCREMENT for table `annonces`
 --
 ALTER TABLE `annonces`
   MODIFY `annonce_ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary Key', AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT pour la table `chef_depart`
+-- AUTO_INCREMENT for table `chef_depart`
 --
 ALTER TABLE `chef_depart`
   MODIFY `chef_ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary Key', AUTO_INCREMENT=23;
 
 --
--- AUTO_INCREMENT pour la table `coordonnateur`
+-- AUTO_INCREMENT for table `coordonnateur`
 --
 ALTER TABLE `coordonnateur`
   MODIFY `cord_ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary Key', AUTO_INCREMENT=24;
 
 --
--- AUTO_INCREMENT pour la table `departement`
+-- AUTO_INCREMENT for table `departement`
 --
 ALTER TABLE `departement`
   MODIFY `depart_ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary Key', AUTO_INCREMENT=14;
 
 --
--- AUTO_INCREMENT pour la table `filiere`
+-- AUTO_INCREMENT for table `emploi`
+--
+ALTER TABLE `emploi`
+  MODIFY `emploi_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `filiere`
 --
 ALTER TABLE `filiere`
   MODIFY `filiere_ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary Key', AUTO_INCREMENT=41;
 
 --
--- AUTO_INCREMENT pour la table `professeur`
+-- AUTO_INCREMENT for table `notifications`
+--
+ALTER TABLE `notifications`
+  MODIFY `id_notification` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `professeur`
 --
 ALTER TABLE `professeur`
-  MODIFY `prof_ID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+  MODIFY `prof_ID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
 
 --
--- AUTO_INCREMENT pour la table `unite`
+-- AUTO_INCREMENT for table `unite`
 --
 ALTER TABLE `unite`
-  MODIFY `unite_ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary Key', AUTO_INCREMENT=25;
+  MODIFY `unite_ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary Key', AUTO_INCREMENT=165;
 
 --
--- AUTO_INCREMENT pour la table `user`
+-- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
+  MODIFY `user_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
 
 --
--- AUTO_INCREMENT pour la table `vacataire`
+-- AUTO_INCREMENT for table `vacataire`
 --
 ALTER TABLE `vacataire`
-  MODIFY `vacat_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `vacat_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT pour la table `voeux`
+-- AUTO_INCREMENT for table `vacataire_note`
+--
+ALTER TABLE `vacataire_note`
+  MODIFY `Note_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `voeux`
 --
 ALTER TABLE `voeux`
-  MODIFY `id_voeux` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id_voeux` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
--- Contraintes pour les tables déchargées
+-- Constraints for dumped tables
 --
 
 --
--- Contraintes pour la table `admin`
+-- Constraints for table `admin`
 --
 ALTER TABLE `admin`
   ADD CONSTRAINT `admin_ibfk_1` FOREIGN KEY (`user_ID`) REFERENCES `user` (`user_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `chef_depart`
+-- Constraints for table `chef_depart`
 --
 ALTER TABLE `chef_depart`
   ADD CONSTRAINT `chef_depart_ibfk_1` FOREIGN KEY (`depart_ID`) REFERENCES `departement` (`depart_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `chef_depart_ibfk_2` FOREIGN KEY (`prof_ID`) REFERENCES `professeur` (`prof_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `coordonnateur`
+-- Constraints for table `coordonnateur`
 --
 ALTER TABLE `coordonnateur`
   ADD CONSTRAINT `coordonnateur_ibfk_1` FOREIGN KEY (`filiere_ID`) REFERENCES `filiere` (`filiere_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `coordonnateur_ibfk_2` FOREIGN KEY (`prof_ID`) REFERENCES `professeur` (`prof_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `filiere`
+-- Constraints for table `emploi`
+--
+ALTER TABLE `emploi`
+  ADD CONSTRAINT `emploi_ibfk_1` FOREIGN KEY (`filiereID`) REFERENCES `filiere` (`filiere_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `filiere`
 --
 ALTER TABLE `filiere`
   ADD CONSTRAINT `filiere_ibfk_1` FOREIGN KEY (`depart_ID`) REFERENCES `departement` (`depart_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `professeur`
+-- Constraints for table `notifications`
 --
-ALTER TABLE `professeur`
-  ADD CONSTRAINT `prof_C1` FOREIGN KEY (`user_ID`) REFERENCES `user` (`user_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `notifications`
+  ADD CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`user_ID`);
 
 --
--- Contraintes pour la table `unite`
+-- Constraints for table `professeur`
+--
+ALTER TABLE `professeur`
+  ADD CONSTRAINT `prof_C1` FOREIGN KEY (`user_ID`) REFERENCES `user` (`user_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `professeur_ibfk_1` FOREIGN KEY (`departement`) REFERENCES `departement` (`depart_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `unite`
 --
 ALTER TABLE `unite`
   ADD CONSTRAINT `unite_ibfk_1` FOREIGN KEY (`unite_resp`) REFERENCES `professeur` (`prof_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
