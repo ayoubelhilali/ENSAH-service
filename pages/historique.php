@@ -1,322 +1,277 @@
 <?php
+ob_start();
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-if (!isset($_SESSION['user'])) {
-  // Redirect to login if not authenticated
-  header('Location: /ENSAH-service/login.php');
-  exit();
-}
-if(!isset($_SESSION['user']['role'])) {
-  header('Location: /ENSAH-service/login.php');
-  exit();
+
+
+$avatar = '/ENSAH-service/assets/images/avatar-M.jpg';
+include($_SERVER['DOCUMENT_ROOT'] . '/ENSAH-service/inc/functions/connections.php');
+
+$selected_year = isset($_GET['annee']) ? $_GET['annee'] : null;
+$filiere = $_SESSION['filiere']["filiereID"];
+$modules = [];
+
+// Get available years for dropdown (extract year from datetime)
+$years_sql = "SELECT DISTINCT YEAR(a.date) AS annee
+              FROM affect_ue_vac a
+              JOIN unite ue ON ue.unite_ID = a.unite_ID
+              JOIN filiere f ON f.filiere_ID = ue.filiere_ID
+              WHERE f.filiere_ID = ?
+              ORDER BY a.date DESC";
+$years_stmt = $pdo->prepare($years_sql);
+$years_stmt->execute([$filiere]);
+$annees_disponibles = $years_stmt->fetchAll(PDO::FETCH_COLUMN);
+
+// Get modules for selected year
+if ($selected_year && in_array($selected_year, $annees_disponibles)) {
+    $modules_sql = "SELECT
+                    ue.unite_ID, 
+                    ue.unite_name AS unite_name,
+                    ue.semestre,
+                    ue.volume_cours,
+                    ue.volume_td,
+                    ue.volume_tp,
+                    us.nom AS nom, 
+                    f.filiere_nom AS filiere,
+                    a.date AS date_affectation,
+                    DATE_FORMAT(a.date, '%d/%m/%Y') AS date_formatted,
+                    DATE_FORMAT(a.date, '%H:%i') AS heure_formatted
+                FROM affect_ue_vac a
+                JOIN unite ue ON a.unite_ID = ue.unite_ID
+                JOIN filiere f ON ue.filiere_ID = f.filiere_ID
+                JOIN vacataire V ON V.vacat_Id = a.vacataire_ID
+                JOIN user us  on V.user_ID = us.user_ID
+                WHERE f.filiere_ID=? AND YEAR(a.date) = ?";
+    $stmt = $pdo->prepare($modules_sql);
+    $stmt->execute([$filiere, $selected_year]);
+    $modules = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<!-- [Head] start -->
 
+<!DOCTYPE html>
+<html lang="fr">
 <head>
-  <title>ENSAH services - Historique</title>
-  <!-- [Meta] -->
-  <meta charset="utf-8">
+    <title>ENSAH-service | Historique des affectations</title>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description"
-        content="Mantis is made using Bootstrap 5 design framework. Download the free admin template & use it for your project.">
-    <meta name="keywords"
-        content="Mantis, Dashboard UI Kit, Bootstrap 5, Admin Template, Admin Dashboard, CRM, CMS, Bootstrap Admin Template">
-    <meta name="author" content="CodedThemes">
-
-    <!-- [Favicon] icon -->
+    <meta name="description" content="Historique des affectations - ENSAH">
+    
+    <!-- Favicon -->
     <link rel="icon" href="/ENSAH-service/assets/images/logo-small_noBG.png" type="image/x-icon">
-    <!-- [Google Font] Family -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap"
-        id="main-font-link">
-    <!-- [Tabler Icons] https://tablericons.com -->
+    
+    <!-- Google Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap">
+    
+    <!-- Icons -->
     <link rel="stylesheet" href="/ENSAH-service/assets/fonts/tabler-icons.min.css">
-    <!-- [Feather Icons] https://feathericons.com -->
     <link rel="stylesheet" href="/ENSAH-service/assets/fonts/feather.css">
-    <!-- [Font Awesome Icons] https://fontawesome.com/icons -->
-    <link rel="stylesheet" href="/ENSAH-service/assets/fonts/fontawesome.css">
-    <!-- [Material Icons] https://fonts.google.com/icons -->
-    <link rel="stylesheet" href="/ENSAH-service/assets/fonts/material.css">
-    <!-- [Template CSS Files] -->
-    <link rel="stylesheet" href="/ENSAH-service/assets/css/style.css" id="main-style-link">
-    <link rel="stylesheet" href="/ENSAH-service/assets/css/style-preset.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/ENSAH-service/assets/css/style.css">
+    <link rel="stylesheet" href="/ENSAH-service/assets/css/style-preset.css">
     <link rel="stylesheet" href="/ENSAH-service/assets/css/main.css">
     
+    <style>
+        .history-card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .year-selector {
+            max-width: 300px;
+        }
+        .table-responsive {
+            overflow-x: auto;
+        }
+        .no-data {
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .date-time {
+            display: flex;
+            flex-direction: column;
+        }
+        .date-part {
+            font-weight: 500;
+        }
+        .time-part {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+    </style>
 </head>
-<!-- [Head] end -->
-<!-- [Body] Start -->
+<body>
+    <!-- [ Sidebar Menu ] start -->
+    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/sidebar/cord-sidebar.php") ?>
+    <!-- [ Sidebar Menu ] end -->
+    
+    <!-- [ Header Topbar ] start -->
+    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-SERVICE/inc/header/header.php") ?>
+    <!-- [ Header ] end -->
 
-<body data-pc-preset="preset-1" data-pc-direction="ltr" data-pc-theme="light">
-  <!-- [ Pre-loader ] start -->
-  <div class="loader-bg">
-    <div class="loader-track">
-      <div class="loader-fill"></div>
-    </div>
-  </div>
-  <!-- [ Pre-loader ] End -->
-  <!-- [ Sidebar Menu ] start -->
-   <?php if($_SESSION["user"]["role"] == "admin") { ?>
-      <?php require_once __DIR__ . "/../inc/sidebar/admin-sidebar.php"; ?>
-   <?php } else if($_SESSION["user"]["role"] == "cord") { ?>
-      <?php require_once __DIR__ . "/../inc/sidebar/cord-sidebar.php"; ?>
-   <?php }else if($_SESSION["user"]["role"] == "vacataire") { ?>
-      <?php require_once __DIR__ . "/../inc/sidebar/vacat-sidebar.php"; ?>
-  <?php } else if($_SESSION["user"]["role"] == "professeur") { ?>
-      <?php require_once __DIR__ . "/../inc/sidebar/prof-sidebar.php"; ?>
-  <?php } ?>
-  <!-- [ Sidebar Menu ] end --> <!-- [ Header Topbar ] start -->
-  <?php require_once(__DIR__ . "/../inc/header/header.php"); ?>
-  <!-- [ Header ] end -->
-  <!-- [ Main Content ] start -->
-  <section class="pc-container">
-    <div class="pc-content">
-      <!-- [ breadcrumb ] start -->
-      <div class="page-header">
-        <div class="page-block">
-          <div class="row align-items-center">
-            <div class="col-md-12">
-              <ul class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/ENSAH-service/dashboard/index.html">Home</a></li>
-                <li class="breadcrumb-item"><a href="javascript: void(0)">Forms</a></li>
-                <li class="breadcrumb-item" aria-current="page">L'historique</li>
-              </ul>
+    <!-- [ Main Content ] start -->
+    <div class="pc-container">
+        <div class="pc-content">
+            <!-- [ breadcrumb ] start -->
+            <div class="page-header">
+                <div class="page-block">
+                    <div class="row align-items-center">
+                        <div class="col-md-12">
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/ENSAH-service/pages/vacataire/dashboard.php">Accueil</a></li>
+                                <li class="breadcrumb-item" aria-current="page">Historique</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="page-header-title">
+                                <h2 class="mb-0">Historique des affectations</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-12">
-              <div class="page-header-title">
-                <h2 class="mb-0">L'historique</h2>
-              </div>
+            <!-- [ breadcrumb ] end -->
+
+            <!-- [ Main Content ] start -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card history-card">
+                        <div class="card-body">
+                            <!-- Success message -->
+                            <?php if (isset($_GET['success']) && isset($_SESSION["success_message"])): ?>
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <?= htmlspecialchars($_SESSION["success_message"]) ?>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                    <?php unset($_SESSION["success_message"]); ?>
+                            <?php endif; ?>
+
+                            <!-- Year selector form -->
+                            <form  method="GET" class="mb-4">
+                                <div class="row g-3 align-items-center">
+                                    <div class="col-md-4">
+                                        <label for="annee" class="form-label">Année académique:</label>
+                                        <select name="annee" id="annee" class="form-select year-selector" onchange="this.form.submit()">
+                                            <option value="">-- Sélectionner une année --</option>
+                                            <?php foreach ($annees_disponibles as $annee): ?>
+                                                    <option value="<?= htmlspecialchars($annee) ?>" 
+                                                        <?= ($selected_year == $annee) ? 'selected' : '' ?>>
+                                                        <?= htmlspecialchars($annee) ?>/<?= htmlspecialchars($annee + 1) ?>
+                                                    </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="submit" class="btn btn-primary mt-4">Afficher</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <!-- Modules table -->
+                            <?php if (!empty($modules)): ?>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover" id="history-table">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Module</th>
+                                                    <th>Semestre</th>
+                                                    <th>Filière</th>
+                                                    <th>Charge horaire</th>
+                                                    <th>Date et heure d'affectation</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php foreach ($modules as $index => $module): ?>
+                                                        <tr>
+                                                            <td><?= $index + 1 ?></td>
+                                                            <td><?= htmlspecialchars($module['unite_name']) ?></td>
+                                                            <td><?= htmlspecialchars($module['semestre']) ?></td>
+                                                            <td><?= htmlspecialchars($module['filiere']) ?></td>
+                                                            <td><?= htmlspecialchars($module['volume_cours']+$module["volume_td"]+$module["volume_tp"]) ?>h</td>
+                                                            <td>
+                                                                <div class="date-time">
+                                                                    <span class="date-part"><?= $module['date_formatted'] ?></span>
+                                                                    <span class="time-part"><?= $module['heure_formatted'] ?></span>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                <?php endforeach; ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                            <?php else: ?>
+                                    <div class="no-data text-center py-5">
+                                        <div>
+                                            <i class="ti ti-info-circle" style="font-size: 3rem; color: #6c757d;"></i>
+                                            <h4 class="mt-3">
+                                                <?php if ($selected_year): ?>
+                                                        Aucune affectation trouvée pour l'année <?= htmlspecialchars($selected_year) ?>/<?= htmlspecialchars($selected_year + 1) ?>
+                                                <?php else: ?>
+                                                        Veuillez sélectionner une année académique
+                                                <?php endif; ?>
+                                            </h4>
+                                        </div>
+                                    </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
+            <!-- [ Main Content ] end -->
         </div>
-      </div>
-      <!-- [ breadcrumb ] end -->
-
-      <!-- [ Main Content ] start -->
-     
-      <!-- [ Main Content ] end -->
     </div>
-  </section>
-  <!-- [ Main Content ] end -->
-  <footer class="pc-footer">
-    <div class="footer-wrapper container-fluid">
-      <div class="row">
-        <div class="col-sm my-1">
-          <p class="m-0">ENSAH-services &copy; 2025-Tous droits réservés.</p>
+
+    <footer class="pc-footer">
+        <div class="footer-wrapper container-fluid">
+            <div class="row">
+                <div class="col-sm my-1">
+                    <p class="m-0">ENSAH-service &copy; <?= date('Y') ?> - Tous droits réservés</p>
+                </div>
+                <div class="col-auto my-1">
+                    <ul class="list-inline footer-link mb-0">
+                        <li class="list-inline-item"><a href="/ENSAH-service/">Accueil</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
-        <div class="col-auto my-1">
-          <ul class="list-inline footer-link mb-0">
-            <li class="list-inline-item"><a href="/ENSAH-service/">Home</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </footer> <!-- Required Js -->
-  <script src="/ENSAH-service/assets/js/plugins/popper.min.js"></script>
-  <script src="/ENSAH-service/assets/js/plugins/simplebar.min.js"></script>
-  <script src="/ENSAH-service/assets/js/plugins/bootstrap.min.js"></script>
-  <script src="/ENSAH-service/assets/js/fonts/custom-font.js"></script>
-  <script src="/ENSAH-service/assets/js/pcoded.js"></script>
-  <script src="/ENSAH-service/assets/js/plugins/feather.min.js"></script>
+    </footer>
 
-
-
-
-
-  <script>layout_change('light');</script>
-
-
-
-
-  <script>change_box_container('false');</script>
-
-
-
-  <script>layout_rtl_change('false');</script>
-
-
-  <script>preset_change("preset-1");</script>
-
-
-  <script>font_change("Public-Sans");</script>
-
-
-  <div class="offcanvas pct-offcanvas offcanvas-end" tabindex="-1" id="offcanvas_pc_layout">
-    <div class="offcanvas-header bg-primary">
-      <h5 class="offcanvas-title text-white">Mantis Customizer</h5>
-      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="pct-body" style="height: calc(100% - 60px)">
-      <div class="offcanvas-body">
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">
-            <a class="btn border-0 text-start w-100" data-bs-toggle="collapse" href="#pctcustcollapse1">
-              <div class="d-flex align-items-center">
-                <div class="flex-shrink-0">
-                  <div class="avtar avtar-xs bg-light-primary">
-                    <i class="ti ti-layout-sidebar f-18"></i>
-                  </div>
-                </div>
-                <div class="flex-grow-1 ms-3">
-                  <h6 class="mb-1">Theme Layout</h6>
-                  <span>Choose your layout</span>
-                </div>
-                <i class="ti ti-chevron-down"></i>
-              </div>
-            </a>
-            <div class="collapse show" id="pctcustcollapse1">
-              <div class="pct-content">
-                <div class="pc-rtl">
-                  <p class="mb-1">Direction</p>
-                  <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="layoutmodertl">
-                    <label class="form-check-label" for="layoutmodertl">RTL</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="list-group-item">
-            <a class="btn border-0 text-start w-100" data-bs-toggle="collapse" href="#pctcustcollapse2">
-              <div class="d-flex align-items-center">
-                <div class="flex-shrink-0">
-                  <div class="avtar avtar-xs bg-light-primary">
-                    <i class="ti ti-brush f-18"></i>
-                  </div>
-                </div>
-                <div class="flex-grow-1 ms-3">
-                  <h6 class="mb-1">Theme Mode</h6>
-                  <span>Choose light or dark mode</span>
-                </div>
-                <i class="ti ti-chevron-down"></i>
-              </div>
-            </a>
-            <div class="collapse show" id="pctcustcollapse2">
-              <div class="pct-content">
-                <div class="theme-color themepreset-color theme-layout">
-                  <a href="#!" class="active" onclick="layout_change('light')" data-value="false"><span><img
-                        src="/ENSAH-service/assets/images/customization/default.svg" alt="img"></span><span>Light</span></a>
-                  <a href="#!" class="" onclick="layout_change('dark')" data-value="true"><span><img
-                        src="/ENSAH-service/assets/images/customization/dark.svg" alt="img"></span><span>Dark</span></a>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="list-group-item">
-            <a class="btn border-0 text-start w-100" data-bs-toggle="collapse" href="#pctcustcollapse3">
-              <div class="d-flex align-items-center">
-                <div class="flex-shrink-0">
-                  <div class="avtar avtar-xs bg-light-primary">
-                    <i class="ti ti-color-swatch f-18"></i>
-                  </div>
-                </div>
-                <div class="flex-grow-1 ms-3">
-                  <h6 class="mb-1">Color Scheme</h6>
-                  <span>Choose your primary theme color</span>
-                </div>
-                <i class="ti ti-chevron-down"></i>
-              </div>
-            </a>
-            <div class="collapse show" id="pctcustcollapse3">
-              <div class="pct-content">
-                <div class="theme-color preset-color">
-                  <a href="#!" class="active" data-value="preset-1"><span><img
-                        src="/ENSAH-service/assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 1</span></a>
-                  <a href="#!" class="" data-value="preset-2"><span><img
-                        src="/ENSAH-service/assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 2</span></a>
-                  <a href="#!" class="" data-value="preset-3"><span><img
-                        src="/ENSAH-service/assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 3</span></a>
-                  <a href="#!" class="" data-value="preset-4"><span><img
-                        src="/ENSAH-service/assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 4</span></a>
-                  <a href="#!" class="" data-value="preset-5"><span><img
-                        src="/ENSAH-service/assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 5</span></a>
-                  <a href="#!" class="" data-value="preset-6"><span><img
-                        src="/ENSAH-service/assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 6</span></a>
-                  <a href="#!" class="" data-value="preset-7"><span><img
-                        src="/ENSAH-service/assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 7</span></a>
-                  <a href="#!" class="" data-value="preset-8"><span><img
-                        src="/ENSAH-service/assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 8</span></a>
-                  <a href="#!" class="" data-value="preset-9"><span><img
-                        src="/ENSAH-service/assets/images/customization/theme-color.svg" alt="img"></span><span>Theme 9</span></a>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="list-group-item pc-boxcontainer">
-            <a class="btn border-0 text-start w-100" data-bs-toggle="collapse" href="#pctcustcollapse4">
-              <div class="d-flex align-items-center">
-                <div class="flex-shrink-0">
-                  <div class="avtar avtar-xs bg-light-primary">
-                    <i class="ti ti-border-inner f-18"></i>
-                  </div>
-                </div>
-                <div class="flex-grow-1 ms-3">
-                  <h6 class="mb-1">Layout Width</h6>
-                  <span>Choose fluid or container layout</span>
-                </div>
-                <i class="ti ti-chevron-down"></i>
-              </div>
-            </a>
-            <div class="collapse show" id="pctcustcollapse4">
-              <div class="pct-content">
-                <div class="theme-color themepreset-color boxwidthpreset theme-container">
-                  <a href="#!" class="active" onclick="change_box_container('false')" data-value="false"><span><img
-                        src="/ENSAH-service/assets/images/customization/default.svg" alt="img"></span><span>Fluid</span></a>
-                  <a href="#!" class="" onclick="change_box_container('true')" data-value="true"><span><img
-                        src="/ENSAH-service/assets/images/customization/container.svg" alt="img"></span><span>Container</span></a>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="list-group-item">
-            <a class="btn border-0 text-start w-100" data-bs-toggle="collapse" href="#pctcustcollapse5">
-              <div class="d-flex align-items-center">
-                <div class="flex-shrink-0">
-                  <div class="avtar avtar-xs bg-light-primary">
-                    <i class="ti ti-typography f-18"></i>
-                  </div>
-                </div>
-                <div class="flex-grow-1 ms-3">
-                  <h6 class="mb-1">Font Family</h6>
-                  <span>Choose your font family.</span>
-                </div>
-                <i class="ti ti-chevron-down"></i>
-              </div>
-            </a>
-            <div class="collapse show" id="pctcustcollapse5">
-              <div class="pct-content">
-                <div class="theme-color fontpreset-color">
-                  <a href="#!" class="active" onclick="font_change('Public-Sans')"
-                    data-value="Public-Sans"><span>Aa</span><span>Public Sans</span></a>
-                  <a href="#!" class="" onclick="font_change('Roboto')"
-                    data-value="Roboto"><span>Aa</span><span>Roboto</span></a>
-                  <a href="#!" class="" onclick="font_change('Poppins')"
-                    data-value="Poppins"><span>Aa</span><span>Poppins</span></a>
-                  <a href="#!" class="" onclick="font_change('Inter')"
-                    data-value="Inter"><span>Aa</span><span>Inter</span></a>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="list-group-item">
-            <div class="collapse show">
-              <div class="pct-content">
-                <div class="d-grid">
-                  <button class="btn btn-light-danger" id="layoutreset">Reset Layout</button>
-                </div>
-              </div>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
+    <!-- Required Js -->
+    <script src="/ENSAH-service/assets/js/plugins/popper.min.js"></script>
+    <script src="/ENSAH-service/assets/js/plugins/simplebar.min.js"></script>
+    <script src="/ENSAH-service/assets/js/plugins/bootstrap.min.js"></script>
+    <script src="/ENSAH-service/assets/js/pcoded.js"></script>
+    
+    <!-- DataTables -->
+    <script src="/ENSAH-service/assets/js/plugins/simple-datatables.js"></script>
+    <script>
+        // Initialize DataTable
+        document.addEventListener('DOMContentLoaded', function() {
+            const dataTable = new simpleDatatables.DataTable('#history-table', {
+                perPage: 10,
+                perPageSelect: [5, 10, 15, 20],
+                labels: {
+                    placeholder: "Rechercher...",
+                    perPage: "{select} éléments par page",
+                    noRows: "Aucune donnée disponible",
+                    info: "Affichage de {start} à {end} sur {rows} éléments"
+                },
+                columns: [
+                    { select: 0, sort: "asc" }, // Sort by first column (index) ascending
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ]
+            });
+        });
+    </script>
 </body>
-<!-- [Body] end -->
-
 </html>
+<?php ob_end_flush(); ?>

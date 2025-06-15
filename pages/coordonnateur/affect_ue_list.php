@@ -256,14 +256,8 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/functions/isStrongP
                                                             title="Affecter">
                                                             <a href="#" class="avtar avtar-xs btn-link-primary affect-btn"
                                                                 data-bs-toggle="modal" data-bs-target="#ue-affect-modal"
-                                                                data-unit="<?= $unit['unite_ID']; ?>"
-                                                                data-nom="<?= $unit['unite_name']; ?>"
-                                                                data-volumeC="<?= $unit['volume_cours']; ?>"
-                                                                data-volumeTd="<?= $unit['volume_td']; ?>"
-                                                                data-volumeTp="<?= $unit['volume_tp']; ?>"
-                                                                data-semestre="<?= $unit['semestre']; ?>"
-                                                                data-vacats='<?= $vacats_json; ?>'>
-                                                                <i class="ti ti-user-plus f-18"></i>
+                                                                data-affect="<?= $unit['affect_ID']; ?>">
+                                                                <i class="ti ti-trash f-18"></i>
                                                             </a>
                                                         </li>
                                                     </ul>

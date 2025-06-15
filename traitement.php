@@ -252,7 +252,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit() ;
         }
         else {
-            header("Location: login.php?message=mot+de+passe+invalide+$chefs_depart[$email]['chef_depart_id'] ");
+            header("Location: login.php?message=mot+de+passe+invalide ");
             exit();
         }
     }
