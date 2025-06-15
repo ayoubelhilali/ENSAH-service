@@ -63,13 +63,22 @@ try {
     }
 
     //get prof data
-    $prof_data="SELECT * FROM professeur " ;
+    $prof_data="SELECT * FROM professeur p
+                JOIN user u ON u.user_ID=p.user_ID " ;
     $stmt= $pdo->prepare($prof_data) ;
     if($stmt->execute()){
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
             $profs[$row['email']]=[
                 'prof_id'=>$row['prof_ID'] ,
                 'password'=>$row['password'] ,
+                'email'=> $row['email'],
+                'nom' => $row['nom'],
+                'prenom' => $row['prenom'],
+                'image'=>$row['image'] ,
+                'genre' => $row['genre'],
+                'phone' => $row['Phone'],
+                'address' => $row['address'],
+                'birthday' => $row['date_naissance'],
                 'role' => 'professeur'
             ] ;
         }
@@ -84,6 +93,14 @@ try {
                 'chef_depart_id'=>$row['chef_ID'] ,
                 'depart_id'=>$row['depart_ID'],
                 'password'=>$row['chef_password'] ,
+                'email'=> $row['email'],
+                'nom' => $row['nom'],
+                'prenom' => $row['prenom'],
+                'image'=>$row['image'] ,
+                'genre' => $row['genre'],
+                'phone' => $row['Phone'],
+                'address' => $row['address'],
+                'birthday' => $row['date_naissance'],
                 'role' => 'chef_depart'
             ] ;
         }
@@ -191,7 +208,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     elseif(isset($profs[$email])){
         if($password==$profs[$email]['password']){
             $_SESSION['user']=[
-                'prof_id'=> $profs[$email]['prof_id']
+                'prof_id'=> $profs[$email]['prof_id'],
+                'email' => $email,
+                'nom' => $profs[$email]['nom'],
+                'prenom' => $profs[$email]['prenom'],
+                'image' => $profs[$email]['image'],
+                'linkedin' => $profs[$email]['linkedin'],
+                'bio' => $profs[$email]['bio'],
+                'genre' => $profs[$email]['genre'],
+                'phone' => $profs[$email]['phone'],
+                'address' => $profs[$email]['address'],
+                'birthday' => $profs[$email]['birthday'],
+                'role' => 'professeur'
             ] ;
             header("Location: Prof_interface.php") ;
             exit() ;
@@ -207,7 +235,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if(password_verify($password, $chefs_depart[$email]['password'])){
             $_SESSION['user']=[
                 'chef_depart_id'=> $chefs_depart[$email]['chef_depart_id'],
-                'depart_id'=> $chefs_depart[$email]['depart_id']
+                'depart_id'=> $chefs_depart[$email]['depart_id'],
+                 'email' => $email,
+                'nom' => $chefs_depart[$email]['nom'],
+                'prenom' => $chefs_depart[$email]['prenom'],
+                'image' => $chefs_depart[$email]['image'],
+                'linkedin' => $chefs_depart[$email]['linkedin'],
+                'bio' => $chefs_depart[$email]['bio'],
+                'genre' => $chefs_depart[$email]['genre'],
+                'phone' => $chefs_depart[$email]['phone'],
+                'address' => $chefs_depart[$email]['address'],
+                'birthday' => $chefs_depart[$email]['birthday'],
+                'role' => 'coordonnateur'
             ] ;
             header("Location: chef_depar.php") ;
             exit() ;
