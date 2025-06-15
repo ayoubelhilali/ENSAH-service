@@ -628,10 +628,12 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/email/sendEmail.php
                   <option disabled class="defaultOption" <?php if (empty($specialite))
                     echo 'selected'; ?>>Specialitée
                   </option>
-                  <option>Computer science</option>
-                  <option>Data analyst</option>
-                  <option>cybersecurity</option>
-                  <option>Mathematics</option>
+                  <option value="computer science">Développement Web</option>
+                  <option value="Data analyst">Réseaux & Sécurité</option>
+                  <option value="cybersecurity">Intelligence Artificielle</option>
+                  <option value="Mathematics">Analyse Numérique</option>
+                  <option value="Mathematics">Statistiques & Data Science</option>
+                  <option value="Mathematics">Optimisation & Recherche Opérationnelle</option>
                 </select>
               </div>
               <p style="color: red"><?php if (isset($specialite_error)) {
@@ -803,11 +805,13 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/email/sendEmail.php
               <div class="form-group">
                 <label class="form-label">Specialité</label>
                 <select name="specialite" class="form-select selectInput" required id="vacat-specialite">
-                  <option disabled class="defaultOption">Specialitée</option>
-                  <option value="computer science">Computer science</option>
-                  <option value="Data analyst">Data analyst</option>
-                  <option value="cybersecurity">cybersecurity</option>
-                  <option value="Mathematics">Mathematics</option>
+                  <option disabled class="defaultOption">Specialité</option>
+                  <option value="computer science">Développement Web</option>
+                  <option value="Data analyst">Réseaux & Sécurité</option>
+                  <option value="cybersecurity">Intelligence Artificielle</option>
+                  <option value="Mathematics">Analyse Numérique</option>
+                  <option value="Mathematics">Statistiques & Data Science</option>
+                  <option value="Mathematics">Optimisation & Recherche Opérationnelle</option>
                 </select>
               </div>
               <p style="color: red"><?php if (isset($specialite_error)) {

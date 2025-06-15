@@ -204,7 +204,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Check if email exists in chefs depart
 
     elseif(isset($chefs_depart[$email])){
-        if($password == $chefs_depart[$email]['password']){
+        if(password_verify($password, $chefs_depart[$email]['password'])){
             $_SESSION['user']=[
                 'chef_depart_id'=> $chefs_depart[$email]['chef_depart_id'],
                 'depart_id'=> $chefs_depart[$email]['depart_id']

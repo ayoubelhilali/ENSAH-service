@@ -171,7 +171,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . "/ENSAH-service/inc/header/header.php";
                                          $stmt1 = $pdo->prepare($sql);
                                if($stmt1->execute([$_SESSION['user']['depart_id']])){
                                       $sql = "SELECT * FROM professeur p 
-                                            JOIN filiere f ON f.filiere_ID=p.filiere_id 
+                                            JOIN departement d ON d.depart_ID=p.departement
                                             JOIN user u ON u.user_ID=p.user_ID 
                                             WHERE depart_ID=? " ;
 
